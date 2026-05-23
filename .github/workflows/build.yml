@@ -75,6 +75,10 @@ jobs:
 
       - name: Build APK
         run: |
+          pip install pywebview
+          JAR_PATH=$(python3 -c "from webview import util; print(util.android_jar_path())")
+          echo "pywebview JAR: $JAR_PATH"
+          sed -i "s|__PYWEBVIEW_JAR__|$JAR_PATH|g" buildozer.spec
           yes | buildozer android debug 2>&1
 
       - name: Find APK
