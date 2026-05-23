@@ -25,8 +25,19 @@ window.addEventListener('beforeinstallprompt', function(e) {
   e.preventDefault();
   installPromptEvent = e;
   var btn = document.getElementById('install-pwa');
-  if (btn) btn.style.display = 'inline-block';
+  if (btn) { btn.textContent = 'INSTALL APP'; btn.title = 'Install NexCampus'; }
 });
+function tryInstall() {
+  if (installPromptEvent) {
+    installPromptEvent.prompt();
+    installPromptEvent.userChoice.then(function(r) {
+      installPromptEvent = null;
+      document.getElementById('install-pwa').textContent = 'INSTALLED';
+    });
+  } else {
+    alert('To install: Open this page in Chrome, visit it twice, and the install option will appear.');
+  }
+}
 </script>
 </head>
 <body>
@@ -49,7 +60,7 @@ window.addEventListener('beforeinstallprompt', function(e) {
       <button class="nav-btn" data-tab="texttools">TEXT TOOLS</button>
       <button class="nav-btn" data-tab="about">ABOUT</button>
     </nav>
-    <div class="sidebar-footer"><button id="install-pwa" class="install-btn" style="display:none" onclick="if(installPromptEvent){installPromptEvent.prompt();installPromptEvent.userChoice.then(function(r){installPromptEvent=null;this.style.display='none';});}">INSTALL APP</button></div>
+    <div class="sidebar-footer"><button id="install-pwa" class="install-btn" onclick="tryInstall()">INSTALL APP</button></div>
   </div>
 
   <div id="main">

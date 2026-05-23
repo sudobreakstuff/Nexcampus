@@ -70,20 +70,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build APK with Buildozer
+      - name: Build APK with Buildozer Docker
         run: |
-          docker pull kivy/buildozer:latest
           docker run --rm \
             -v ${{ github.workspace }}:/workspace \
             -w /workspace \
-            -e BUILDKIT_PROGRESS=plain \
-            kivy/buildozer:latest \
-            bash -c "yes | buildozer android debug 2>&1" || \
-          docker run --rm \
-            -v ${{ github.workspace }}:/workspace \
-            -w /workspace \
-            kivy/buildozer:latest \
-            bash -c "yes | buildozer android debug 2>&1"
+            kivy/buildozer android debug 2>&1
 
       - name: Find APK
         id: find-apk
@@ -94,7 +86,7 @@ jobs:
             echo "APK found: $apk"
           else
             echo "No APK found in bin/"
-            ls -la bin/ 2>/dev/null || echo "bin/ directory not found"
+            ls -la bin/ 2>/dev/null || echo "bin/ not found"
           fi
 
       - name: Upload
