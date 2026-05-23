@@ -66,6 +66,25 @@ python -m PyInstaller --onefile \
 
 > **Windows OCR**: Download Windows Tesseract binaries and place in `tesseract-pkg/tesseract-bin/` before building.
 
+### Android (APK)
+
+Requires [Buildozer](https://buildozer.readthedocs.io/) on Linux:
+
+```bash
+# Install Buildozer dependencies (Ubuntu/Debian)
+sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf \
+  libtool pkg-config zlib1g-dev libncurses5-dev libffi-dev libssl-dev
+pip3 install buildozer
+
+# Build APK
+cd Nexcampus
+buildozer android debug
+
+# The APK will be at bin/NexCampus-*.apk
+```
+
+Install the APK on your Android device. OCR is not available on Android. All other features work.
+
 ## Features
 
 - **Notes Editor**: Rich text, templates, PDF export, table editor, emoji picker, font manager
@@ -82,6 +101,7 @@ python -m PyInstaller --onefile \
 |----------|--------|
 | Linux | ✅ Full support |
 | Windows | ✅ Supported (no OCR) |
+| Android | ✅ APK (no OCR) |
 | Android | ✅ PWA (limited to client-side features) |
 
 ## License
