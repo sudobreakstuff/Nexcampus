@@ -4,7 +4,7 @@
 
 set -e
 
-APP_NAME="NexCampus-v2.0-linux"
+APP_NAME="NexCampus-linux"
 ENTRY="server.py"
 
 echo "[NexCampus Build] Building $APP_NAME..."
@@ -18,7 +18,10 @@ fi
 rm -rf build dist *.spec
 
 # Build
-pyinstaller --onefile --add-data "static:static" --name "$APP_NAME" "$ENTRY"
+pyinstaller --onefile \
+  --add-data "static:static" \
+  --add-data "tesseract-pkg/tesseract-bin:tesseract-bin" \
+  --name "$APP_NAME" "$ENTRY"
 
 echo "[NexCampus Build] Done: dist/$APP_NAME"
 echo "[NexCampus Build] Size: $(du -h dist/$APP_NAME | cut -f1)"
