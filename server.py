@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import http.server, json, sys, os, threading, socket, urllib.request, urllib.error, base64, re, glob
+import http.server, json, sys, os, threading, socket, urllib.request, urllib.error, base64, re, glob, random
 from pathlib import Path
 from collections import Counter
 from io import BytesIO
@@ -719,7 +719,12 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
             try:
                 vectorizer = TfidfVectorizer(stop_words='english', max_features=500, max_df=0.9, min_df=1)
                 tfidf = vectorizer.fit_transform([text])
-                import numpy as np
+HAS_NUMPY = False
+try:
+    import numpy as np
+    HAS_NUMPY = True
+except:
+    pass
                 names = vectorizer.get_feature_names_out()
                 scores = np.array(tfidf.sum(axis=0)).flatten()
                 ranked = sorted(zip(names, scores), key=lambda x: -x[1])
@@ -939,7 +944,7 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
                 continue
             question = sent.replace(answer, '_____', 1) if answer in sent else sent
             options = [answer] + distractors
-            np.random.shuffle(options)
+            random.shuffle(options)
             questions.append({
                 'question': question,
                 'options': options,
