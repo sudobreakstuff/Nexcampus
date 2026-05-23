@@ -181,8 +181,8 @@ input:focus, textarea:focus, select:focus {
 }
 
 /* Cursor glow overlay */
-#content::before {
-  content: ''; position: fixed; inset: 0; pointer-events: none;
+body::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: -1;
   background: radial-gradient(100px at var(--gx, 50%) var(--gy, 50%), rgba(79,195,247,0.04), transparent);
 }
 

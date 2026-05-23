@@ -1083,17 +1083,20 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
 
     # --- OCR ---
     def _get_tesseract_path(self):
-        import sys, stat
+        import sys, stat, platform
+        is_win = platform.system() == 'Windows'
         if getattr(sys, 'frozen', False):
-            base = os.path.join(sys._MEIPASS, 'tesseract-bin')
+            base = os.path.join(sys._MEIPASS, 'tesseract-win' if is_win else 'tesseract-bin')
         else:
             base = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tesseract-pkg', 'tesseract-bin')
-        binary = os.path.join(base, 'tesseract')
-        lib_dir = base
+        if is_win:
+            binary = os.path.join(base, 'tesseract.exe')
+        else:
+            binary = os.path.join(base, 'tesseract')
+            if os.path.exists(binary):
+                os.chmod(binary, os.stat(binary).st_mode | stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH)
         tessdata = base
-        if os.path.exists(binary):
-            os.chmod(binary, os.stat(binary).st_mode | stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH)
-        return binary, lib_dir, tessdata
+        return binary, base, tessdata
 
     def api_ocr(self, data):
         image_data = data.get('image', '')
@@ -1115,7 +1118,10 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
                 tmp = f.name
             binary, lib_dir, tessdata = self._get_tesseract_path()
             env = os.environ.copy()
-            env['LD_LIBRARY_PATH'] = lib_dir + (':' + env.get('LD_LIBRARY_PATH', ''))
+            if os.name == 'nt':
+                env['PATH'] = lib_dir + ';' + env.get('PATH', '')
+            else:
+                env['LD_LIBRARY_PATH'] = lib_dir + ':' + env.get('LD_LIBRARY_PATH', '')
             env['TESSDATA_PREFIX'] = tessdata
             result = subprocess.run(
                 [binary, tmp, 'stdout'],

@@ -11,10 +11,8 @@ Get the latest build from **[Releases](https://github.com/sudobreakstuff/Nexcamp
 |----------|------|-------|
 | **Linux** | `NexCampus-linux` | Make executable: `chmod +x NexCampus-linux && ./NexCampus-linux` |
 | **Windows** | `NexCampus-windows.exe` | Double-click to run |
-| **Android** | (PWA) | Open in Chrome → Install |
 
-> Linux build includes bundled Tesseract 5.5 for OCR.  
-> Windows build does **not** include Tesseract — OCR will show "not available" on Windows.
+> Both builds include bundled Tesseract 5 for OCR.
 
 ## Install
 
@@ -36,13 +34,6 @@ Now find "NexCampus" in your app menu.
 1. Download `NexCampus-windows.exe` from Releases
 2. Double-click to run
 
-### Android (PWA)
-
-1. Open **https://github.com/sudobreakstuff/Nexcampus** in Chrome
-2. Tap the menu → **Install NexCampus**
-
-The PWA works for all client-side tools (Text Tools, Periodic Table, Dictionary, etc.). Server features (OCR, Study Lab AI) require the Python backend.
-
 ## Build from source
 
 ```bash
@@ -55,42 +46,25 @@ pip install pywebview PyInstaller Pillow
 # Linux
 python3 -m PyInstaller --onefile \
   --add-data "static:static" \
+  --add-data "index.html:." \
   --add-data "tesseract-pkg/tesseract-bin:tesseract-bin" \
   --name "NexCampus-linux" server.py
 
-# Windows
-python -m PyInstaller --onefile \
+# Windows — requires Tesseract installed via choco first:
+#   choco install tesseract --version 5.3.3.20231005 -y
+python -m PyInstaller --onefile --noconsole \
   --add-data "static;static" \
+  --add-data "index.html;." \
+  --add-data "tesseract-win;tesseract-win" \
   --name "NexCampus-windows.exe" server.py
 ```
-
-> **Windows OCR**: Download Windows Tesseract binaries and place in `tesseract-pkg/tesseract-bin/` before building.
-
-### Android (APK)
-
-Requires [Buildozer](https://buildozer.readthedocs.io/) on Linux:
-
-```bash
-# Install Buildozer dependencies (Ubuntu/Debian)
-sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf \
-  libtool pkg-config zlib1g-dev libncurses5-dev libffi-dev libssl-dev
-pip3 install buildozer
-
-# Build APK
-cd Nexcampus
-buildozer android debug
-
-# The APK will be at bin/NexCampus-*.apk
-```
-
-Install the APK on your Android device. OCR works via Tesseract.js in the browser — no server needed.
 
 ## Features
 
 - **Notes Editor**: Rich text, templates, PDF export, table editor, emoji picker, font manager
 - **16 Study Lab Tools**: Summarize, Q&A, Quiz, Flashcards, Citation, Timer, Readability, Merge, GPA, Vocab, Outline, Diff, Bibliography, Periodic Table, Dictionary
 - **12 Text Tools**: Case converter, Ciphers (ROT13/Atbash/Caesar/Vigenere), Lines ops, Diff, AI-ism Scanner, Stats, Frequency chart, Entity extraction, Hash/Base64, Password generator, Spell Check, Find & Replace
-- **OCR**: Tesseract 5.5 bundled (Linux desktop) or Tesseract.js in-browser (all platforms including Android/PWA)
+- **OCR**: Tesseract 5 bundled on both Linux and Windows (fully offline)
 - **Dictionary**: 262k-word offline dictionary
 - **Periodic Table**: Interactive, quiz mode, 40 fun facts
 - **Fully offline**: No internet required
@@ -100,9 +74,8 @@ Install the APK on your Android device. OCR works via Tesseract.js in the browse
 | Platform | Status |
 |----------|--------|
 | Linux | ✅ Full support |
-| Windows | ✅ Supported (no server OCR) |
-| Android | ✅ APK + PWA (browser OCR via Tesseract.js) |
-| Android | ✅ PWA (limited to client-side features) |
+| Windows | ✅ Full support |
+| Android | 🚧 Future release (dedicated native app planned) |
 
 ## License
 

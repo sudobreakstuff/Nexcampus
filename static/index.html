@@ -729,10 +729,6 @@ document.addEventListener('DOMContentLoaded', function() {
   var ocrFile = document.getElementById('tt-ocr-file');
   if (ocrFile) { ocrFile.onchange = previewOcrImage; }
 
-  // Register service worker for PWA
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js');
-  }
 });
 </script>
 </body>
