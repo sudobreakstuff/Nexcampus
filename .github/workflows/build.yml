@@ -67,21 +67,19 @@ jobs:
 
   build-android:
     runs-on: ubuntu-latest
+    container:
+      image: kivy/buildozer:latest
+      options: --user root
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build APK with Buildozer Docker
+      - name: Build APK
         run: |
-          docker pull kivy/buildozer:latest
-          docker run --rm \
-            -v ${{ github.workspace }}:/workspace \
-            -w /workspace \
-            -e GRADLE_OPTS="-Xmx2g -Xms2g" \
-            kivy/buildozer:latest \
-            /bin/bash -c "yes | buildozer android debug" 2>&1
+          yes | buildozer android debug 2>&1
 
       - name: Find APK
         id: find-apk
+        shell: bash
         run: |
           apk=$(ls bin/*.apk 2>/dev/null | head -1)
           if [ -n "$apk" ]; then
