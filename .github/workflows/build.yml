@@ -1,8 +1,9 @@
 name: Build
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - 'v*'
 
 permissions:
   contents: write
@@ -38,6 +39,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: dist/NexCampus-linux
+          generate_release_notes: true
+          make_latest: true
 
   build-windows:
     runs-on: windows-latest
@@ -59,3 +62,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: dist/NexCampus-windows.exe
+          generate_release_notes: true
+          make_latest: true
