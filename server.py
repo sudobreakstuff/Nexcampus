@@ -71,20 +71,26 @@ def load_version():
 
 VERSION = load_version()
 
-# Load dictionary
+# Load dictionary (lazy)
 DICTIONARY = {}
+DICTIONARY_LOADED = False
 def load_dictionary():
-    global DICTIONARY
-    dict_path = STATIC_DIR / "dictionary.json"
-    if dict_path.exists():
-        try:
+    global DICTIONARY, DICTIONARY_LOADED
+    if DICTIONARY_LOADED:
+        return
+    try:
+        dict_path = STATIC_DIR / "dictionary.json"
+        if dict_path.exists():
             with open(dict_path, 'r', encoding='utf-8') as f:
                 DICTIONARY = json.load(f)
             print(f'[NexCampus] Loaded dictionary: {len(DICTIONARY)} words')
-        except Exception as e:
-            print(f'[NexCampus] Failed to load dictionary: {e}')
+        DICTIONARY_LOADED = True
+    except Exception as e:
+        print(f'[NexCampus] Failed to load dictionary: {e}')
+        DICTIONARY_LOADED = True
 
-load_dictionary()
+# Lazy load on first request instead of at import time
+# load_dictionary()
 PLATFORM = 'windows' if sys.platform == 'win32' else 'linux'
 
 STOP_WORDS = frozenset({
@@ -613,6 +619,7 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
         if not word:
             self.send_json({'error': 'No word provided', 'success': False}, 400)
             return
+        load_dictionary()
         defn = DICTIONARY.get(word)
         if defn:
             self.send_json({'word': word, 'definition': defn, 'found': True, 'success': True})

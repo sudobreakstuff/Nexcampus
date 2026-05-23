@@ -13,7 +13,15 @@ else:
 sys.path.insert(0, str(APP_DIR))
 
 # Import server module
-import server
+try:
+    import server
+except Exception as e:
+    import traceback
+    try:
+        (APP_DIR / 'crash_import.log').write_text(f'Import failed: {e}\n{traceback.format_exc()}')
+    except:
+        pass
+    raise
 
 # Override data dirs to writable Android paths
 server.NOTEBOOK_DIR = APP_DIR / 'notebook_data'
@@ -50,4 +58,13 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as e:
+        import traceback
+        try:
+            crash_log = APP_DIR / 'crash.log'
+            crash_log.write_text(f'NexCampus crash: {e}\n{traceback.format_exc()}')
+        except:
+            pass
+        raise
