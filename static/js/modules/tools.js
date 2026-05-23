@@ -1687,37 +1687,79 @@ function ttOcr() {
   status.textContent = 'Running OCR...';
   output.style.display = 'none';
   if (btn) btn.disabled = true;
+
   var reader = new FileReader();
   reader.onload = function(e) {
-    fetch('/api/ocr', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: e.target.result })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (btn) btn.disabled = false;
-      if (data.error) {
-        status.textContent = 'OCR failed';
-        output.value = 'Error: ' + data.error;
-      } else {
-        var text = data.text || '';
-        if (text.trim()) {
-          var words = text.split(/\s+/).filter(function(w) { return w.length > 0; }).length;
-          status.textContent = 'Extracted ' + words + ' words';
-        } else {
-          status.textContent = 'No text found';
+    var imageData = e.target.result;
+
+    if (typeof Tesseract !== 'undefined') {
+      // Use Tesseract.js in-browser (works on Android/PWA)
+      var TESS_PATH = '/js/tesseract/';
+      Tesseract.createWorker({
+        workerPath: TESS_PATH + 'worker.min.js',
+        corePath: TESS_PATH + 'tesseract-core.wasm.js',
+        langPath: TESS_PATH,
+        logger: function(m) {
+          if (m.status === 'recognizing text') {
+            status.textContent = 'OCR: ' + Math.round(m.progress * 100) + '%';
+          }
         }
-        output.value = text;
-      }
-      output.style.display = '';
-    })
-    .catch(function(err) {
-      if (btn) btn.disabled = false;
-      status.textContent = 'Server error';
-      output.value = 'Request failed: ' + err.message;
-      output.style.display = '';
-    });
+      }).then(function(worker) {
+        worker.loadLanguage('eng').then(function() {
+          worker.initialize('eng').then(function() {
+            worker.recognize(imageData).then(function(result) {
+              worker.terminate();
+              if (btn) btn.disabled = false;
+              var text = result.data.text || '';
+              if (text.trim()) {
+                var words = text.split(/\s+/).filter(function(w) { return w.length > 0; }).length;
+                status.textContent = 'Extracted ' + words + ' words (browser)';
+              } else {
+                status.textContent = 'No text found';
+              }
+              output.value = text;
+              output.style.display = '';
+            }).catch(function() { fallbackOcr(imageData, status, output, btn); });
+          }).catch(function() { fallbackOcr(imageData, status, output, btn); });
+        }).catch(function() { fallbackOcr(imageData, status, output, btn); });
+      }).catch(function() {
+        fallbackOcr(imageData, status, output, btn);
+      });
+    } else {
+      fallbackOcr(imageData, status, output, btn);
+    }
   };
   reader.readAsDataURL(file);
+}
+
+function fallbackOcr(imageData, status, output, btn) {
+  fetch('/api/ocr', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ image: imageData })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (btn) btn.disabled = false;
+    if (data.error) {
+      status.textContent = 'OCR failed';
+      output.value = 'Error: ' + data.error;
+    } else {
+      var text = data.text || '';
+      if (text.trim()) {
+        var words = text.split(/\s+/).filter(function(w) { return w.length > 0; }).length;
+        status.textContent = 'Extracted ' + words + ' words';
+      } else {
+        status.textContent = 'No text found';
+      }
+      output.value = text;
+    }
+    output.style.display = '';
+  })
+  .catch(function(err) {
+    if (btn) btn.disabled = false;
+    status.textContent = 'Server error';
+    output.value = 'Request failed: ' + err.message;
+    output.style.display = '';
+  });
 }

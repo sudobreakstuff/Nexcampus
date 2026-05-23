@@ -83,14 +83,14 @@ buildozer android debug
 # The APK will be at bin/NexCampus-*.apk
 ```
 
-Install the APK on your Android device. OCR is not available on Android. All other features work.
+Install the APK on your Android device. OCR works via Tesseract.js in the browser — no server needed.
 
 ## Features
 
 - **Notes Editor**: Rich text, templates, PDF export, table editor, emoji picker, font manager
 - **16 Study Lab Tools**: Summarize, Q&A, Quiz, Flashcards, Citation, Timer, Readability, Merge, GPA, Vocab, Outline, Diff, Bibliography, Periodic Table, Dictionary
 - **12 Text Tools**: Case converter, Ciphers (ROT13/Atbash/Caesar/Vigenere), Lines ops, Diff, AI-ism Scanner, Stats, Frequency chart, Entity extraction, Hash/Base64, Password generator, Spell Check, Find & Replace
-- **OCR**: Tesseract 5.5 bundled (Linux only)
+- **OCR**: Tesseract 5.5 bundled (Linux desktop) or Tesseract.js in-browser (all platforms including Android/PWA)
 - **Dictionary**: 262k-word offline dictionary
 - **Periodic Table**: Interactive, quiz mode, 40 fun facts
 - **Fully offline**: No internet required
@@ -100,8 +100,8 @@ Install the APK on your Android device. OCR is not available on Android. All oth
 | Platform | Status |
 |----------|--------|
 | Linux | ✅ Full support |
-| Windows | ✅ Supported (no OCR) |
-| Android | ✅ APK (no OCR) |
+| Windows | ✅ Supported (no server OCR) |
+| Android | ✅ APK + PWA (browser OCR via Tesseract.js) |
 | Android | ✅ PWA (limited to client-side features) |
 
 ## License
