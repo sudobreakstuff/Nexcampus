@@ -38,25 +38,6 @@ server.NexCampusHandler.api_ocr = lambda self, data: self.send_json(
 
 def main():
     port = 8080
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    try:
-        sock.bind(('127.0.0.1', port))
-        sock.close()
-    except OSError:
-        for p in range(port, port + 100):
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            try:
-                s.bind(('127.0.0.1', p))
-                s.close()
-                port = p
-                break
-            except OSError:
-                s.close()
-        else:
-            return
-
     httpd = http.server.HTTPServer(('127.0.0.1', port), server.NexCampusHandler)
     t = threading.Thread(target=httpd.serve_forever, daemon=True)
     t.start()
