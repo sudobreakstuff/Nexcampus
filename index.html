@@ -2,19 +2,31 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0f1623">
 <title>NexCampus - Offline Student Toolkit</title>
 <link rel="stylesheet" href="static/css/retro.css">
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json" crossorigin="anonymous">
 <link rel="icon" href="static/icons/favicon.png">
+<link rel="apple-touch-icon" href="static/icons/icon-192.png">
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').then(function(reg) {
+  navigator.serviceWorker.register('sw.js', { scope: '.' }).then(function(reg) {
     console.log('SW registered:', reg.scope);
   }).catch(function(err) {
     console.error('SW registration failed:', err);
   });
 }
+var installPromptEvent;
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  installPromptEvent = e;
+  var btn = document.getElementById('install-pwa');
+  if (btn) btn.style.display = 'inline-block';
+});
 </script>
 </head>
 <body>
@@ -30,14 +42,14 @@ if ('serviceWorker' in navigator) {
 <div id="app" style="display:none;">
   <div id="sidebar">
     <div class="sidebar-header">NEXCAMPUS <span class="connection-dot"></span></div>
-    <div class="sidebar-subtitle">v2.0</div>
+    <div class="sidebar-subtitle">v2.1</div>
     <nav id="nav">
       <button class="nav-btn active" data-tab="home">HOME</button>
       <button class="nav-btn" data-tab="notebook">STUDY LAB</button>
       <button class="nav-btn" data-tab="texttools">TEXT TOOLS</button>
       <button class="nav-btn" data-tab="about">ABOUT</button>
     </nav>
-    <div class="sidebar-footer"></div>
+    <div class="sidebar-footer"><button id="install-pwa" class="install-btn" style="display:none" onclick="if(installPromptEvent){installPromptEvent.prompt();installPromptEvent.userChoice.then(function(r){installPromptEvent=null;this.style.display='none';});}">INSTALL APP</button></div>
   </div>
 
   <div id="main">
@@ -51,11 +63,11 @@ if ('serviceWorker' in navigator) {
       <!-- HOME -->
       <div class="tab-pane active section" id="tab-home">
         <div class="greeting">Hey there.</div>
-        <div class="greeting-sub">NexCampus v2.0</div>
+        <div class="greeting-sub">NexCampus v2.1</div>
 
         <div class="stat-row">
           <div class="stat-item">
-            <span class="stat-value">v2.0</span>
+            <span class="stat-value">v2.1</span>
             <span class="stat-label">Version</span>
           </div>
           <div class="stat-item">
@@ -640,7 +652,7 @@ if ('serviceWorker' in navigator) {
 
       <!-- ABOUT -->
       <div class="tab-pane section" id="tab-about">
-        <div class="about-header">About NexCampus <span id="about-version">v2.0</span></div>
+        <div class="about-header">About NexCampus <span id="about-version">v2.1</span></div>
 
         <div class="about-block">
           <div class="about-block-title">Our Mission</div>
@@ -715,7 +727,7 @@ if ('serviceWorker' in navigator) {
 </div>
 
   <div id="statusbar">
-    <span>NexCampus v2.0 · Made by Shahid Singh · NexCore&trade; Systems and Technologies · 2026</span>
+    <span>NexCampus v2.1 · Made by Shahid Singh · NexCore&trade; Systems and Technologies · 2026</span>
   </div>
 
   <script src="static/js/utils.js"></script>

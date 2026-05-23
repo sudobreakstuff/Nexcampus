@@ -49,18 +49,51 @@ if getattr(sys, 'frozen', False):
 else:
     BASE_DIR = Path(__file__).parent
     EXE_DIR = BASE_DIR
+
+# Use proper app data directory to avoid clutter where exe is placed
+if 'ANDROID_PRIVATE' in os.environ:
+    DATA_DIR = Path(os.environ['ANDROID_PRIVATE'])
+elif 'ANDROID_ARGUMENT' in os.environ:
+    DATA_DIR = Path(os.environ['ANDROID_ARGUMENT'])
+elif getattr(sys, 'frozen', False) and sys.platform == 'win32':
+    DATA_DIR = Path(os.environ.get('APPDATA', str(EXE_DIR))) / 'NexCampus'
+elif getattr(sys, 'frozen', False):
+    DATA_DIR = Path(os.environ.get('XDG_DATA_HOME', Path.home() / '.local' / 'share')) / 'nexcampus'
+else:
+    DATA_DIR = EXE_DIR
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+
 STATIC_DIR = BASE_DIR / "static"
 VERSION_FILE = STATIC_DIR / "version.json"
-NOTEBOOK_DIR = EXE_DIR / "notebook_data"
-NOTES_DIR = EXE_DIR / "notes_data"
-FONTS_DIR = EXE_DIR / "fonts_data"
-TEMPLATES_DIR = EXE_DIR / "templates_data"
-BIBLIOGRAPHY_DIR = EXE_DIR / "bibliography_data"
+NOTEBOOK_DIR = DATA_DIR / "notebook_data"
+NOTES_DIR = DATA_DIR / "notes_data"
+FONTS_DIR = DATA_DIR / "fonts_data"
+TEMPLATES_DIR = DATA_DIR / "templates_data"
+BIBLIOGRAPHY_DIR = DATA_DIR / "bibliography_data"
 NOTEBOOK_DIR.mkdir(exist_ok=True)
 NOTES_DIR.mkdir(exist_ok=True)
 FONTS_DIR.mkdir(exist_ok=True)
 TEMPLATES_DIR.mkdir(exist_ok=True)
 BIBLIOGRAPHY_DIR.mkdir(exist_ok=True)
+
+# Create desktop shortcut on Windows (frozen/onefile)
+if getattr(sys, 'frozen', False) and sys.platform == 'win32':
+    try:
+        desktop = Path(os.environ.get('USERPROFILE', '')) / 'Desktop' / 'NexCampus.lnk'
+        if not desktop.exists():
+            import subprocess
+            ps_script = f'''
+$ws = New-Object -ComObject WScript.Shell
+$s = $ws.CreateShortcut("{desktop}")
+$s.TargetPath = "{sys.executable}"
+$s.WorkingDirectory = "{EXE_DIR}"
+$s.Description = "NexCampus - Offline Student Toolkit"
+$s.Save()
+'''
+            subprocess.run(['powershell', '-NoProfile', '-Command', ps_script],
+                capture_output=True, timeout=10)
+    except:
+        pass
 
 def load_version():
     try:

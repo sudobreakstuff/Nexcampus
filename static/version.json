@@ -1,22 +1,12 @@
 {
-  "version": "2.0.0",
-  "name": "NexCampus v2.0",
-  "update_url": "https://nexcampus.example.com/version.json",
-  "downloads": {
-    "linux": {
-      "url": "https://nexcampus.example.com/downloads/NexCampus-v2.0-linux",
-      "size": "9.2 MB"
-    },
-    "windows": {
-      "url": "https://nexcampus.example.com/downloads/NexCampus-v2.0-windows.exe",
-      "size": "12 MB"
-    }
-  },
-  "release_notes_url": "https://nexcampus.example.com/releases",
+  "version": "2.1.0",
+  "name": "NexCampus v2.1",
   "changelog": [
-    "Initial release v2.0",
-    "Clean slate — HOME and ABOUT only",
-    "Native window support (pywebview)",
-    "Cross-platform (Linux + Windows)"
+    "Data directories moved to APPDATA/~/.local/share (no desktop clutter)",
+    "Desktop shortcut auto-created on Windows first run",
+    "Fixed left-side app cutoff (overflow-x hidden)",
+    "Improved PWA manifest with scope and meta tags",
+    "APK crash handling now shows error in webview",
+    "APK uses writable app-private directory for data"
   ]
 }

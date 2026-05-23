@@ -55,7 +55,7 @@ body {
 }
 
 /* Layout */
-#app { display: flex; height: 100vh; }
+#app { display: flex; height: 100vh; width: 100%; overflow-x: hidden; }
 
 /* Sidebar — subtle, floats */
 #sidebar {
@@ -84,6 +84,8 @@ body {
 .nav-btn:hover { color: var(--fg); padding-left: 20px; }
 .nav-btn.active { color: var(--cyan); text-shadow: 0 0 12px var(--glow-cyan); }
 .sidebar-footer { margin-top: auto; padding: 6px 16px; }
+.install-btn { display:none; width:100%; padding:6px 8px; margin-top:6px; background:transparent; border:1px solid var(--cyan); color:var(--cyan); font-family:inherit; font-size:9px; letter-spacing:1px; border-radius:3px; cursor:pointer; transition:0.2s; }
+.install-btn:hover { background:rgba(79,195,247,0.1); }
 .connection-dot {
   width: 6px; height: 6px; border-radius: 50%;
   background: var(--amber); box-shadow: 0 0 8px var(--amber);
@@ -93,7 +95,7 @@ body {
 @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
 /* Main */
-#main { flex: 1; display: flex; flex-direction: column; }
+#main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 #clockbar {
   display: flex; justify-content: flex-end; gap: 20px;
   padding: 8px 32px; font-size: 10px; color: var(--fg-dim);
@@ -102,7 +104,7 @@ body {
 /* Content — centered vertically + horizontally */
 #content {
   flex: 1; display: flex; align-items: center; justify-content: center;
-  padding: 40px; overflow-y: auto; min-height: 0;
+  padding: 40px; overflow-y: auto; overflow-x: hidden; min-height: 0;
 }
 .tab-pane { display: none; animation: fadeIn 0.3s ease; width: 100%; }
 .tab-pane.active { display: block; }
