@@ -1,17 +1,17 @@
 const CACHE = 'nexcampus-v1';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/static/css/retro.css',
-  '/static/js/utils.js',
-  '/static/js/app.js',
-  '/static/js/modules/notebook.js',
-  '/static/js/modules/notes.js',
-  '/static/js/modules/tools.js',
-  '/static/manifest.json',
-  '/static/icons/icon-192.png',
-  '/static/icons/icon-512.png',
-  '/static/icons/favicon.png',
+  '.',
+  'index.html',
+  'static/css/retro.css',
+  'static/js/utils.js',
+  'static/js/app.js',
+  'static/js/modules/notebook.js',
+  'static/js/modules/notes.js',
+  'static/js/modules/tools.js',
+  'manifest.json',
+  'static/icons/icon-192.png',
+  'static/icons/icon-512.png',
+  'static/icons/favicon.png',
 ];
 
 self.addEventListener('install', function(e) {

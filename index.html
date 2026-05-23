@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NexCampus - Offline Student Toolkit</title>
 <link rel="stylesheet" href="static/css/retro.css">
-<link rel="manifest" href="static/manifest.json">
+<link rel="manifest" href="manifest.json">
 <link rel="icon" href="static/icons/favicon.png">
 </head>
 <body>
@@ -730,7 +730,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Register service worker for PWA
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('static/sw.js');
+    navigator.serviceWorker.register('sw.js');
   }
 });
 </script>
