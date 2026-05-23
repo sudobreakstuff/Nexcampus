@@ -1,0 +1,73 @@
+name: Build
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            python3-dev \
+            libgtk-3-dev \
+            libwebkit2gtk-4.1-dev \
+            libappindicator3-dev \
+            patchelf
+
+      - name: Install Python deps
+        run: pip install pywebview PyInstaller Pillow
+
+      - name: Build
+        run: python3 -m PyInstaller --onefile \
+          --add-data "static:static" \
+          --add-data "tesseract-pkg/tesseract-bin:tesseract-bin" \
+          --name "NexCampus-linux" server.py
+
+      - name: Upload
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: dist/NexCampus-linux
+          asset_name: NexCampus-linux
+          asset_content_type: application/octet-stream
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python deps
+        run: pip install pywebview PyInstaller Pillow
+
+      - name: Build
+        run: python -m PyInstaller --onefile \
+          --add-data "static;static" \
+          --name "NexCampus-windows.exe" server.py
+
+      - name: Upload
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: dist/NexCampus-windows.exe
+          asset_name: NexCampus-windows.exe
+          asset_content_type: application/octet-stream

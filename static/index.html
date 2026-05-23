@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NexCampus - Offline Student Toolkit</title>
 <link rel="stylesheet" href="css/retro.css">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icons/favicon.png">
 </head>
 <body>
 
@@ -726,6 +728,11 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   var ocrFile = document.getElementById('tt-ocr-file');
   if (ocrFile) { ocrFile.onchange = previewOcrImage; }
+
+  // Register service worker for PWA
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
 });
 </script>
 </body>
