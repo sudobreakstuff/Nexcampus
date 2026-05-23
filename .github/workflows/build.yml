@@ -64,3 +64,28 @@ jobs:
           files: dist/NexCampus-windows.exe
           generate_release_notes: true
           make_latest: true
+
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Buildozer global
+        uses: actions/cache@v4
+        with:
+          path: .buildozer_global
+          key: buildozer-global-${{ hashFiles('buildozer.spec') }}
+
+      - name: Build APK
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          workdir: .
+          buildozer_version: stable
+
+      - name: Upload
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.buildozer.outputs.filename }}
+          generate_release_notes: true
+          make_latest: true
