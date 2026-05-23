@@ -1,4 +1,4 @@
-const CACHE = 'nexcampus-v1';
+const CACHE = 'nexcampus-v2';
 const ASSETS = [
   '.',
   'index.html',
