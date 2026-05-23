@@ -12,7 +12,12 @@ if os.path.isdir('/tmp') and getattr(sys, 'frozen', False):
         if os.path.normpath(d) != current_mei and os.path.isdir(d):
             shutil.rmtree(d, ignore_errors=True)
 
-import numpy as np
+HAS_NUMPY = False
+try:
+    import numpy as np
+    HAS_NUMPY = True
+except:
+    pass
 
 HAS_PDF = False
 try:
@@ -719,12 +724,7 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
             try:
                 vectorizer = TfidfVectorizer(stop_words='english', max_features=500, max_df=0.9, min_df=1)
                 tfidf = vectorizer.fit_transform([text])
-HAS_NUMPY = False
-try:
-    import numpy as np
-    HAS_NUMPY = True
-except:
-    pass
+                import numpy as np
                 names = vectorizer.get_feature_names_out()
                 scores = np.array(tfidf.sum(axis=0)).flatten()
                 ranked = sorted(zip(names, scores), key=lambda x: -x[1])
