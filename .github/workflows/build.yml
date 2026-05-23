@@ -29,20 +29,12 @@ jobs:
         run: pip install pywebview PyInstaller Pillow
 
       - name: Build
-        run: python3 -m PyInstaller --onefile \
-          --add-data "static:static" \
-          --add-data "tesseract-pkg/tesseract-bin:tesseract-bin" \
-          --name "NexCampus-linux" server.py
+        run: python3 -m PyInstaller --onefile --add-data "static:static" --add-data "tesseract-pkg/tesseract-bin:tesseract-bin" --name "NexCampus-linux" server.py
 
       - name: Upload
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: dist/NexCampus-linux
-          asset_name: NexCampus-linux
-          asset_content_type: application/octet-stream
+          files: dist/NexCampus-linux
 
   build-windows:
     runs-on: windows-latest
@@ -58,16 +50,9 @@ jobs:
         run: pip install pywebview PyInstaller Pillow
 
       - name: Build
-        run: python -m PyInstaller --onefile \
-          --add-data "static;static" \
-          --name "NexCampus-windows.exe" server.py
+        run: python -m PyInstaller --onefile --add-data "static;static" --name "NexCampus-windows.exe" server.py
 
       - name: Upload
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: dist/NexCampus-windows.exe
-          asset_name: NexCampus-windows.exe
-          asset_content_type: application/octet-stream
+          files: dist/NexCampus-windows.exe
