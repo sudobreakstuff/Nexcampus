@@ -72,10 +72,13 @@ jobs:
 
       - name: Build APK with Buildozer Docker
         run: |
+          docker pull kivy/buildozer:latest
           docker run --rm \
             -v ${{ github.workspace }}:/workspace \
             -w /workspace \
-            kivy/buildozer android debug 2>&1
+            -e GRADLE_OPTS="-Xmx2g -Xms2g" \
+            kivy/buildozer:latest \
+            /bin/bash -c "yes | buildozer android debug" 2>&1
 
       - name: Find APK
         id: find-apk
