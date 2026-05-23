@@ -65,35 +65,3 @@ jobs:
           generate_release_notes: true
           make_latest: true
 
-  build-android:
-    runs-on: ubuntu-latest
-    container:
-      image: kivy/buildozer:latest
-      options: --user root
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build APK
-        run: |
-          yes | buildozer android debug 2>&1
-
-      - name: Find APK
-        id: find-apk
-        shell: bash
-        run: |
-          apk=$(ls bin/*.apk 2>/dev/null | head -1)
-          if [ -n "$apk" ]; then
-            echo "filename=$apk" >> $GITHUB_OUTPUT
-            echo "APK found: $apk"
-          else
-            echo "No APK found in bin/"
-            ls -la bin/ 2>/dev/null || echo "bin/ not found"
-          fi
-
-      - name: Upload
-        if: steps.find-apk.outputs.filename != ''
-        uses: softprops/action-gh-release@v2
-        with:
-          files: ${{ steps.find-apk.outputs.filename }}
-          generate_release_notes: true
-          make_latest: true

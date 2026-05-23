@@ -100,18 +100,15 @@ body {
   padding: 8px 32px; font-size: 10px; color: var(--fg-dim);
 }
 
-/* Content — centered vertically + horizontally */
+/* Content — scrollable, centered block */
 #content {
-  flex: 1; display: flex; align-items: flex-start; justify-content: center;
-  padding: 40px 40px 120px; overflow-y: auto; overflow-x: hidden; min-height: 0;
+  flex: 1; overflow-y: auto; overflow-x: hidden; min-height: 0;
+  padding: 40px 40px 100px;
 }
-.tab-pane { display: none; animation: fadeIn 0.3s ease; width: 100%; }
+.tab-pane { display: none; animation: fadeIn 0.3s ease; }
 .tab-pane.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-.section { max-width: 560px; }
-/* STUDY LAB tab sits at top, not centered */
-#tab-notebook.active { align-self: flex-start; }
-#tab-texttools.active { align-self: flex-start; }
+.section { max-width: 560px; margin: 0 auto; word-break: break-word; }
 
 /* Home */
 .greeting {
