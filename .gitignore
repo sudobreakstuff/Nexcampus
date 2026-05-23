@@ -3,6 +3,7 @@ __pycache__/
 dist/
 build/
 *.spec
+!buildozer.spec
 notebook_data/
 notes_data/
 fonts_data/

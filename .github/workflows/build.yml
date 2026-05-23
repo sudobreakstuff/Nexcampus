@@ -70,22 +70,37 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Cache Buildozer global
-        uses: actions/cache@v4
-        with:
-          path: .buildozer_global
-          key: buildozer-global-${{ hashFiles('buildozer.spec') }}
+      - name: Build APK with Buildozer
+        run: |
+          docker pull kivy/buildozer:latest
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            -e BUILDKIT_PROGRESS=plain \
+            kivy/buildozer:latest \
+            bash -c "yes | buildozer android debug 2>&1" || \
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            kivy/buildozer:latest \
+            bash -c "yes | buildozer android debug 2>&1"
 
-      - name: Build APK
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
-        with:
-          workdir: .
-          buildozer_version: stable
+      - name: Find APK
+        id: find-apk
+        run: |
+          apk=$(ls bin/*.apk 2>/dev/null | head -1)
+          if [ -n "$apk" ]; then
+            echo "filename=$apk" >> $GITHUB_OUTPUT
+            echo "APK found: $apk"
+          else
+            echo "No APK found in bin/"
+            ls -la bin/ 2>/dev/null || echo "bin/ directory not found"
+          fi
 
       - name: Upload
+        if: steps.find-apk.outputs.filename != ''
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ steps.buildozer.outputs.filename }}
+          files: ${{ steps.find-apk.outputs.filename }}
           generate_release_notes: true
           make_latest: true
