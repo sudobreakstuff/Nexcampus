@@ -201,7 +201,10 @@ input:focus, textarea:focus, select:focus {
   display: flex; gap: 0; margin-bottom: 24px; width: 100%;
   border-bottom: 1px solid var(--border); background: var(--bg2);
   border-radius: 6px 6px 0 0; padding: 0 4px;
+  overflow-x: auto; overflow-y: hidden; flex-shrink: 0;
 }
+.nb-tabs-bar::-webkit-scrollbar { height: 3px; }
+.nb-tabs-bar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 .nb-tab-btn {
   font-size: 11px; padding: 10px 18px; margin: 0 4px; border: none;
   border-bottom: 2px solid transparent; margin-bottom: -1px;
@@ -421,7 +424,7 @@ a:hover { color: var(--fg-bright); }
 .tool-inline .tool-form-row label { font-size: 11px; color: var(--fg-dim); display: flex; align-items: center; gap: 4px; }
 .tool-inline .tool-result-box { margin-top: 10px; padding: 12px; background: var(--bg-light); border: 1px solid var(--border); border-radius: 4px; display: none; font-size: 11px; line-height: 1.6; }
 .tool-inline .tool-result-box.visible { display: block; }
-.tool-result-box { padding: 12px; margin-top: 8px; background: var(--bg-light); border: 1px solid var(--border); border-radius: 4px; font-size: 11px; line-height: 1.6; }
+.tool-result-box { padding: 12px; margin-top: 8px; background: var(--bg-light); border: 1px solid var(--border); border-radius: 4px; font-size: 11px; line-height: 1.6; max-height: 300px; overflow-y: auto; }
 .tt-output-ta { width: 100%; min-height: 80px; padding: 8px; background: var(--bg); border: 1px solid var(--border); color: var(--fg); font-family: inherit; font-size: 11px; line-height: 1.5; border-radius: 3px; resize: vertical; box-sizing: border-box; }
 .tool-inline .tool-status { font-size: 9px; color: var(--fg-dim); margin: 4px 0; min-height: 16px; }
 .tool-info-panel { background: var(--bg-light); border: 1px solid var(--border); border-radius: 4px; padding: 12px; margin-top: 10px; font-size: 11px; line-height: 1.6; }

@@ -3,6 +3,7 @@
   "short_name": "NexCampus",
   "description": "Offline Student Toolkit — Notes, Study Lab, Text Tools, Dictionary & more",
   "start_url": ".",
+  "scope": ".",
   "display": "standalone",
   "background_color": "#0a0e17",
   "theme_color": "#0f1623",

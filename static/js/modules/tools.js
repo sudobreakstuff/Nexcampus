@@ -1694,7 +1694,7 @@ function ttOcr() {
 
     if (typeof Tesseract !== 'undefined') {
       // Use Tesseract.js in-browser (works on Android/PWA)
-      var TESS_PATH = '/js/tesseract/';
+      var TESS_PATH = 'static/js/tesseract/';
       Tesseract.createWorker({
         workerPath: TESS_PATH + 'worker.min.js',
         corePath: TESS_PATH + 'tesseract-core.wasm.js',

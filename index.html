@@ -7,6 +7,15 @@
 <link rel="stylesheet" href="static/css/retro.css">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="static/icons/favicon.png">
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').then(function(reg) {
+    console.log('SW registered:', reg.scope);
+  }).catch(function(err) {
+    console.error('SW registration failed:', err);
+  });
+}
+</script>
 </head>
 <body>
 
@@ -728,10 +737,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var ocrFile = document.getElementById('tt-ocr-file');
   if (ocrFile) { ocrFile.onchange = previewOcrImage; }
 
-  // Register service worker for PWA
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-  }
+  // Service worker is registered from <head>
 });
 </script>
 </body>
