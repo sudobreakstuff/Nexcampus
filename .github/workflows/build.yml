@@ -53,7 +53,7 @@ jobs:
         run: pip install pywebview PyInstaller Pillow
 
       - name: Build
-        run: python -m PyInstaller --onefile --add-data "static;static" --add-data "index.html;." --add-data "manifest.json;." --add-data "sw.js;." --name "NexCampus-windows.exe" server.py
+        run: python -m PyInstaller --onefile --noconsole --add-data "static;static" --add-data "index.html;." --add-data "manifest.json;." --add-data "sw.js;." --name "NexCampus-windows.exe" server.py
 
       - name: Upload
         uses: softprops/action-gh-release@v2
