@@ -20,6 +20,9 @@ rm -rf build dist *.spec
 # Build
 pyinstaller --onefile \
   --add-data "static:static" \
+  --add-data "index.html:." \
+  --add-data "manifest.json:." \
+  --add-data "sw.js:." \
   --add-data "tesseract-pkg/tesseract-bin:tesseract-bin" \
   --name "$APP_NAME" "$ENTRY"
 
