@@ -1,0 +1,22 @@
+{
+  "version": "2.0.0",
+  "name": "NexCampus v2.0",
+  "update_url": "https://nexcampus.example.com/version.json",
+  "downloads": {
+    "linux": {
+      "url": "https://nexcampus.example.com/downloads/NexCampus-v2.0-linux",
+      "size": "9.2 MB"
+    },
+    "windows": {
+      "url": "https://nexcampus.example.com/downloads/NexCampus-v2.0-windows.exe",
+      "size": "12 MB"
+    }
+  },
+  "release_notes_url": "https://nexcampus.example.com/releases",
+  "changelog": [
+    "Initial release v2.0",
+    "Clean slate — HOME and ABOUT only",
+    "Native window support (pywebview)",
+    "Cross-platform (Linux + Windows)"
+  ]
+}

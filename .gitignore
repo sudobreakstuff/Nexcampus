@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+dist/
+build/
+*.spec
+notebook_data/
+notes_data/
+fonts_data/
+templates_data/
+bibliography_data/

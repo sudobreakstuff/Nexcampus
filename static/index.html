@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexCampus - Offline Student Toolkit</title>
+<link rel="stylesheet" href="css/retro.css">
+</head>
+<body>
+
+<div id="boot-screen">
+  <div class="boot-content">
+    <div class="boot-logo-new">NexCampus</div>
+    <div class="boot-bar"><div class="boot-fill"></div></div>
+    <div class="boot-sub">Made by NexCore&trade; Systems &amp; Technologies</div>
+  </div>
+</div>
+
+<div id="app" style="display:none;">
+  <div id="sidebar">
+    <div class="sidebar-header">NEXCAMPUS <span class="connection-dot"></span></div>
+    <div class="sidebar-subtitle">v2.0</div>
+    <nav id="nav">
+      <button class="nav-btn active" data-tab="home">HOME</button>
+      <button class="nav-btn" data-tab="notebook">STUDY LAB</button>
+      <button class="nav-btn" data-tab="texttools">TEXT TOOLS</button>
+      <button class="nav-btn" data-tab="about">ABOUT</button>
+    </nav>
+    <div class="sidebar-footer"></div>
+  </div>
+
+  <div id="main">
+    <div id="clockbar">
+      <span id="clock"></span>
+      <span id="date"></span>
+    </div>
+
+    <div id="content">
+
+      <!-- HOME -->
+      <div class="tab-pane active section" id="tab-home">
+        <div class="greeting">Hey there.</div>
+        <div class="greeting-sub">NexCampus v2.0</div>
+
+        <div class="stat-row">
+          <div class="stat-item">
+            <span class="stat-value">v2.0</span>
+            <span class="stat-label">Version</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Internet Required</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">∞</span>
+            <span class="stat-label">Possibilities</span>
+          </div>
+        </div>
+
+        <div class="mission-text">
+          Every student deserves free tools to learn, build, and create — no internet required.
+        </div>
+      </div>
+
+      <!-- STUDY LAB -->
+      <div class="tab-pane" id="tab-notebook">
+        <div class="nb-tabs-bar">
+          <button class="nb-tab-btn active" data-nb-tool="summarize" onclick="switchNbTool('summarize')">Summarize</button>
+          <button class="nb-tab-btn" data-nb-tool="qa" onclick="switchNbTool('qa')">Q&A</button>
+          <button class="nb-tab-btn" data-nb-tool="quiz" onclick="switchNbTool('quiz')">Quiz</button>
+          <button class="nb-tab-btn" data-nb-tool="cards" onclick="switchNbTool('cards')">Flashcards</button>
+          <button class="nb-tab-btn" data-nb-tool="notes" onclick="switchNbTool('notes')">Notes</button>
+          <button class="nb-tab-btn" data-nb-tool="citation" onclick="switchNbTool('citation')">Citation</button>
+          <button class="nb-tab-btn" data-nb-tool="timer" onclick="switchNbTool('timer')">Timer</button>
+          <button class="nb-tab-btn" data-nb-tool="readability" onclick="switchNbTool('readability')">Readability</button>
+          <button class="nb-tab-btn" data-nb-tool="merge" onclick="switchNbTool('merge')">Merge</button>
+          <button class="nb-tab-btn" data-nb-tool="gpa" onclick="switchNbTool('gpa')">GPA</button>
+          <button class="nb-tab-btn" data-nb-tool="vocab" onclick="switchNbTool('vocab')">Vocab</button>
+          <button class="nb-tab-btn" data-nb-tool="outline" onclick="switchNbTool('outline')">Outline</button>
+          <button class="nb-tab-btn" data-nb-tool="diff" onclick="switchNbTool('diff')">Diff</button>
+          <button class="nb-tab-btn" data-nb-tool="bib" onclick="switchNbTool('bib')">Bibliography</button>
+          <button class="nb-tab-btn" data-nb-tool="periodic" onclick="switchNbTool('periodic')">Periodic</button>
+          <button class="nb-tab-btn" data-nb-tool="dictionary" onclick="switchNbTool('dictionary')">Dictionary</button>
+        </div>
+        <div class="nb-grid">
+          <div class="nb-side">
+            <div class="nb-section-title">Sources</div>
+            <div class="nb-upload-row">
+              <input type="file" id="nb-file-input" accept=".txt,.md,.pdf">
+              <button onclick="uploadDocument()">Upload</button>
+            </div>
+            <div class="nb-paste-row">
+              <textarea id="nb-paste-input" placeholder="Or paste text here..." rows="2"></textarea>
+              <button onclick="addPastedText()">Add</button>
+            </div>
+            <div id="nb-upload-status" class="nb-status"></div>
+            <div id="nb-doc-list" class="nb-doc-list"></div>
+            <div class="nb-source-footer">
+              <span id="nb-doc-count" class="nb-doc-count">0 documents</span>
+              <button onclick="clearAllDocuments()" class="nb-clear-btn">Clear All</button>
+            </div>
+          </div>
+          <div class="nb-main">
+            <div id="nb-tool-summarize" class="nb-tool-content active">
+              <div class="nb-controls">
+                <label>Sentences: <input type="number" id="nb-summary-sents" value="5" min="1" max="20" class="nb-num-inp"></label>
+                <label>Max words: <input type="number" id="nb-summary-words" value="0" min="0" max="2000" class="nb-num-inp" placeholder="0=auto"></label>
+                <button onclick="summarizeDocs()" class="nb-gen-btn">Generate</button>
+              </div>
+            </div>
+
+            <div id="nb-tool-qa" class="nb-tool-content">
+              <div class="nb-qa-area">
+                <div id="nb-qa-messages" class="nb-chat-box">
+                  <div style="color:var(--fg-dim);font-size:12px;padding:12px">Ask a question about your documents.</div>
+                </div>
+                <div class="nb-qa-row">
+                  <textarea id="nb-qa-input" placeholder="Ask about your documents..." rows="2"></textarea>
+                  <button onclick="askNotebook()">Ask</button>
+                  <button onclick="clearNbChat()">Clear</button>
+                </div>
+                <div id="nb-qa-status" class="nb-status"></div>
+              </div>
+            </div>
+
+            <div id="nb-tool-quiz" class="nb-tool-content">
+              <div class="nb-controls">
+                <label>Questions: <input type="number" id="nb-quiz-count" value="8" min="1" max="30" class="nb-num-inp"></label>
+                <button onclick="generateQuiz()" class="nb-gen-btn">Generate</button>
+              </div>
+            </div>
+
+            <div id="nb-tool-cards" class="nb-tool-content">
+              <div class="nb-controls">
+                <label>Cards: <input type="number" id="nb-cards-count" value="10" min="1" max="40" class="nb-num-inp"></label>
+                <button onclick="generateCards()" class="nb-gen-btn">Generate</button>
+              </div>
+            </div>
+
+            <!-- Notes -->
+            <div id="nb-tool-notes" class="nb-tool-content">
+              <div id="notes-toolbar">
+                <div class="nt-group">
+                  <button class="nt-btn" onclick="notesNew()" title="New document">New</button>
+                  <button class="nt-btn" onclick="notesLoad()" title="Open file from computer">Open</button>
+                  <button class="nt-btn" onclick="notesSave()" title="Save (Ctrl+S)">Save</button>
+                  <button class="nt-btn" onclick="notesManager()" title="Browse saved notes">Notes</button>
+                  <button class="nt-btn" onclick="notesExportPDF()" title="Download as PDF">PDF</button>
+                  <button class="nt-btn" onclick="notesPrint()" title="Print">Print</button>
+                  <button class="nt-btn" onclick="notesTempSave()" title="Save as template">Tpl+</button>
+                  <button class="nt-btn" onclick="notesTempLoad()" title="Load template">Tpl</button>
+                  <button class="nt-btn" onclick="notesFontManager()" title="Manage fonts">Fonts</button>
+                  <button class="nt-btn" onclick="notesHelp()" title="Quick guide & shortcuts">Help</button>
+                </div>
+                <span class="nt-divider"></span>
+                <div class="nt-group">
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('bold')" title="Bold (Ctrl+B)"><b>B</b></button>
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('italic')" title="Italic (Ctrl+I)"><i>I</i></button>
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('underline')" title="Underline (Ctrl+U)"><u>U</u></button>
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('removeFormat')" title="Clear formatting">✕</button>
+                </div>
+                <span class="nt-divider"></span>
+                <div class="nt-group">
+                  <select class="nt-select" onchange="execCmd('formatBlock', this.value)">
+                    <option value="p">Normal</option>
+                    <option value="h1">H1</option>
+                    <option value="h2">H2</option>
+                    <option value="h3">H3</option>
+                  </select>
+                  <select class="nt-select" id="nt-font-size" onchange="setFontSize(this.value)">
+                    <option value="10">10</option>
+                    <option value="12">12</option>
+                    <option value="14" selected>14</option>
+                    <option value="16">16</option>
+                    <option value="18">18</option>
+                    <option value="24">24</option>
+                    <option value="32">32</option>
+                    <option value="48">48</option>
+                    <option value="72">72</option>
+                  </select>
+                  <select class="nt-select" id="nt-font-family" onchange="setFontFamily(this.value)">
+                    <option value="sans-serif">Sans</option>
+                    <option value="serif" selected>Serif</option>
+                    <option value="monospace">Mono</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Trebuchet MS">Trebuchet MS</option>
+                    <option value="Palatino">Palatino</option>
+                    <option value="Garamond">Garamond</option>
+                    <option value="Bookman">Bookman</option>
+                    <option value="Comic Sans MS">Comic Sans</option>
+                    <option value="Impact">Impact</option>
+                    <option value="Lucida Console">Lucida Console</option>
+                    <option value="Tahoma">Tahoma</option>
+                    <option value="Century Gothic">Century Gothic</option>
+                    <option value="Cambria">Cambria</option>
+                    <option value="Calibri">Calibri</option>
+                    <option value="Candara">Candara</option>
+                    <option value="Consolas">Consolas</option>
+                    <option value="Corbel">Corbel</option>
+                    <option value="Franklin Gothic">Franklin Gothic</option>
+                  </select>
+                  <select class="nt-select" id="nt-line-height" onchange="setLineHeight(this.value)">
+                    <option value="1">Single</option>
+                    <option value="1.15">1.15</option>
+                    <option value="1.5" selected>1.5</option>
+                    <option value="2">Double</option>
+                  </select>
+                </div>
+                <span class="nt-divider"></span>
+                <div class="nt-group">
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('justifyLeft')" title="Align left">⬪L</button>
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('justifyCenter')" title="Center">⬪C</button>
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('justifyRight')" title="Align right">⬪R</button>
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('justifyFull')" title="Justify">⬪J</button>
+                </div>
+                <span class="nt-divider"></span>
+                <div class="nt-group">
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('insertOrderedList')" title="Numbered list">OL</button>
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('insertUnorderedList')" title="Bullet list">UL</button>
+                  <select class="nt-select" id="nt-list-style" onchange="setListStyle(this.value)" title="List style">
+                    <option value="">Style</option>
+                    <option value="disc">● Disc</option>
+                    <option value="circle">○ Circle</option>
+                    <option value="square">■ Square</option>
+                    <option value="decimal">1. Decimal</option>
+                    <option value="lower-alpha">a. Alpha</option>
+                    <option value="upper-alpha">A. Alpha</option>
+                    <option value="lower-roman">i. Roman</option>
+                    <option value="upper-roman">I. Roman</option>
+                  </select>
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('indent')" title="Increase indent">→</button>
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('outdent')" title="Decrease indent">←</button>
+                </div>
+                <span class="nt-divider"></span>
+                <div class="nt-group">
+                  <label class="nt-color-label" title="Text color">A<input type="color" class="nt-color" onchange="execCmd('foreColor', this.value)" value="#4fc3f7"></label>
+                  <label class="nt-color-label" title="Highlight">▮<input type="color" class="nt-color" onchange="execCmd('hiliteColor', this.value)" value="#1a2436"></label>
+                  <button class="nt-btn nt-btn-icon" onclick="insertLink()" title="Insert link">🔗</button>
+                  <button class="nt-btn nt-btn-icon" onclick="notesInsertImage()" title="Insert image">🖼</button>
+                  <button class="nt-btn nt-btn-icon" onclick="notesInsertTable()" title="Insert table">⊞</button>
+                  <button class="nt-btn nt-btn-icon" onclick="notesTableMenu()" title="Edit table">⊟</button>
+                  <button class="nt-btn nt-btn-icon" onclick="notesInsertBlockquote()" title="Blockquote">❝</button>
+                  <button class="nt-btn nt-btn-icon" onclick="notesInsertCode()" title="Code block">⟨/⟩</button>
+                  <button class="nt-btn nt-btn-icon" onclick="notesInsertEmoji()" title="Insert emoji">☺</button>
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('insertHorizontalRule')" title="Horizontal rule">—</button>
+                </div>
+                <span class="nt-divider"></span>
+                <div class="nt-group">
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('superscript')" title="Superscript">x²</button>
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('subscript')" title="Subscript">x₂</button>
+                  <button class="nt-btn" onclick="notesFindReplace()" title="Find and Replace">Find</button>
+                </div>
+                <span class="nt-divider"></span>
+                <div class="nt-group">
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('undo')" title="Undo (Ctrl+Z)">↩</button>
+                  <button class="nt-btn nt-btn-icon" onclick="execCmd('redo')" title="Redo (Ctrl+Shift+Z)">↪</button>
+                </div>
+              </div>
+              <div id="notes-editor" contenteditable="true"><div style="color:var(--fg-dim);font-family:sans-serif">Start typing your notes here...</div></div>
+              <input type="file" id="notes-file-input" accept=".txt,.md,.pdf" style="display:none">
+              <input type="file" id="notes-image-input" accept=".png,.jpg,.jpeg,.gif,.svg,.webp" style="display:none">
+              <input type="file" id="notes-font-input" accept=".ttf,.otf,.woff,.woff2" style="display:none">
+              <div id="notes-statusbar">
+                <span id="notes-words">0 words</span>
+                <span id="notes-chars">0 chars</span>
+                <span id="notes-paras">0 paras</span>
+                <span id="notes-readtime">~1 min read</span>
+                <span id="notes-sel" style="color:var(--teal);font-size:10px"></span>
+                <span style="flex:1"></span>
+                <span id="notes-filename">Untitled</span>
+                <span id="notes-saved" style="color:var(--amber)">Unsaved</span>
+              </div>
+            </div>
+
+            <!-- Citation Generator -->
+            <div id="nb-tool-citation" class="nb-tool-content" data-hide-sources="1">
+              <div class="tool-inline" id="cit-inline">
+                <div class="tool-section-title">Citation Generator</div>
+                <div style="font-size:10px;color:var(--fg-dim);margin-bottom:8px">Generate formatted citations in MLA, APA, or Chicago style.</div>
+                <div class="tool-form-row">
+                  <label>Source: <select id="cit-type" onchange="updateCitFields()" style="font-size:11px;padding:4px">
+                    <option value="book">Book</option><option value="article">Journal Article</option><option value="website">Website</option>
+                  </select></label>
+                  <label>Style: <select id="cit-style" style="font-size:11px;padding:4px">
+                    <option value="mla">MLA</option><option value="apa">APA</option><option value="chicago">Chicago</option>
+                  </select></label>
+                </div>
+                <div id="cit-fields">
+                  <label style="display:block;font-size:11px;color:var(--fg-dim);margin-bottom:4px">Author: <input type="text" id="cit-author" class="tools-input" placeholder="Last, First"></label>
+                  <label style="display:block;font-size:11px;color:var(--fg-dim);margin-bottom:4px">Title: <input type="text" id="cit-title" class="tools-input"></label>
+                  <label style="display:block;font-size:11px;color:var(--fg-dim);margin-bottom:4px">Publisher: <input type="text" id="cit-publisher" class="tools-input"></label>
+                  <label style="display:block;font-size:11px;color:var(--fg-dim);margin-bottom:4px">Year: <input type="text" id="cit-year" class="tools-input" style="width:80px"></label>
+                </div>
+                <button class="nb-gen-btn" onclick="genCitation()" style="margin-top:8px">Generate Citation</button>
+                <div id="cit-result" class="tool-result-box"></div>
+              </div>
+            </div>
+
+            <!-- Study Timer -->
+            <div id="nb-tool-timer" class="nb-tool-content" data-hide-sources="1">
+              <div class="tool-inline" id="timer-inline">
+                <div class="tool-section-title">Study Timer</div>
+                <div style="text-align:center;padding:20px 0">
+                  <div id="timer-display" class="timer-display">25:00</div>
+                  <div id="timer-mode-label" style="font-size:11px;color:var(--fg-dim);margin-bottom:12px">Focus session</div>
+                  <div class="tool-form-row" style="justify-content:center">
+                    <button class="nb-gen-btn" id="timer-toggle-btn" onclick="timerToggle()">Start</button>
+                    <button class="nb-gen-btn" onclick="timerReset()">Reset</button>
+                  </div>
+                  <div class="tool-form-row" style="justify-content:center;margin-top:12px">
+                    <label style="font-size:10px">Focus: <input type="number" id="timer-focus-min" value="25" min="1" max="120" class="tools-input" style="width:50px"> min</label>
+                    <label style="font-size:10px">Break: <input type="number" id="timer-break-min" value="5" min="1" max="60" class="tools-input" style="width:50px"> min</label>
+                    <button class="nb-gen-btn" onclick="timerApply()" style="font-size:10px">Apply</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reading Level Analyzer -->
+            <div id="nb-tool-readability" class="nb-tool-content" data-hide-sources="1">
+              <div class="tool-inline" id="rd-inline">
+                <div class="tool-section-title">Reading Level Analyzer</div>
+                <div style="font-size:10px;color:var(--fg-dim);margin-bottom:8px">Paste text below to analyze its reading level.</div>
+                <textarea id="rd-text" class="tools-textarea" rows="5"></textarea>
+                <button class="nb-gen-btn" onclick="calcReadability()" style="margin-top:6px">Analyze</button>
+                <div id="rd-result" class="tool-result-box"></div>
+              </div>
+            </div>
+
+            <!-- Document Merger -->
+            <div id="nb-tool-merge" class="nb-tool-content">
+              <div class="tool-inline" id="merge-inline">
+                <div class="tool-section-title">Document Merger</div>
+                <div style="font-size:10px;color:var(--fg-dim);margin-bottom:8px">Select documents from the Sources panel to merge into one file.</div>
+                <div id="merge-list" style="margin-bottom:8px;max-height:200px;overflow-y:auto"></div>
+                <button class="nb-gen-btn" onclick="doMerge()">Merge & Download</button>
+                <div id="merge-result" class="tool-result-box"></div>
+              </div>
+            </div>
+
+            <!-- GPA Calculator -->
+            <div id="nb-tool-gpa" class="nb-tool-content" data-hide-sources="1">
+              <div class="tool-inline" id="gpa-inline">
+                <div class="tool-section-title">GPA Calculator</div>
+                <div style="font-size:10px;color:var(--fg-dim);margin-bottom:8px">Add your courses and grades to calculate GPA.</div>
+                <div id="gpa-rows"></div>
+                <button class="nb-gen-btn" onclick="addGpaRow()" style="margin-top:6px">+ Add Course</button>
+                <div id="gpa-result" class="tool-result-box"></div>
+              </div>
+            </div>
+
+            <!-- Vocabulary Builder -->
+            <div id="nb-tool-vocab" class="nb-tool-content">
+              <div class="tool-inline" id="vocab-inline">
+                <div class="tool-section-title">Vocabulary Builder</div>
+                <div style="font-size:10px;color:var(--fg-dim);margin-bottom:8px">Extract important vocabulary from your uploaded documents.</div>
+                <button class="nb-gen-btn" onclick="genVocab()">Extract from Documents</button>
+                <div id="vocab-result" class="tool-result-box"></div>
+              </div>
+            </div>
+
+            <!-- Outline Generator -->
+            <div id="nb-tool-outline" class="nb-tool-content">
+              <div class="tool-inline" id="outline-inline">
+                <div class="tool-section-title">Outline Generator</div>
+                <div style="font-size:10px;color:var(--fg-dim);margin-bottom:8px">Generate a structured outline from your uploaded documents.</div>
+                <button class="nb-gen-btn" onclick="genOutline()">Generate Outline</button>
+                <div id="outline-result" class="tool-result-box"></div>
+              </div>
+            </div>
+
+            <!-- Document Diff -->
+            <div id="nb-tool-diff" class="nb-tool-content" data-hide-sources="1">
+              <div class="tool-inline" id="diff-inline">
+                <div class="tool-section-title">Document Diff</div>
+                <div style="font-size:10px;color:var(--fg-dim);margin-bottom:8px">Paste two versions of a document to see what changed.</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  <div style="flex:1;min-width:180px">
+                    <div style="font-size:10px;color:var(--fg-dim);margin-bottom:4px">Original:</div>
+                    <textarea id="diff-text1" class="tools-textarea" rows="6"></textarea>
+                  </div>
+                  <div style="flex:1;min-width:180px">
+                    <div style="font-size:10px;color:var(--fg-dim);margin-bottom:4px">Modified:</div>
+                    <textarea id="diff-text2" class="tools-textarea" rows="6"></textarea>
+                  </div>
+                </div>
+                <button class="nb-gen-btn" onclick="doDiff()" style="margin-top:6px">Compare</button>
+                <div id="diff-result" class="tool-result-box"></div>
+              </div>
+            </div>
+
+            <!-- Bibliography Manager -->
+            <div id="nb-tool-bib" class="nb-tool-content" data-hide-sources="1">
+              <div class="tool-inline" id="bib-inline">
+                <div class="tool-section-title">Bibliography Manager</div>
+                <div style="font-size:10px;color:var(--fg-dim);margin-bottom:8px">Save and manage your references.</div>
+                <button class="nb-gen-btn" onclick="addBibEntry()" style="margin-bottom:10px">+ Add Reference</button>
+                <div id="bib-list"></div>
+              </div>
+            </div>
+
+            <!-- Periodic Table -->
+            <div id="nb-tool-periodic" class="nb-tool-content" data-hide-sources="1">
+              <div class="tool-inline pt-wrapper" id="pt-inline">
+                <div class="tool-section-title">Periodic Table</div>
+                <div class="pt-quiz-bar" id="pt-quiz-bar"></div>
+                <div class="pt-search-row">
+                  <input type="text" id="pt-search" placeholder="Search element by name or symbol..." oninput="filterPeriodic()" onkeydown="if(event.key==='Enter'&&PT_QUIZ_MODE)checkQuizAnswer()">
+                  <button class="nb-gen-btn" onclick="resetPeriodic()">Reset</button>
+                </div>
+                <div class="pt-legend" id="pt-legend"></div>
+                <div class="pt-grid" id="pt-grid"></div>
+                <div class="pt-detail-panel" id="pt-detail"></div>
+              </div>
+            </div>
+
+            <!-- Dictionary -->
+            <div id="nb-tool-dictionary" class="nb-tool-content" data-hide-sources="1">
+              <div class="tool-inline" id="dict-inline">
+                <div class="tool-section-title">Dictionary</div>
+                <div style="font-size:10px;color:var(--fg-dim);margin-bottom:8px">Look up word definitions from the offline dictionary.</div>
+                <div style="display:flex;gap:8px">
+                  <input type="text" id="dict-input" class="tools-input" placeholder="Enter a word..." style="flex:1;font-size:12px" onkeydown="if(event.key==='Enter')lookupDictionary()">
+                  <button class="nb-gen-btn" onclick="lookupDictionary()">Define</button>
+                </div>
+                <div id="dict-result" class="tool-result-box"></div>
+              </div>
+            </div>
+
+
+
+          </div>
+        </div>
+      </div>
+
+      <!-- TEXT TOOLS -->
+      <div class="tab-pane" id="tab-texttools">
+        <div style="padding:16px;width:100%;box-sizing:border-box">
+          <div class="nb-tabs-bar">
+            <button class="nb-tab-btn active" data-tt-tool="case" onclick="switchTtTool('case')">Case</button>
+            <button class="nb-tab-btn" data-tt-tool="ciphers" onclick="switchTtTool('ciphers')">Ciphers</button>
+            <button class="nb-tab-btn" data-tt-tool="lines" onclick="switchTtTool('lines')">Lines</button>
+            <button class="nb-tab-btn" data-tt-tool="diff" onclick="switchTtTool('diff')">Diff</button>
+            <button class="nb-tab-btn" data-tt-tool="aiscan" onclick="switchTtTool('aiscan')">AI-ism</button>
+            <button class="nb-tab-btn" data-tt-tool="stats" onclick="switchTtTool('stats')">Stats</button>
+            <button class="nb-tab-btn" data-tt-tool="freq" onclick="switchTtTool('freq')">Frequency</button>
+            <button class="nb-tab-btn" data-tt-tool="entities" onclick="switchTtTool('entities')">Entities</button>
+            <button class="nb-tab-btn" data-tt-tool="hash" onclick="switchTtTool('hash')">Hash</button>
+            <button class="nb-tab-btn" data-tt-tool="passgen" onclick="switchTtTool('passgen')">Password</button>
+            <button class="nb-tab-btn" data-tt-tool="spell" onclick="switchTtTool('spell')">Spell</button>
+            <button class="nb-tab-btn" data-tt-tool="replace" onclick="switchTtTool('replace')">Replace</button>
+            <button class="nb-tab-btn" data-tt-tool="ocr" onclick="switchTtTool('ocr')">OCR</button>
+          </div>
+
+          <div class="nb-tool-content active" id="tt-pane-case">
+            <textarea id="tt-case-input" class="tools-textarea" rows="4" placeholder="Type or paste text here..."></textarea>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">
+              <button class="nb-gen-btn" onclick="ttConv('upper')">UPPER</button>
+              <button class="nb-gen-btn" onclick="ttConv('lower')">lower</button>
+              <button class="nb-gen-btn" onclick="ttConv('title')">Title</button>
+              <button class="nb-gen-btn" onclick="ttConv('sentence')">Sentence</button>
+              <button class="nb-gen-btn" onclick="ttConv('camel')">camelCase</button>
+              <button class="nb-gen-btn" onclick="ttConv('snake')">snake_case</button>
+              <button class="nb-gen-btn" onclick="ttConv('kebab')">kebab-case</button>
+              <button class="nb-gen-btn" onclick="ttConv('toggle')">tOGGLE</button>
+            </div>
+            <div id="tt-case-output" class="tool-result-box"></div>
+          </div>
+
+          <div class="nb-tool-content" id="tt-pane-ciphers">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+              <select id="tt-cipher-type" style="font-size:10px;padding:4px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px">
+                <option value="rot13">ROT13</option>
+                <option value="atbash">Atbash</option>
+                <option value="caesar">Caesar</option>
+                <option value="vigenere">Vigenere</option>
+              </select>
+              <input type="text" id="tt-cipher-key" placeholder="Key" style="font-size:10px;padding:4px;width:160px;display:none;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px">
+            </div>
+            <textarea id="tt-cipher-input" class="tools-textarea" rows="3" placeholder="Text to encode/decode..."></textarea>
+            <div style="display:flex;gap:4px;margin-top:6px">
+              <button class="nb-gen-btn" onclick="ttCipher('encode')">Encode</button>
+              <button class="nb-gen-btn" onclick="ttCipher('decode')">Decode</button>
+              <button class="nb-gen-btn" onclick="ttCipher('bruteforce')">Brute Force</button>
+            </div>
+            <div id="tt-cipher-output" class="tool-result-box"></div>
+          </div>
+
+          <div class="nb-tool-content" id="tt-pane-lines">
+            <textarea id="tt-lines-input" class="tools-textarea" rows="5" placeholder="One item per line..."></textarea>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">
+              <button class="nb-gen-btn" onclick="ttLines('sort')">Sort A-Z</button>
+              <button class="nb-gen-btn" onclick="ttLines('sortr')">Sort Z-A</button>
+              <button class="nb-gen-btn" onclick="ttLines('reverse')">Reverse</button>
+              <button class="nb-gen-btn" onclick="ttLines('shuffle')">Shuffle</button>
+              <button class="nb-gen-btn" onclick="ttLines('unique')">No Dupes</button>
+              <button class="nb-gen-btn" onclick="ttLines('nonempty')">No Empty</button>
+              <button class="nb-gen-btn" onclick="ttLines('trim')">Trim</button>
+              <button class="nb-gen-btn" onclick="ttLines('number')">Number</button>
+              <button class="nb-gen-btn" onclick="ttLines('dedent')">Dedent</button>
+            </div>
+            <div id="tt-lines-output" class="tool-result-box"></div>
+          </div>
+
+          <div class="nb-tool-content" id="tt-pane-diff">
+            <div style="display:flex;gap:8px">
+              <textarea id="tt-diff-a" class="tools-textarea" rows="5" placeholder="Original..." style="flex:1"></textarea>
+              <textarea id="tt-diff-b" class="tools-textarea" rows="5" placeholder="Modified..." style="flex:1"></textarea>
+            </div>
+            <button class="nb-gen-btn" onclick="ttDiff()" style="margin-top:6px">Compare</button>
+            <div id="tt-diff-output" class="tool-result-box"></div>
+          </div>
+
+          <div class="nb-tool-content" id="tt-pane-aiscan">
+            <textarea id="tt-ai-input" class="tools-textarea" rows="5" placeholder="Paste text to scan..."></textarea>
+            <button class="nb-gen-btn" onclick="ttAiScan()" style="margin-top:6px">Scan</button>
+            <div id="tt-ai-output" class="tool-result-box"></div>
+          </div>
+
+          <div class="nb-tool-content" id="tt-pane-stats">
+            <textarea id="tt-stats-input" class="tools-textarea" rows="5" placeholder="Paste text here..."></textarea>
+            <button class="nb-gen-btn" onclick="ttStats()" style="margin-top:6px">Analyze</button>
+            <div id="tt-stats-output" class="tool-result-box" style="white-space:normal"></div>
+          </div>
+
+          <div class="nb-tool-content" id="tt-pane-freq">
+            <div style="display:flex;gap:8px;margin-bottom:4px">
+              <input type="number" id="tt-freq-limit" value="20" min="1" max="200" style="font-size:10px;width:60px;background:var(--bg);border:1px solid var(--border);color:var(--fg);padding:3px;border-radius:3px">
+              <span style="font-size:10px;color:var(--fg-dim);line-height:22px">top</span>
+              <label style="font-size:10px;color:var(--fg-dim);line-height:22px"><input type="checkbox" id="tt-freq-common" checked> Skip common</label>
+            </div>
+            <textarea id="tt-freq-input" class="tools-textarea" rows="5" placeholder="Paste text here..."></textarea>
+            <button class="nb-gen-btn" onclick="ttFreq()" style="margin-top:6px">Count</button>
+            <div id="tt-freq-output" class="tool-result-box" style="white-space:normal"></div>
+          </div>
+
+          <div class="nb-tool-content" id="tt-pane-entities">
+            <textarea id="tt-entity-input" class="tools-textarea" rows="5" placeholder="Paste text to scan..."></textarea>
+            <button class="nb-gen-btn" onclick="ttEntities()" style="margin-top:6px">Scan</button>
+            <div id="tt-entity-output" class="tool-result-box" style="white-space:normal"></div>
+          </div>
+
+          <div class="nb-tool-content" id="tt-pane-hash">
+            <div style="margin-bottom:4px">
+              <select id="tt-hash-type" style="font-size:10px;padding:4px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px">
+                <option value="md5">MD5</option>
+                <option value="sha1">SHA-1</option>
+                <option value="sha256">SHA-256</option>
+                <option value="base64enc">Base64 Encode</option>
+                <option value="base64dec">Base64 Decode</option>
+              </select>
+            </div>
+            <textarea id="tt-hash-input" class="tools-textarea" rows="3" placeholder="Text to hash/encode..."></textarea>
+            <button class="nb-gen-btn" onclick="ttHash()" style="margin-top:6px">Generate</button>
+            <div id="tt-hash-output" class="tool-result-box"></div>
+          </div>
+
+          <div class="nb-tool-content" id="tt-pane-passgen">
+            <div style="display:flex;gap:8px;margin-bottom:4px;align-items:center;flex-wrap:wrap">
+              <label style="font-size:10px;color:var(--fg-dim)">Length: <input type="number" id="tt-pass-length" value="16" min="4" max="128" style="font-size:10px;width:60px;background:var(--bg);border:1px solid var(--border);color:var(--fg);padding:3px;border-radius:3px"></label>
+              <label style="font-size:10px;color:var(--fg-dim)"><input type="checkbox" id="tt-pass-upper" checked> A-Z</label>
+              <label style="font-size:10px;color:var(--fg-dim)"><input type="checkbox" id="tt-pass-lower" checked> a-z</label>
+              <label style="font-size:10px;color:var(--fg-dim)"><input type="checkbox" id="tt-pass-digits" checked> 0-9</label>
+              <label style="font-size:10px;color:var(--fg-dim)"><input type="checkbox" id="tt-pass-symbols" checked> !@#$</label>
+            </div>
+            <div style="display:flex;gap:4px">
+              <button class="nb-gen-btn" onclick="ttPassword()">Generate</button>
+              <button class="nb-gen-btn" onclick="ttPasswordMulti()">10x</button>
+            </div>
+            <div id="tt-pass-output" class="tool-result-box"></div>
+          </div>
+
+          <!-- SPELL CHECK -->
+          <div class="nb-tool-content" id="tt-pane-spell">
+            <textarea id="tt-spell-input" class="tools-textarea" rows="6" placeholder="Paste text to spell-check..."></textarea>
+            <div style="margin-top:6px">
+              <button class="nb-gen-btn" onclick="ttSpell()">Check Spelling</button>
+              <span style="font-size:9px;color:var(--fg-dim);margin-left:8px">Local dictionary: 500+ words</span>
+            </div>
+            <div id="tt-spell-output" class="tool-result-box" style="white-space:normal"></div>
+          </div>
+
+          <!-- FIND & REPLACE -->
+          <div class="nb-tool-content" id="tt-pane-replace">
+            <textarea id="tt-replace-input" class="tools-textarea" rows="5" placeholder="Type or paste text here..."></textarea>
+            <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+              <input type="text" id="tt-replace-find" placeholder="Find..." style="font-size:10px;padding:4px;width:160px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px">
+              <input type="text" id="tt-replace-with" placeholder="Replace with..." style="font-size:10px;padding:4px;width:160px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px">
+              <label style="font-size:10px;color:var(--fg-dim);line-height:22px"><input type="checkbox" id="tt-replace-regex"> Regex</label>
+              <label style="font-size:10px;color:var(--fg-dim);line-height:22px"><input type="checkbox" id="tt-replace-ci"> Case-insensitive</label>
+            </div>
+            <div style="margin-top:6px">
+              <button class="nb-gen-btn" onclick="ttReplace()">Replace All</button>
+            </div>
+            <div id="tt-replace-output" class="tool-result-box"></div>
+          </div>
+
+          <!-- OCR -->
+          <div class="nb-tool-content" id="tt-pane-ocr">
+            <div style="margin-bottom:6px">
+              <input type="file" id="tt-ocr-file" accept="image/png,image/jpeg,image/webp,image/gif" style="font-size:10px;color:var(--fg);background:var(--bg);border:1px solid var(--border);padding:4px;border-radius:3px;width:calc(100% - 30px);box-sizing:border-box;display:inline-block">
+              <button onclick="clearOcrImage()" style="background:none;border:1px solid var(--border);color:var(--fg-dim);cursor:pointer;font-size:12px;padding:3px 8px;border-radius:3px;vertical-align:middle" title="Clear image">&times;</button>
+            </div>
+            <div id="tt-ocr-preview" style="max-width:100%;margin-bottom:6px;text-align:center"></div>
+            <div style="display:flex;gap:6px;align-items:center">
+              <button class="nb-gen-btn" onclick="ttOcr()" id="tt-ocr-btn">Extract Text</button>
+              <span id="tt-ocr-status" style="font-size:10px;color:var(--fg-dim)">Upload an image to get started</span>
+            </div>
+            <div id="tt-ocr-output-area" style="margin-top:8px">
+              <textarea id="tt-ocr-output" class="tools-textarea" rows="8" placeholder="Extracted text will appear here..." style="display:none"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Overlay -->
+      <div id="tool-modal" class="modal-overlay" style="display:none" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+          <div class="modal-header">
+            <span id="modal-title" class="modal-title"></span>
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+          </div>
+          <div id="modal-body" class="modal-body"></div>
+        </div>
+      </div>
+
+      <!-- ABOUT -->
+      <div class="tab-pane section" id="tab-about">
+        <div class="about-header">About NexCampus <span id="about-version">v2.0</span></div>
+
+        <div class="about-block">
+          <div class="about-block-title">Our Mission</div>
+          <div class="about-block-text">Every student deserves free tools to learn, build, and create — no internet required. NexCampus is built for the off-campus, off-grid, and under-resourced — because learning shouldn't need a connection.</div>
+        </div>
+
+        <div class="about-block">
+          <div class="about-block-title">Tools &amp; Features</div>
+
+          <div class="about-block-text" style="margin-bottom:6px;font-weight:bold;color:var(--cyan)">Study Lab</div>
+          <ul style="padding-left:20px;font-size:11px;line-height:1.7;color:var(--fg);margin-bottom:10px">
+            <li><strong>Summarizer</strong> — TF-IDF document summarization</li>
+            <li><strong>Q&amp;A</strong> — Ask questions about uploaded documents with cosine similarity matching</li>
+            <li><strong>Quiz Generator</strong> — Auto-generated multiple-choice quizzes from documents</li>
+            <li><strong>Flashcards</strong> — Key term extraction as digital flashcards</li>
+            <li><strong>Notes</strong> — Full rich-text word processor with formatting toolbar, font manager, templates, PDF/print export, file import, emoji picker, table editor, find/replace, auto-save</li>
+            <li><strong>Citation Generator</strong> — MLA/APA/Chicago citations for books, articles, websites</li>
+            <li><strong>Study Timer</strong> — Pomodoro-style focus/break timer</li>
+            <li><strong>Reading Level Analyzer</strong> — Flesch-Kincaid, Coleman-Liau, SMOG scores</li>
+            <li><strong>Document Merger</strong> — Concatenate multiple documents</li>
+            <li><strong>GPA Calculator</strong> — Dynamic GPA computation with grade points and credits</li>
+            <li><strong>Vocabulary Builder</strong> — TF-IDF rare word extraction linked to 262k-word server dictionary</li>
+            <li><strong>Outline Generator</strong> — Heading/key-sentence extraction from documents</li>
+            <li><strong>Document Diff</strong> — Side-by-side and unified diff via server-side difflib</li>
+            <li><strong>Bibliography Manager</strong> — CRUD reference entries, MLA export</li>
+            <li><strong>Periodic Table</strong> — Interactive 118-element grid with search, filters, fun facts, discovery dates, quiz mode</li>
+            <li><strong>Dictionary</strong> — 262,851-word Wiktionary-derived offline dictionary with smart suggestions</li>
+          </ul>
+
+          <div class="about-block-text" style="margin-bottom:6px;font-weight:bold;color:var(--cyan)">Text Tools</div>
+          <ul style="padding-left:20px;font-size:11px;line-height:1.7;color:var(--fg)">
+            <li><strong>Case Converter</strong> — UPPER, lower, Title, Sentence, camelCase, snake_case, kebab-case, tOGGLE</li>
+            <li><strong>Ciphers</strong> — ROT13, Atbash, Caesar, Vigenere with brute force</li>
+            <li><strong>Line Tools</strong> — Sort, reverse, shuffle, deduplicate, trim, number, dedent</li>
+            <li><strong>Text Diff</strong> — Compare two texts, highlight differences</li>
+            <li><strong>AI-ism Scanner</strong> — Detect patterns common in AI-generated text</li>
+            <li><strong>Text Stats</strong> — Characters, words, sentences, paragraphs, averages</li>
+            <li><strong>Word Frequency</strong> — Frequency table with bar charts, skip common words</li>
+            <li><strong>Entity Scanner</strong> — Find emails, URLs, phone numbers, IPs, dates, more</li>
+            <li><strong>Hash Generator</strong> — MD5, SHA-1, SHA-256, Base64 encode/decode</li>
+            <li><strong>Password Generator</strong> — Configurable length and character types</li>
+            <li><strong>Spell Check</strong> — Local dictionary-based spell checking with suggestions</li>
+            <li><strong>Find &amp; Replace</strong> — Search and replace with regex and case-insensitive options</li>
+            <li><strong>OCR</strong> — Extract text from images via bundled Tesseract 5.5 (fully offline)</li>
+          </ul>
+        </div>
+
+        <div class="about-block">
+          <div class="about-block-title">Updates</div>
+          <div class="about-block-text" style="margin-bottom:8px">Version: <strong id="about-current-ver">loading...</strong></div>
+          <div class="update-status">Click "Check for Updates" to see if a newer version is available.</div>
+          <div class="input-group">
+            <button onclick="checkForUpdates()">Check for Updates</button>
+            <button id="btn-download-update" onclick="downloadUpdate()" style="display:none">Download Update</button>
+          </div>
+          <div class="update-result" id="update-result"></div>
+        </div>
+
+        <div class="about-block">
+          <div class="about-block-title">Technical</div>
+          <div class="about-block-text">Built with Python HTTP server + vanilla JavaScript. No frameworks, no internet dependencies, no tracking.</div>
+        </div>
+
+        <div class="about-block">
+          <div class="about-block-title">Roadmap</div>
+          <div class="about-block-text">More tools and features coming in future updates. Stay tuned.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+  <div id="statusbar">
+    <span>NexCampus v2.0 · Made by Shahid Singh · NexCore&trade; Systems and Technologies · 2026</span>
+  </div>
+
+  <script src="js/utils.js"></script>
+<script src="js/modules/notebook.js"></script>
+<script src="js/modules/notes.js"></script>
+<script src="js/modules/tools.js"></script>
+<script src="js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var sel = document.getElementById('tt-cipher-type');
+  if (sel) {
+    sel.onchange = function() {
+      var key = document.getElementById('tt-cipher-key');
+      if (key) key.style.display = (this.value === 'caesar' || this.value === 'vigenere') ? '' : 'none';
+    };
+    sel.onchange();
+  }
+  var ocrFile = document.getElementById('tt-ocr-file');
+  if (ocrFile) { ocrFile.onchange = previewOcrImage; }
+});
+</script>
+</body>
+</html>
