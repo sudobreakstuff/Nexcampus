@@ -1,15 +1,15 @@
 {
-  "version": "2.3.0",
-  "name": "NexCampus v2.3",
+  "version": "2.3.1",
+  "name": "NexCampus v2.3.1",
   "update_url": "",
   "changelog": [
-    "Android support removed (dedicated native app planned for future)",
-    "About page layout fixed — content no longer cut off",
-    "Windows OCR — Tesseract 5.3 bundled with installer",
-    "OCR reliability improved — server first with 8s timeout, browser fallback",
-    "One-line install scripts for Linux and Windows",
-    "Auto app drawer setup on Linux via install script",
-    "Interactive Solar System tool added to Study Lab",
-    "In-app update checker now works via GitHub API"
+    "Solar System overhaul: zoom/pan, Milky Way, asteroid belt, Saturn rings, pulsing Sun, dwarf planets (Ceres & Pluto), tabbed info panel, enhanced planet data, 34 rotating facts",
+    "Inline Find/Replace bar in Notes (Ctrl+F) replaces ugly prompt() dialogs",
+    "Styled notifications — error/success/info types replace all 34 alert() calls",
+    "Startup crash fix — missing 'import time' bug resolved",
+    "Stale server processes killed on startup (no more 'connection refused')",
+    "Server stays alive when opening in browser instead of pywebview",
+    "Uninstall scripts for Linux and Windows",
+    "Version comparison fixed for proper update detection"
   ]
 }

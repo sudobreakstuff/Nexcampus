@@ -365,6 +365,8 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
         try:
             r = tuple(int(x) for x in remote.split('.'))
             c = tuple(int(x) for x in current.split('.'))
+            while len(r) < len(c): r = r + (0,)
+            while len(c) < len(r): c = c + (0,)
             return r > c
         except:
             return False
