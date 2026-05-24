@@ -1251,20 +1251,34 @@ def open_window(url):
         return False
 
 def main():
-    port = find_port(8080)
-    if port is None:
-        print('[NexCampus] No available port found.')
-        return
+    import traceback
+    STARTUP_LOG = Path.home() / '.nexcampus-startup.log'
+    try:
+        port = find_port(8080)
+        if port is None:
+            msg = 'No available port found.'
+            print(f'[NexCampus] {msg}')
+            STARTUP_LOG.write_text(msg + '\n')
+            return
 
-    httpd = http.server.HTTPServer(('127.0.0.1', port), NexCampusHandler)
-    t = threading.Thread(target=httpd.serve_forever, daemon=True)
-    t.start()
+        httpd = http.server.HTTPServer(('127.0.0.1', port), NexCampusHandler)
+        t = threading.Thread(target=httpd.serve_forever, daemon=True)
+        t.start()
 
-    url = f'http://127.0.0.1:{port}'
-    print(f'[NexCampus] NexCampus v{VERSION.get("version","?")}')
-    print(f'[NexCampus] Server: {url}')
-    print('[NexCampus] Made by Shahid Singh | NexCore Systems and Technologies')
+        url = f'http://127.0.0.1:{port}'
+        STARTUP_LOG.write_text(f'Server running at {url}\nVERSION: {VERSION}\n')
+        print(f'[NexCampus] NexCampus v{VERSION.get("version","?")}')
+        print(f'[NexCampus] Server: {url}')
+        print('[NexCampus] Made by Shahid Singh | NexCore Systems and Technologies')
 
-    open_window(url)
+        open_window(url)
+    except Exception as e:
+        tb = traceback.format_exc()
+        print(f'[NexCampus] Fatal error: {e}\n{tb}')
+        try:
+            STARTUP_LOG.write_text(f'FATAL: {e}\n{tb}')
+        except:
+            pass
+
 if __name__ == '__main__':
     main()
