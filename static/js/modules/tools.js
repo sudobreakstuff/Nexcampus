@@ -1582,7 +1582,172 @@ function randomElementFact() {
   showElementDetail(el.z);
 }
 
-// ====== 11. DICTIONARY (server-side, 262k+ words from Wiktionary) ======
+// ====== 11. SOLAR SYSTEM (interactive canvas) ======
+TOOL_INIT.solar = function() {
+  initSolarSystem();
+};
+
+var SOLAR_PLANETS = [
+  { name:'Mercury', color:'#b5b5b5', orbit:45, size:5,  speed:4.15, angle:0,
+    info:{diameter:'4,879 km', distSun:'57.9M km', year:'88 days', day:'58.6 days', moons:0, fact:'Mercury is the smallest planet and closest to the Sun! It has no atmosphere, so temperatures swing from -180°C at night to 430°C during the day.'} },
+  { name:'Venus',   color:'#e8cda0', orbit:70, size:8,  speed:1.62, angle:1.5,
+    info:{diameter:'12,104 km', distSun:'108.2M km', year:'225 days', day:'243 days', moons:0, fact:'Venus spins backwards compared to most planets! A day on Venus is longer than its year — 243 Earth days.'} },
+  { name:'Earth',   color:'#4fc3f7', orbit:95, size:9,  speed:1.0,  angle:3.0,
+    info:{diameter:'12,756 km', distSun:'149.6M km', year:'365.25 days', day:'24 hours', moons:1, fact:'Earth is the only known planet with liquid water and life! About 71% of Earth is covered in water.'} },
+  { name:'Mars',    color:'#e57373', orbit:120, size:7, speed:0.53, angle:4.5,
+    info:{diameter:'6,792 km', distSun:'227.9M km', year:'687 days', day:'24.6 hours', moons:2, fact:'Mars has the tallest mountain in the solar system — Olympus Mons is 2.5 times the height of Mount Everest!'} },
+  { name:'Jupiter', color:'#d4a574', orbit:155, size:14, speed:0.084, angle:1.0,
+    info:{diameter:'142,984 km', distSun:'778.5M km', year:'11.86 years', day:'9.9 hours', moons:95, fact:'Jupiter\'s Great Red Spot is a storm bigger than Earth that has been raging for hundreds of years!'} },
+  { name:'Saturn',  color:'#f0d58c', orbit:185, size:12, speed:0.034, angle:2.5,
+    info:{diameter:'120,536 km', distSun:'1.43B km', year:'29.46 years', day:'10.7 hours', moons:146, fact:'Saturn\'s rings are made of ice and rock stretching 280,000 km wide but only about 10 meters thick!'} },
+  { name:'Uranus',  color:'#7ec8e3', orbit:215, size:10, speed:0.012, angle:0.5,
+    info:{diameter:'51,118 km', distSun:'2.87B km', year:'84 years', day:'17.2 hours', moons:27, fact:'Uranus rotates on its side with an axis tilt of 98° — it basically rolls around the Sun!'} },
+  { name:'Neptune', color:'#4a6db5', orbit:240, size:10, speed:0.006, angle:3.5,
+    info:{diameter:'49,528 km', distSun:'4.50B km', year:'164.8 years', day:'16.1 hours', moons:16, fact:'Neptune has the strongest winds of any planet at 2,100 km/h — faster than any storm on Earth!'} }
+];
+
+var SOLAR_FACTS = [
+  "The Sun is 109 times wider than Earth!",
+  "A year on Mercury is just 88 Earth days.",
+  "Venus is the hottest planet at 465°C — even hotter than Mercury!",
+  "Earth is 4.5 billion years old.",
+  "Mars has seasons just like Earth, but they last twice as long.",
+  "Jupiter's Great Red Spot could swallow Earth whole!",
+  "Saturn is so light it would float in water!",
+  "Uranus was the first planet discovered with a telescope.",
+  "Neptune was discovered using math before anyone saw it.",
+  "Pluto was reclassified as a dwarf planet in 2006.",
+  "The Sun makes up 99.86% of all mass in the solar system.",
+  "Sunlight takes 8 minutes and 20 seconds to reach Earth.",
+  "There are more stars than grains of sand on all Earth's beaches!",
+  "One day on Venus lasts longer than one year on Venus.",
+  "Jupiter has 95 known moons — more than any other planet.",
+  "The solar system is about 4.6 billion years old.",
+  "A teaspoon of neutron star would weigh 6 billion tons!",
+  "UFOs sounds weird when said backwards: SOFUs"
+];
+
+var SOLAR = { canvas:null, ctx:null, paused:false, speed:1, animId:null, selected:null, lastTime:0, planets:[], factIdx:0, w:800, h:500 };
+
+function initSolarSystem() {
+  if (SOLAR.canvas) return;
+  SOLAR.canvas = document.getElementById('solar-canvas');
+  if (!SOLAR.canvas) return;
+  SOLAR.ctx = SOLAR.canvas.getContext('2d');
+  SOLAR.w = SOLAR.canvas.width = 800;
+  SOLAR.h = SOLAR.canvas.height = 500;
+  SOLAR.planets = SOLAR_PLANETS.map(function(p) { return { name:p.name, color:p.color, orbit:p.orbit, size:p.size, speed:p.speed, angle:p.angle, info:p.info, _x:0, _y:0 }; });
+  SOLAR.canvas.addEventListener('click', solarClick);
+  SOLAR.canvas.addEventListener('mousemove', solarHover);
+  SOLAR.factIdx = Math.floor(Math.random() * SOLAR_FACTS.length);
+  var factEl = document.getElementById('solar-fact');
+  if (factEl) factEl.textContent = '💡 ' + SOLAR_FACTS[SOLAR.factIdx];
+  SOLAR.lastTime = performance.now();
+  solarLoop(performance.now());
+}
+
+function solarLoop(time) {
+  var dt = (time - SOLAR.lastTime) / 1000;
+  SOLAR.lastTime = time;
+  if (!SOLAR.paused) {
+    SOLAR.planets.forEach(function(p) { p.angle += p.speed * SOLAR.speed * dt * 0.3; });
+  }
+  solarDraw();
+  SOLAR.animId = requestAnimationFrame(solarLoop);
+}
+
+function solarDraw() {
+  var ctx = SOLAR.ctx, w = SOLAR.w, h = SOLAR.h, cx = w / 2, cy = h / 2;
+  var grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, w * 0.6);
+  grad.addColorStop(0, '#0a0e1a'); grad.addColorStop(1, '#000004');
+  ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
+  if (!SOLAR._stars) {
+    SOLAR._stars = [];
+    for (var i = 0; i < 200; i++) SOLAR._stars.push({ x:Math.random()*w, y:Math.random()*h, r:Math.random()*1.5+0.3, a:Math.random()*0.5+0.2, t:Math.random()*1000 });
+  }
+  SOLAR._stars.forEach(function(s) {
+    ctx.globalAlpha = s.a * (0.6 + 0.4 * Math.sin(performance.now()/1000 + s.t));
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 0.5; ctx.setLineDash([3,6]);
+  SOLAR.planets.forEach(function(p) { ctx.beginPath(); ctx.arc(cx, cy, p.orbit, 0, Math.PI*2); ctx.stroke(); });
+  ctx.setLineDash([]);
+  var sg = ctx.createRadialGradient(cx, cy, 0, cx, cy, 40);
+  sg.addColorStop(0,'#fffbe6'); sg.addColorStop(0.2,'#ffe066'); sg.addColorStop(0.5,'#ff8c00'); sg.addColorStop(0.8,'rgba(255,100,0,0.3)'); sg.addColorStop(1,'rgba(255,50,0,0)');
+  ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(cx, cy, 40, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#fffbe6'; ctx.beginPath(); ctx.arc(cx, cy, 14, 0, Math.PI*2); ctx.fill();
+  SOLAR.planets.forEach(function(p) {
+    var x = cx + Math.cos(p.angle) * p.orbit, y = cy + Math.sin(p.angle) * p.orbit;
+    p._x = x; p._y = y;
+    ctx.strokeStyle = p.color + '40'; ctx.lineWidth = p.size * 0.3; ctx.globalAlpha = 0.3;
+    ctx.beginPath(); ctx.arc(x, y, p.size * 0.5, 0, Math.PI*2); ctx.stroke(); ctx.globalAlpha = 1;
+    var pg = ctx.createRadialGradient(x - p.size*0.3, y - p.size*0.3, 0, x, y, p.size);
+    pg.addColorStop(0, lightenColor(p.color, 40)); pg.addColorStop(1, p.color);
+    ctx.fillStyle = pg; ctx.beginPath(); ctx.arc(x, y, p.size, 0, Math.PI*2); ctx.fill();
+    if (SOLAR.selected === p.name) {
+      ctx.strokeStyle = '#4fc3f7'; ctx.lineWidth = 2; ctx.shadowColor = '#4fc3f7'; ctx.shadowBlur = 12;
+      ctx.beginPath(); ctx.arc(x, y, p.size + 3, 0, Math.PI*2); ctx.stroke(); ctx.shadowBlur = 0;
+    }
+    ctx.fillStyle = 'rgba(255,255,255,0.7)'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(p.name, x, y + p.size + 14);
+  });
+}
+
+function solarClick(e) {
+  var rect = SOLAR.canvas.getBoundingClientRect();
+  var mx = (e.clientX - rect.left) * SOLAR.w / rect.width;
+  var my = (e.clientY - rect.top) * SOLAR.h / rect.height;
+  SOLAR.selected = null;
+  SOLAR.planets.forEach(function(p) {
+    if ((mx-p._x)*(mx-p._x) + (my-p._y)*(my-p._y) < (p.size+5)*(p.size+5)) SOLAR.selected = p.name;
+  });
+  solarShowInfo();
+}
+
+function solarHover(e) {
+  var rect = SOLAR.canvas.getBoundingClientRect();
+  var mx = (e.clientX - rect.left) * SOLAR.w / rect.width;
+  var my = (e.clientY - rect.top) * SOLAR.h / rect.height;
+  var hover = false;
+  SOLAR.planets.forEach(function(p) {
+    if ((mx-p._x)*(mx-p._x) + (my-p._y)*(my-p._y) < (p.size+8)*(p.size+8)) hover = true;
+  });
+  SOLAR.canvas.style.cursor = hover ? 'pointer' : 'default';
+}
+
+function solarShowInfo() {
+  var el = document.getElementById('solar-info-content');
+  if (!el) return;
+  if (!SOLAR.selected) { el.innerHTML = 'Click on a planet above to see its details!'; return; }
+  var p = null;
+  SOLAR.planets.forEach(function(pp) { if (pp.name === SOLAR.selected) p = pp; });
+  if (!p) return;
+  var i = p.info;
+  el.innerHTML = '<div style="font-size:15px;font-weight:bold;color:' + p.color + ';margin-bottom:6px">' + p.name + '</div>' +
+    '<div style="font-size:10px;color:var(--fg-dim);margin-bottom:8px">' +
+    '<strong>Diameter:</strong> ' + i.diameter + '<br>' +
+    '<strong>From Sun:</strong> ' + i.distSun + '<br>' +
+    '<strong>Year:</strong> ' + i.year + '<br>' +
+    '<strong>Day:</strong> ' + i.day + '<br>' +
+    '<strong>Moons:</strong> ' + i.moons + '</div>' +
+    '<div style="font-size:10px;line-height:1.5;padding:8px;background:rgba(79,195,247,0.06);border-left:2px solid ' + p.color + ';border-radius:3px">💡 ' + i.fact + '</div>';
+}
+
+function solarSetSpeed(v) { SOLAR.speed = parseFloat(v); }
+
+function solarTogglePause() {
+  SOLAR.paused = !SOLAR.paused;
+  var btn = document.getElementById('solar-pause-btn');
+  if (btn) btn.textContent = SOLAR.paused ? 'Resume' : 'Pause';
+}
+
+function lightenColor(hex, amt) {
+  var r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+  return '#' + [Math.min(255,r+amt),Math.min(255,g+amt),Math.min(255,b+amt)].map(function(c){return c.toString(16).padStart(2,'0');}).join('');
+}
+
+// ====== 12. DICTIONARY (server-side, 262k+ words from Wiktionary) ======
 TOOL_INIT.dictionary = function() {
   var result = $('dict-result');
   if (result) { result.classList.remove('visible'); result.innerHTML = ''; }

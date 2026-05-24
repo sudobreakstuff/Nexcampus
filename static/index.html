@@ -82,6 +82,7 @@
           <button class="nb-tab-btn" data-nb-tool="bib" onclick="switchNbTool('bib')">Bibliography</button>
           <button class="nb-tab-btn" data-nb-tool="periodic" onclick="switchNbTool('periodic')">Periodic</button>
           <button class="nb-tab-btn" data-nb-tool="dictionary" onclick="switchNbTool('dictionary')">Dictionary</button>
+          <button class="nb-tab-btn" data-nb-tool="solar" onclick="switchNbTool('solar')" style="color:var(--amber)">★ Solar System</button>
         </div>
         <div class="nb-grid">
           <div class="nb-side">
@@ -429,6 +430,43 @@
                   <input type="text" id="dict-input" class="tools-input" placeholder="Enter a word..." style="flex:1;font-size:12px" onkeydown="if(event.key==='Enter')lookupDictionary()">
                   <button class="nb-gen-btn" onclick="lookupDictionary()">Define</button>
                 </div>
+                <div id="dict-result" class="tool-result-box"></div>
+              </div>
+            </div>
+
+            <!-- Solar System -->
+            <div id="nb-tool-solar" class="nb-tool-content" data-hide-sources="1">
+              <div class="tool-inline" id="solar-inline" style="position:relative">
+                <div class="tool-section-title" style="margin-bottom:4px">
+                  Interactive Solar System
+                  <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Click on any planet to learn more!</span>
+                </div>
+                <div style="display:flex;gap:16px;flex-wrap:wrap">
+                  <div style="flex:1;min-width:480px">
+                    <canvas id="solar-canvas" width="800" height="500" style="width:100%;height:auto;background:#000;border-radius:8px;border:1px solid var(--border);cursor:pointer"></canvas>
+                    <div style="display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap">
+                      <label style="font-size:10px;color:var(--fg-dim)">Speed:
+                        <select id="solar-speed" onchange="solarSetSpeed(this.value)" style="font-size:10px;padding:2px 6px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px">
+                          <option value="0.5">0.5×</option>
+                          <option value="1" selected>1×</option>
+                          <option value="2">2×</option>
+                          <option value="5">5×</option>
+                          <option value="10">10×</option>
+                        </select>
+                      </label>
+                      <button onclick="solarTogglePause()" id="solar-pause-btn" style="font-size:10px;padding:4px 12px">Pause</button>
+                      <span id="solar-fact" class="update-result" style="font-size:10px;color:var(--teal);flex:1;text-align:right"></span>
+                    </div>
+                  </div>
+                  <div id="solar-info" style="width:220px;min-width:220px;padding:12px;background:var(--bg-light);border:1px solid var(--border);border-radius:6px;font-size:11px;line-height:1.6">
+                    <div style="font-size:10px;color:var(--fg-dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Planet Info</div>
+                    <div id="solar-info-content" style="color:var(--fg-dim)">Click on a planet above to see its details!</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
                 <div id="dict-result" class="tool-result-box"></div>
               </div>
             </div>

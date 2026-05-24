@@ -1,12 +1,15 @@
 {
-  "version": "2.1.0",
-  "name": "NexCampus v2.1",
+  "version": "2.3.0",
+  "name": "NexCampus v2.3",
+  "update_url": "",
   "changelog": [
-    "Data directories moved to APPDATA/~/.local/share (no desktop clutter)",
-    "Desktop shortcut auto-created on Windows first run",
-    "Fixed left-side app cutoff (overflow-x hidden)",
-    "Improved PWA manifest with scope and meta tags",
-    "APK crash handling now shows error in webview",
-    "APK uses writable app-private directory for data"
+    "Android support removed (dedicated native app planned for future)",
+    "About page layout fixed — content no longer cut off",
+    "Windows OCR — Tesseract 5.3 bundled with installer",
+    "OCR reliability improved — server first with 8s timeout, browser fallback",
+    "One-line install scripts for Linux and Windows",
+    "Auto app drawer setup on Linux via install script",
+    "Interactive Solar System tool added to Study Lab",
+    "In-app update checker now works via GitHub API"
   ]
 }

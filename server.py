@@ -331,24 +331,31 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
         super().log_message(format, *args)
 
     def api_check_update(self):
-        remote_url = VERSION.get('update_url', '')
-        if not remote_url:
-            self.send_json({'error': 'No update URL configured', 'success': False})
-            return
+        BINARY_NAME = 'NexCampus-windows.exe' if PLATFORM == 'windows' else 'NexCampus-linux'
         try:
-            req = urllib.request.Request(remote_url, headers={'User-Agent': 'NexCampus/2.0'})
+            req = urllib.request.Request(
+                'https://api.github.com/repos/sudobreakstuff/Nexcampus/releases/latest',
+                headers={'User-Agent': 'NexCampus/2.0', 'Accept': 'application/vnd.github.v3+json'}
+            )
             with urllib.request.urlopen(req, timeout=10) as resp:
-                remote = json.loads(resp.read())
+                release = json.loads(resp.read())
             current = VERSION.get('version', '0.0.0')
-            remote_ver = remote.get('version', '')
+            remote_ver = release.get('tag_name', '').lstrip('v')
             has_update = self._compare_versions(remote_ver, current)
+            download_url = ''
+            for asset in release.get('assets', []):
+                if asset['name'] == BINARY_NAME:
+                    download_url = asset['browser_download_url']
+                    break
+            body = release.get('body', '')
+            changelog = [l.strip('- ').strip() for l in body.split('\n') if l.strip().startswith('-')] if body else []
             self.send_json({
                 'current_version': current,
                 'remote_version': remote_ver,
                 'has_update': has_update,
-                'download_url': remote.get('downloads', {}).get(PLATFORM, {}).get('url', ''),
-                'release_notes_url': remote.get('release_notes_url', ''),
-                'changelog': remote.get('changelog', []),
+                'download_url': download_url,
+                'release_notes_url': release.get('html_url', ''),
+                'changelog': changelog,
                 'success': True
             })
         except Exception as e:
