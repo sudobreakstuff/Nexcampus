@@ -46,6 +46,22 @@ html[data-theme="forest"] {
   --accent: var(--cyan);
 }
 
+/* ====== Iron Man — dark red with gold, arc-reactor blue glow ====== */
+html[data-theme="ironman"] {
+  --bg: #0d0505;
+  --bg2: #1a0a0a;
+  --fg: #e8d8c8;
+  --fg-dim: #8a6050;
+  --fg-bright: #f0e0d0;
+  --cyan: #ff3333;
+  --teal: #ffd700;
+  --amber: #ff8c00;
+  --pink: #ff6b6b;
+  --border: #2a1010;
+  --glow-cyan: rgba(255, 51, 51, 0.12);
+  --accent: #ffd700;
+}
+
 /* ====== Paper Light — warm cream with navy ====== */
 html[data-theme="paper"] {
   --bg: #f5f0e8;

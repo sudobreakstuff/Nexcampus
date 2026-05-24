@@ -1706,66 +1706,80 @@ function solarDraw() {
   var t = performance.now() / 1000;
   if (!SOLAR._stars) {
     SOLAR._stars = [];
-    for (var i = 0; i < 350; i++) {
+    for (var i = 0; i < 400; i++) {
       var angle = Math.random() * 2 * Math.PI;
-      var dist = Math.random() * w * 0.8;
-      SOLAR._stars.push({ x:w/2 + Math.cos(angle)*dist, y:h/2 + Math.sin(angle)*dist, r:Math.random()*1.2+0.2, a:Math.random()*0.4+0.1, t:Math.random()*1000 });
+      var dist = Math.random() * w * 0.85;
+      var colors = ['#fff','#c8d8ff','#ffe8c8','#ffd8d8','#e8ffe8'];
+      SOLAR._stars.push({ x:w/2 + Math.cos(angle)*dist, y:h/2 + Math.sin(angle)*dist, r:Math.random()*1.5+0.2, a:Math.random()*0.5+0.1, t:Math.random()*1000, c:colors[Math.floor(Math.random()*colors.length)] });
     }
     SOLAR._milkyStars = [];
-    for (var i = 0; i < 150; i++) {
+    for (var i = 0; i < 200; i++) {
       var angle = -0.5 + Math.random() * 1.0;
       var dist = Math.random() * w * 0.7 + 30;
-      SOLAR._milkyStars.push({ x:w/2 + Math.cos(angle)*dist, y:h/2 + Math.sin(angle * 2.5)*dist*0.3, r:Math.random()*1.5+0.3, a:Math.random()*0.3+0.05 });
+      SOLAR._milkyStars.push({ x:w/2 + Math.cos(angle)*dist, y:h/2 + Math.sin(angle * 2.5)*dist*0.25, r:Math.random()*2+0.4, a:Math.random()*0.4+0.05, c:['#c8d8ff','#d8c8ff','#ffd8c8'][Math.floor(Math.random()*3)] });
+    }
+    SOLAR._nebula = [];
+    for (var i = 0; i < 40; i++) {
+      var a = Math.random() * 2 * Math.PI;
+      var d = 80 + Math.random() * 200;
+      SOLAR._nebula.push({ x:w/2 + Math.cos(a)*d, y:h/2 + Math.sin(a)*d, r:10+Math.random()*40, c:'rgba(' + Math.floor(20+Math.random()*30) + ',' + Math.floor(10+Math.random()*20) + ',' + Math.floor(40+Math.random()*50) + ',0.015)' });
     }
   }
+  SOLAR._nebula.forEach(function(n) {
+    ctx.fillStyle = n.c; ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI*2); ctx.fill();
+  });
   SOLAR._stars.forEach(function(s) {
     ctx.globalAlpha = s.a * (0.7 + 0.3 * Math.sin(t + s.t));
-    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = s.c; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
   });
   SOLAR._milkyStars.forEach(function(s) {
-    ctx.globalAlpha = s.a * (0.6 + 0.4 * Math.sin(t * 0.5 + s.x));
-    ctx.fillStyle = '#c8d8ff'; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
+    ctx.globalAlpha = s.a * (0.5 + 0.4 * Math.sin(t * 0.3 + s.x));
+    ctx.fillStyle = s.c; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
   });
   ctx.globalAlpha = 1;
 
-  ctx.strokeStyle = 'rgba(255,255,255,0.04)'; ctx.lineWidth = 0.5;
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 0.5;
   SOLAR.planets.forEach(function(p) { ctx.beginPath(); ctx.arc(cx, cy, p.orbit, 0, Math.PI*2); ctx.stroke(); });
-  ctx.strokeStyle = 'rgba(255,255,255,0.025)';
+  ctx.strokeStyle = 'rgba(255,255,255,0.035)';
   SOLAR.dwarfs.forEach(function(p) { ctx.beginPath(); ctx.arc(cx, cy, p.orbit, 0, Math.PI*2); ctx.stroke(); });
 
   if (z > 0.3) {
-    for (var i = 0; i < 120; i++) {
+    for (var i = 0; i < 150; i++) {
       var a = Math.random() * 2 * Math.PI;
-      var r = 125 + Math.random() * 25;
-      ctx.fillStyle = 'rgba(255,255,255,' + (0.02 + Math.random() * 0.04) + ')';
-      ctx.fillRect(cx + Math.cos(a)*r - 0.3, cy + Math.sin(a)*r - 0.3, 0.6, 0.6);
+      var r = 123 + Math.random() * 29;
+      ctx.fillStyle = 'rgba(200,200,200,' + (0.015 + Math.random() * 0.035) + ')';
+      ctx.fillRect(cx + Math.cos(a)*r - 0.4, cy + Math.sin(a)*r - 0.4, 0.8, 0.8);
     }
   }
 
-  var pulse = 1 + 0.04 * Math.sin(t * 1.5);
-  var sunR = 35 * pulse;
-  var sg = ctx.createRadialGradient(cx, cy, 0, cx, cy, sunR * 1.4);
-  sg.addColorStop(0,'#fffbe6'); sg.addColorStop(0.15,'#ffe066'); sg.addColorStop(0.35,'#ff8c00');
-  sg.addColorStop(0.6,'rgba(255,100,0,0.3)'); sg.addColorStop(0.8,'rgba(255,50,0,0.1)'); sg.addColorStop(1,'rgba(255,50,0,0)');
-  ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(cx, cy, sunR * 1.4, 0, Math.PI*2); ctx.fill();
-  var corona = ctx.createRadialGradient(cx, cy, sunR * 0.3, cx, cy, sunR * 2);
-  corona.addColorStop(0,'rgba(255,200,100,0.08)'); corona.addColorStop(0.5,'rgba(255,100,0,0.03)'); corona.addColorStop(1,'rgba(255,50,0,0)');
-  ctx.fillStyle = corona; ctx.beginPath(); ctx.arc(cx, cy, sunR * 2, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = '#fffbe6'; ctx.beginPath(); ctx.arc(cx, cy, 12 * pulse, 0, Math.PI*2); ctx.fill();
+  var pulse = 1 + 0.05 * Math.sin(t * 1.5) + 0.02 * Math.sin(t * 3.7);
+  var sunR = 36 * pulse;
+  var sg = ctx.createRadialGradient(cx, cy, 0, cx, cy, sunR * 1.5);
+  sg.addColorStop(0,'#fffef0'); sg.addColorStop(0.1,'#ffe066'); sg.addColorStop(0.25,'#ff8c00');
+  sg.addColorStop(0.5,'rgba(255,100,0,0.3)'); sg.addColorStop(0.7,'rgba(255,50,0,0.1)'); sg.addColorStop(1,'rgba(255,30,0,0)');
+  ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(cx, cy, sunR * 1.5, 0, Math.PI*2); ctx.fill();
+  var corona = ctx.createRadialGradient(cx, cy, sunR * 0.2, cx, cy, sunR * 2.5);
+  corona.addColorStop(0,'rgba(255,200,100,0.06)'); corona.addColorStop(0.4,'rgba(255,100,0,0.03)'); corona.addColorStop(1,'rgba(255,50,0,0)');
+  ctx.fillStyle = corona; ctx.beginPath(); ctx.arc(cx, cy, sunR * 2.5, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#fffef0'; ctx.beginPath(); ctx.arc(cx, cy, 13 * pulse, 0, Math.PI*2); ctx.fill();
 
   var allBodies = SOLAR.planets.concat(SOLAR.dwarfs);
   allBodies.forEach(function(p) {
     var x = cx + Math.cos(p.angle) * p.orbit, y = cy + Math.sin(p.angle) * p.orbit;
     p._x = x; p._y = y;
 
-    if (p.name === 'Saturn' && z > 0.2) {
+    if (p.name === 'Saturn' && z > 0.15) {
       ctx.save();
       ctx.translate(x, y);
-      ctx.scale(1, 0.35);
-      ctx.strokeStyle = p.color + '60'; ctx.lineWidth = 1.5;
-      ctx.beginPath(); ctx.arc(0, 0, p.size * 1.8, 0, Math.PI*2); ctx.stroke();
-      ctx.strokeStyle = p.color + '30'; ctx.lineWidth = 0.8;
-      ctx.beginPath(); ctx.arc(0, 0, p.size * 2.1, 0, Math.PI*2); ctx.stroke();
+      ctx.scale(1, 0.3);
+      ctx.strokeStyle = '#c8a050' + '80'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(0, 0, p.size * 1.6, 0, Math.PI*2); ctx.stroke();
+      ctx.strokeStyle = '#d4b060' + '50'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(0, 0, p.size * 1.9, 0, Math.PI*2); ctx.stroke();
+      ctx.strokeStyle = '#b89040' + '40'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(0, 0, p.size * 2.2, 0, Math.PI*2); ctx.stroke();
+      ctx.strokeStyle = '#c8a050' + '30'; ctx.lineWidth = 0.5;
+      ctx.beginPath(); ctx.arc(0, 0, p.size * 2.5, Math.PI*0.1, Math.PI*1.9); ctx.stroke();
       ctx.restore();
     }
 
@@ -1774,30 +1788,68 @@ function solarDraw() {
       ctx.beginPath(); ctx.arc(x, y, p.size * 1.5, 0, Math.PI*2); ctx.fill();
     }
 
-    ctx.strokeStyle = p.color + '30'; ctx.lineWidth = p.size * 0.25;
-    ctx.beginPath(); ctx.arc(x, y, p.size * 0.5, 0, Math.PI*2); ctx.stroke();
+    if (p.name === 'Earth' && z > 0.4) {
+      var moonAngle = p.angle * 13;
+      var moonDist = p.size * 2.5;
+      ctx.fillStyle = '#aaa';
+      ctx.beginPath(); ctx.arc(x + Math.cos(moonAngle)*moonDist, y + Math.sin(moonAngle)*moonDist, p.size * 0.3, 0, Math.PI*2); ctx.fill();
+    }
 
-    var pg = ctx.createRadialGradient(x - p.size*0.3, y - p.size*0.3, 0, x, y, p.size);
-    pg.addColorStop(0, lightenColor(p.color, 50)); pg.addColorStop(1, p.color);
-    ctx.fillStyle = pg; ctx.beginPath(); ctx.arc(x, y, p.size, 0, Math.PI*2); ctx.fill();
+    var ps = p.size;
+    ctx.shadowColor = 'rgba(0,0,0,0.3)'; ctx.shadowBlur = ps * 0.5;
+    var pg = ctx.createRadialGradient(x - ps*0.3, y - ps*0.3, 0, x, y, ps);
+    pg.addColorStop(0, lightenColor(p.color, 60));
+    pg.addColorStop(0.5, lightenColor(p.color, 15));
+    pg.addColorStop(1, p.color);
+    ctx.fillStyle = pg; ctx.beginPath(); ctx.arc(x, y, ps, 0, Math.PI*2); ctx.fill();
+    ctx.shadowBlur = 0;
 
     if (p.name === 'Jupiter') {
-      ctx.strokeStyle = 'rgba(180,120,80,0.2)'; ctx.lineWidth = 0.8;
-      for (var b = -1; b <= 1; b+=0.5) {
-        ctx.beginPath(); ctx.ellipse(x + b*3, y + b*2, p.size*0.6, p.size*0.15, 0, 0, Math.PI*2); ctx.stroke();
+      ctx.save();
+      ctx.beginPath(); ctx.arc(x, y, ps, 0, Math.PI*2); ctx.clip();
+      ctx.strokeStyle = 'rgba(180,120,80,0.2)'; ctx.lineWidth = 1.5;
+      for (var b = -0.8; b <= 0.8; b += 0.35) {
+        ctx.beginPath(); ctx.ellipse(x, y + b * ps * 0.5, ps * 0.7, ps * 0.12, 0, 0, Math.PI*2); ctx.stroke();
       }
+      ctx.restore();
+    }
+
+    if (p.name === 'Earth' && z > 0.4) {
+      ctx.save();
+      ctx.beginPath(); ctx.arc(x, y, ps, 0, Math.PI*2); ctx.clip();
+      ctx.fillStyle = 'rgba(60,140,60,0.15)';
+      ctx.fillRect(x - ps, y - ps*0.3, ps*2, ps*0.25);
+      ctx.fillRect(x - ps*0.2, y - ps*0.5, ps*0.8, ps*0.4);
+      ctx.fillRect(x + ps*0.3, y - ps*0.1, ps*0.5, ps*0.3);
+      ctx.fillStyle = 'rgba(255,255,255,0.08)';
+      ctx.beginPath(); ctx.arc(x - ps*0.2, y - ps*0.2, ps*0.3, 0, Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
+
+    if (p.name === 'Jupiter' || p.name === 'Saturn') {
+      ctx.save();
+      ctx.beginPath(); ctx.arc(x, y, ps, 0, Math.PI*2); ctx.clip();
+      ctx.fillStyle = 'rgba(255,255,255,0.06)';
+      ctx.fillRect(x - ps * 0.8, y - ps * 0.15, ps * 1.6, ps * 0.3);
+      ctx.restore();
     }
 
     if (SOLAR.selected === p.name) {
       ctx.strokeStyle = '#4fc3f7'; ctx.lineWidth = 2 / z;
-      ctx.shadowColor = '#4fc3f7'; ctx.shadowBlur = 15 / z;
-      ctx.beginPath(); ctx.arc(x, y, p.size + 3, 0, Math.PI*2); ctx.stroke();
+      ctx.shadowColor = '#4fc3f7'; ctx.shadowBlur = 20 / z;
+      ctx.beginPath(); ctx.arc(x, y, ps + 4, 0, Math.PI*2); ctx.stroke();
       ctx.shadowBlur = 0;
+    } else if (z > 0.15) {
+      ctx.strokeStyle = p.color + '40'; ctx.lineWidth = 1 / z;
+      ctx.beginPath(); ctx.arc(x, y, ps + 1.5, 0, Math.PI*2); ctx.stroke();
     }
 
     if (z > 0.25) {
-      ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.font = '9px sans-serif'; ctx.textAlign = 'center';
-      ctx.fillText(p.name, x, y + p.size + 12);
+      ctx.shadowColor = 'rgba(0,0,0,0.8)'; ctx.shadowBlur = 4 / z;
+      ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.font = Math.max(8, Math.round(10 / z)) + 'px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(p.name, x, y + ps + Math.max(10, 14 / z));
+      ctx.shadowBlur = 0;
     }
   });
   ctx.restore();

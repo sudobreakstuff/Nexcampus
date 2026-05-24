@@ -2,247 +2,290 @@
 
 var currentClTab = 'guides';
 var currentClLang = 'python';
+var _clAbortController = null;
 
 var CODEGUIDES = [
   {
     id:'python-intro',
     title:'Python Basics',
     category:'Python',
-    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Welcome to Python!</h3>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Python is a high-level, interpreted programming language known for its readability and simplicity. Created by Guido van Rossum and first released in 1991, Python emphasizes code readability through significant whitespace and a clean syntax. It is widely used in web development, data science, artificial intelligence, scientific computing, and automation. Python follows a philosophy summarized in the Zen of Python: "Beautiful is better than ugly. Explicit is better than implicit. Simple is better than complex."</p>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Python uses dynamic typing, meaning you don\'t need to declare variable types explicitly — the interpreter infers them at runtime. This makes Python very forgiving for beginners while still being powerful enough for professional-grade applications. Python\'s extensive standard library provides modules for everything from file I/O to web services.</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Installing Python</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Download Python from python.org (version 3.x recommended). Installers are available for Windows, macOS, and Linux. During installation on Windows, make sure to check "Add Python to PATH". Verify your installation by opening a terminal and typing:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">python --version</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Your First Program</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">The classic first program prints "Hello, World!" to the console. In Python, this is just one line:</p>'
+    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Welcome to Python! Let\\\'s Write Some Code!</h3>'
+      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Hey there! Welcome to Python — a programming language that reads almost like English. Created by Guido van Rossum in 1991, Python is designed to be <em>fun</em> to write and easy to read. It\\\'s used for everything from websites to AI to rocket science. But right now, we\\\'re going to start simple: writing code that actually runs.</p>'
+      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Here\\\'s the deal: don\\\'t just read this guide. Type the examples in the code runner below. Change them. Break them. That\\\'s how you actually learn. Ready? Let\\\'s go!</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Your First Program (It\\\'s a Tradition)</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Every programmer starts here. Type this and hit run:</p>'
       + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">print("Hello, World!")</code></pre>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">The <code>print()</code> function outputs text to the console. You can pass strings (text in quotes), numbers, variables, or expressions to it. Python automatically converts non-string values to strings for display.</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Comments</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Use the <code>#</code> symbol to write comments that Python ignores. Comments help explain your code:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># This is a comment\nprint("Hello!")  # Inline comment</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Basic Math</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Python can do arithmetic right in the console or in scripts:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">print(2 + 3)   # 5\nprint(10 - 4)  # 6\nprint(3 * 7)   # 21\nprint(15 / 4)  # 3.75\nprint(15 // 4) # 3 (floor division)\nprint(15 % 4)  # 3 (modulus)\nprint(2 ** 3)  # 8 (exponent)</code></pre>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Python follows standard operator precedence: multiplication and division happen before addition and subtraction. Use parentheses to control order: <code>(2 + 3) * 4</code> equals 20, while <code>2 + 3 * 4</code> equals 14.</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Getting Help</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Use Python\'s built-in <code>help()</code> function to learn about any function or module. For quick reference, <code>dir()</code> lists all attributes of an object:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">help(print)\ndir(str)</code></pre>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Python\'s interactive shell (REPL) is a great way to experiment. Just type <code>python</code> in your terminal to start it.</p>'
+      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Boom! You\\\'re officially a programmer. <code>print()</code> shows text on screen. Try changing the message to your name. Go ahead, I\\\'ll wait.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Leave Yourself Notes (Comments)</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Use <code>#</code> to write comments that Python ignores completely. Your future self will thank you when you revisit this code in 6 months:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># This is a comment — Python ignores this line\\nprint("Hello!")  # You can also put comments after code</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Common pitfall:</strong> Forgetting the <code>#</code>! Without it, Python tries to run your comment as code and crashes with a SyntaxError. Always start comments with <code>#</code>.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Python is a Fancy Calculator</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Python can do math. And it\\\'s way better than a real calculator. Try these:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">print(2 + 3)   # Addition: 5\\nprint(10 - 4)  # Subtraction: 6\\nprint(3 * 7)   # Multiplication: 21\\nprint(15 / 4)  # Division: 3.75\\nprint(15 // 4) # Floor division (chops decimal): 3\\nprint(15 % 4)  # Modulus (remainder): 3\\nprint(2 ** 3)  # Exponent (power): 8</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Watch out!</strong> <code>/</code> always gives a decimal (float). If you want a whole number, use <code>//</code>. Try <code>print(10 / 3)</code> vs <code>print(10 // 3)</code> to see the difference!</p>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">💡 <strong>Pro Tip:</strong> Use parentheses to control order: <code>(2 + 3) * 4</code> = 20, but <code>2 + 3 * 4</code> = 14. Without parens, Python follows PEMDAS (multiplication before addition).</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Need Help? Python Has Your Back</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Stuck? Type <code>help(print)</code> or <code>dir(str)</code> to see what something can do. Python\\\'s built-in help is like having a super-nerdy friend on speed dial:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">help(print)\\ndir(str)</code></pre>'
+      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
+      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Print "Python is awesome!" instead of "Hello, World!"</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Calculate how many seconds are in a day (24 * 60 * 60) and print it</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Add a comment explaining what your code does (use <code>#</code>)</p>'
+      + '</div>'
   },
   {
     id:'python-vars',
     title:'Variables & Types',
     category:'Python',
-    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Variables and Data Types</h3>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Variables are named containers that store data in memory. In Python, you create a variable by assigning a value to a name using the equals sign <code>=</code>. Unlike many other languages, Python variables don\'t need explicit type declarations — the interpreter infers the type from the value you assign.</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">name = "Alice"\nage = 25\nheight = 5.6\nis_student = True</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Variable Naming Rules</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Variable names must start with a letter or underscore, followed by letters, digits, or underscores. They are case-sensitive (<code>age</code> and <code>Age</code> are different). Avoid using Python keywords like <code>if</code>, <code>else</code>, <code>while</code>, <code>for</code>, <code>class</code>, <code>def</code>, <code>import</code>, and <code>return</code> as variable names.</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">valid_name = "ok"\n_validName = "also ok"\nname123 = "fine"\n123name = "not allowed"  # SyntaxError!</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Basic Data Types</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Python has several built-in types. <code>int</code> is for whole numbers (positive, negative, or zero). <code>float</code> is for decimal numbers. <code>str</code> is for text (strings). <code>bool</code> is for boolean values <code>True</code> or <code>False</code>. <code>NoneType</code> represents the absence of a value (<code>None</code>).</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">x = 42          # int\ny = 3.14        # float\nz = "Hello"     # str\nflag = False    # bool\nnothing = None  # NoneType\n\nprint(type(x))  # <class \'int\'></code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Type Conversion</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">You can convert between types using built-in functions like <code>int()</code>, <code>float()</code>, <code>str()</code>, and <code>bool()</code>:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">age_str = "25"\nage_int = int(age_str)      # 25\npi = 3.14159\npi_str = str(pi)            # "3.14159"\nnum = float("10.5")        # 10.5\nprint(bool(0))             # False\nprint(bool(1))             # True\nprint(bool(""))            # False\nprint(bool("hello"))       # True</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Multiple Assignment</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Python lets you assign multiple variables in one line:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">a, b, c = 1, 2, 3\n# Swap values without a temp variable\na, b = b, a  # a=2, b=1\n\n# Same value to multiple variables\nx = y = z = 0</code></pre>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Understanding types is fundamental to Python programming. The <code>type()</code> function is your friend when you need to check what type a variable holds.</p>'
+    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Variables: Sticky Notes for Your Code</h3>'
+      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Imagine labeling jars in your kitchen. One says \"sugar\", another says \"flour\". That\\\'s what variables are — named containers for values. In Python, you just write <code>name = value</code> and done. No extra ceremony, no type declarations. Python figures out the type from what you put in it.</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">name = "Alice"\\nage = 25\\nheight = 5.6\\nis_student = True</code></pre>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Naming Rules (Python Plays by Rules)</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Names must start with a letter or underscore, then can have letters, numbers, or underscores. They\\\'re case-sensitive (<code>age</code> vs <code>Age</code> = totally different). And NEVER use Python keywords like <code>if</code>, <code>class</code>, or <code>return</code> — Python will yell at you:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">valid_name = "ok"\\n_validName = "also ok"\\nname123 = "fine"\\n# 123name = "not allowed"  # SyntaxError — numbers can\\\'t start!</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Common mistake:</strong> Starting a name with a number! <code>1st_place</code> is illegal. Python thinks it\\\'s a number followed by random stuff. Use <code>first_place</code> instead.</p>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Another gotcha:</strong> <code>if = 5</code> will give a SyntaxError because <code>if</code> is a reserved keyword. Python won\\\'t even let you try — it\\\'ll stop you instantly.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">The Python Type Zoo</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Python has several built-in types. Think of them as different flavors of data:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">x = 42          # int — whole numbers\\ny = 3.14        # float — decimals\\nz = "Hello"     # str — text\\nflag = False    # bool — True or False\\nnothing = None  # NoneType — "nothing here, move along"\\n\\nprint(type(x))  # <class \\\'int\\\'>  — use type() to check!</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">💡 <strong>Pro Tip:</strong> <code>type()</code> is your debugging best friend. Stuck on a weird error? Print <code>type(your_variable)</code> and see what Python thinks it is. You\\\'ll spot the problem immediately.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Type Conversion: Shape-Shifting Data</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Sometimes you need to convert between types. <code>int()</code>, <code>float()</code>, <code>str()</code>, <code>bool()</code> are your conversion spells. But be careful — not everything converts:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">age_str = "25"\\nage_int = int(age_str)      # "25" -> 25\\npi = 3.14159\\npi_str = str(pi)            # 3.14159 -> "3.14159"\\nnum = float("10.5")        # "10.5" -> 10.5\\nprint(bool(0))             # 0 -> False\\nprint(bool(""))            # "" -> False\\nprint(bool("hello"))       # "hello" -> True</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Watch out!</strong> <code>int("hello")</code> crashes with <code>ValueError</code>. Python can\\\'t magically turn letters into numbers (it\\\'s programming, not wizardry). Always convert from types that actually make sense.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Party Trick: Multi-Assignment</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Python lets you assign multiple variables at once. Even swap two values WITHOUT a temporary variable. Show this to a friend who uses another language — watch their jaw drop:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">a, b, c = 1, 2, 3\\n# Swap without a temp! Mind-blowing!\\na, b = b, a  # a=2, b=1</code></pre>'
+      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
+      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Create a variable <code>my_age</code> with your age and print it</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Convert the string "7.5" to a float, double it, and print the result</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Swap <code>a = 10</code> and <code>b = 20</code> using Python\\\'s magic swap trick</p>'
+      + '</div>'
   },
   {
     id:'python-strings',
     title:'Strings & Formatting',
     category:'Python',
-    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Strings and String Formatting</h3>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Strings are sequences of characters enclosed in single quotes (\') or double quotes ("). Python treats both quote styles the same — just be consistent. Triple quotes (<code>\'\'\'</code> or <code>"""</code>) are used for multi-line strings and docstrings.</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">s1 = \'Hello\'\ns2 = "World"\ns3 = \'\'\'This is a\nmulti-line\nstring.\'\'\'</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">String Operations</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Strings support concatenation (<code>+</code>) and repetition (<code>*</code>). You can also check membership with <code>in</code>:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">greeting = "Hello" + " " + "World"  # "Hello World"\nha = "ha" * 3                       # "hahaha"\nprint("ell" in "Hello")            # True</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">String Indexing and Slicing</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">You can access individual characters using square brackets with an index. Python uses zero-based indexing, meaning the first character is at index 0. Negative indices count from the end, starting at -1.</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">text = "Python"\nprint(text[0])   # P\nprint(text[-1])  # n\nprint(text[0:3]) # Pyt (slice, start inclusive, end exclusive)\nprint(text[2:])  # thon\nprint(text[:4])  # Pyth\nprint(text[::2]) # Pto (step of 2)\nprint(text[::-1])# nohtyP (reverse)</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Common String Methods</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Python strings have many built-in methods. <code>lower()</code> and <code>upper()</code> change case. <code>strip()</code> removes whitespace. <code>split()</code> breaks a string into a list. <code>join()</code> does the reverse. <code>replace()</code> substitutes text.</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">s = "  Hello, World!  "\nprint(s.strip())          # "Hello, World!"\nprint(s.lower())          # "  hello, world!  "\nprint(s.upper())          # "  HELLO, WORLD!  "\nprint(s.split(","))       # ["  Hello", " World!  "]\nparts = ["a", "b", "c"]\nprint("-".join(parts))    # "a-b-c"\nprint(s.replace("World", "Python"))  # "  Hello, Python!  "</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">F-Strings (Python 3.6+)</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">F-strings are the modern way to embed expressions inside strings. Prefix the string with <code>f</code> or <code>F</code> and use curly braces to insert variables or expressions:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">name = "Alice"\nage = 25\nprint(f"My name is {name} and I am {age} years old.")\nprint(f"Next year I will be {age + 1}.")\nprint(f"Pi to 3 decimals: {3.14159:.3f}")  # "3.142"</code></pre>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">F-strings evaluate any Python expression inside the curly braces. You can call functions, do arithmetic, access list items, and more — all inline.</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Escape Characters</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Use backslash to include special characters: <code>\\n</code> for newline, <code>\\t</code> for tab, <code>\\\\</code> for a literal backslash, <code>\\\'</code> for a single quote:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">print("Line1\\nLine2")\nprint("Column1\\tColumn2")\nprint(\'It\\\'s nice\')</code></pre>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Raw strings (<code>r"..."</code>) treat backslashes as literal characters, which is useful for file paths and regular expressions.</p>'
+    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Strings: Python\\\'s Way With Words</h3>'
+      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Strings are just text. A single character, a word, a sentence, a whole book — if it\\\'s made of letters and symbols, it\\\'s a string. In Python, you wrap them in single (<code>\\\'hi\\\'</code>) or double (<code>"hi"</code>) quotes. Python doesn\\\'t care which, just pick one and be consistent. Triple quotes are for multi-line strings.</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">s1 = \\\'Hello\\\'\\ns2 = "World"\\ns3 = \\\'\\\'\\\'This can be\\nmultiple lines\\nwithout any extra effort!\\\'\\\'\\\'</code></pre>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">String Superpowers</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">You can glue strings with <code>+</code> (concatenation) or multiply them with <code>*</code>. Yes, <code>"ha" * 3</code> gives <code>"hahaha"</code>. Try doing THAT in a calculator:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">greeting = "Hello" + " " + "World"  # "Hello World"\\nha = "ha" * 3                       # "hahaha"\\nprint("ell" in "Hello")            # True — substring check!</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">💡 <strong>Pro Tip:</strong> <code>in</code> is amazing for checking if one string contains another. Use it for searching, filtering, and validation.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Slicing: Carve Out Any Piece</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Think of a string as a row of numbered boxes, starting at 0 (computer scientists have strong opinions about counting). Slicing <code>[start:stop:step]</code> lets you extract any portion. The stop index is <em>excluded</em> (sorry, it\\\'s just how it works):</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">text = "Python"\\nprint(text[0])   # P — first character\\nprint(text[-1])  # n — last character\\nprint(text[0:3]) # Pyt — indices 0,1,2 (3 is excluded!)\\nprint(text[::-1])# nohtyP — reversed! How cool is that?</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Off-by-one trap!</strong> Remember <code>[start:stop]</code> excludes <code>stop</code>. So <code>"Python"[0:5]</code> gives "Pytho", not the full word. Use <code>[:6]</code> or just <code>[:]</code> to get everything.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Handy String Methods</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7"><code>.upper()</code> for SHOUTING, <code>.lower()</code> for whispering, <code>.strip()</code> trims whitespace, <code>.split()</code> breaks into a list, <code>.join()</code> glues a list back together, <code>.replace()</code> swaps text:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">s = "  Hello, World!  "\\nprint(s.strip())          # "Hello, World!" — no more spaces\\nprint(s.upper())          # "  HELLO, WORLD!  "\\nparts = ["a", "b", "c"]\\nprint("-".join(parts))    # "a-b-c"\\nprint(s.replace("World", "Python"))  # swap text</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Strings are IMMUTABLE!</strong> <code>.upper()</code> returns a NEW string, it doesn\\\'t change the original. <code>s.upper()</code> without reassignment does nothing you can see. You need <code>s = s.upper()</code> to save the change.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">F-Strings: The Modern Way</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">F-strings (Python 3.6+) are the best thing since sliced strings. Prefix with <code>f</code>, use <code>{}</code> to drop variables right in. Clean, readable, beautiful:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">name = "Alice"\\nage = 25\\nprint(f"My name is {name} and I am {age} years old.")\\nprint(f"Next year: {age + 1}. Getting old, eh?")\\nprint(f"Pi: {3.14159:.3f}")  # "3.142" — format specifiers!</code></pre>'
+      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
+      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Create a variable with your name and print "Hello, [name]!" using an f-string</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Use <code>.replace()</code> to change "cats are great" to "dogs are great"</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Reverse the string "desserts" using <code>[::-1]</code> — what do you get?</p>'
+      + '</div>'
   },
   {
     id:'python-lists',
     title:'Lists & Loops',
     category:'Python',
-    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Lists and Loops</h3>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Lists are ordered, mutable collections that can hold items of different types. They are one of Python\'s most versatile data structures. Create a list with square brackets, separating items with commas.</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">fruits = ["apple", "banana", "cherry"]\nmixed = [1, "hello", 3.14, True]\nempty = []\nnested = [[1, 2], [3, 4]]</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Accessing List Items</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Like strings, lists use zero-based indexing and support negative indices and slicing:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">fruits = ["apple", "banana", "cherry", "date"]\nprint(fruits[0])     # apple\nprint(fruits[-1])    # date\nprint(fruits[1:3])   # ["banana", "cherry"]\nfruits[0] = "avocado"  # modify item</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">List Methods</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Lists have many useful methods: <code>append()</code> adds to the end, <code>insert()</code> adds at a position, <code>remove()</code> deletes by value, <code>pop()</code> removes and returns by index, <code>sort()</code> sorts in place, <code>reverse()</code> reverses, and <code>len()</code> returns the length:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">nums = [3, 1, 4, 1, 5]\nnums.append(9)\nnums.insert(0, 0)   # insert at index 0\nnums.remove(1)      # removes first occurrence of 1\nlast = nums.pop()   # removes and returns 9\nnums.sort()         # [0, 1, 3, 4, 5]\nprint(len(nums))    # 5</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">The For Loop</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">The <code>for</code> loop lets you iterate over any iterable (like a list, string, or range). The loop variable takes each item in sequence:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">fruits = ["apple", "banana", "cherry"]\nfor fruit in fruits:\n    print(fruit)\n\n# Using range() to count\nfor i in range(5):\n    print(i)  # 0, 1, 2, 3, 4\n\n# enumerate() gives index and value\nfor i, fruit in enumerate(fruits):\n    print(f"{i}: {fruit}")</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">While Loop</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">The <code>while</code> loop repeats as long as a condition is true. Be careful to update the condition inside the loop to avoid infinite loops:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">count = 0\nwhile count < 5:\n    print(count)\n    count += 1  # increment\n\n# Break and continue\nfor num in range(10):\n    if num == 3:\n        continue  # skip 3\n    if num == 7:\n        break     # stop at 7\n    print(num)</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">List Comprehensions</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">List comprehensions provide a concise way to create lists. The basic syntax is <code>[expression for item in iterable if condition]</code>:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">squares = [x**2 for x in range(10)]\nevens = [x for x in range(20) if x % 2 == 0]\npairs = [(a, b) for a in [1,2] for b in [3,4]]</code></pre>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Lists and loops are fundamental to Python programming. Practice combining them to build powerful data processing pipelines.</p>'
+    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Lists: Your Code\\\'s Shopping Cart</h3>'
+      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">A list is like a shopping cart — you toss stuff in, take stuff out, and everything stays in order. Lists are <strong>ordered</strong>, <strong>mutable</strong> (changeable), and can hold ANY type. Create one with square brackets <code>[]</code>:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">fruits = ["apple", "banana", "cherry"]\\nmixed = [1, "hello", 3.14, True]  # Lists don\\\'t care about types\\nempty = []\\nnested = [[1, 2], [3, 4]]  # Lists inside lists!</code></pre>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Indexing: Zero is the First</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Like strings, list indexing starts at 0 (blame computer scientists). Use negative indices to count from the end. And you can change items by assigning to an index — try THAT with a string:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">fruits = ["apple", "banana", "cherry", "date"]\\nprint(fruits[0])     # apple\\nprint(fruits[-1])    # date\\nprint(fruits[1:3])   # ["banana", "cherry"]\\nfruits[0] = "avocado"  # Lists are mutable!</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Common crash:</strong> <code>IndexError</code> happens when you try <code>fruits[100]</code>. Always check <code>len(fruits)</code> first. Or use a loop and let Python handle the bounds.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">List Superpowers (a.k.a. Methods)</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7"><code>.append()</code> adds to end, <code>.insert()</code> at a position, <code>.remove()</code> by value, <code>.pop()</code> removes and returns, <code>.sort()</code> orders in place:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">nums = [3, 1, 4, 1, 5]\\nnums.append(9)          # [3, 1, 4, 1, 5, 9]\\nnums.insert(0, 0)       # [0, 3, 1, 4, 1, 5, 9]\\nnums.remove(1)          # removes first 1\\nlast = nums.pop()       # removes and returns 9\\nnums.sort()             # [0, 1, 3, 4, 5]</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Sneaky trap:</strong> <code>.sort()</code> returns <code>None</code> — it modifies the list in place! Don\\\'t write <code>sorted_list = my_list.sort()</code>. Use <code>sorted(my_list)</code> if you want a new list.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">For Loops: Visit Every Item</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">A <code>for</code> loop walks through each item in a list automatically. It\\\'s like an assembly line — each element gets processed in turn. No manual indexing needed!</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">fruits = ["apple", "banana", "cherry"]\\nfor fruit in fruits:\\n    print(f"I love {fruit}")\\n\\n# range() generates numbers\\nfor i in range(5):\\n    print(i)  # 0, 1, 2, 3, 4</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">💡 <strong>Pro Tip:</strong> Need both index AND value? Use <code>enumerate()</code>: <code>for i, fruit in enumerate(fruits):</code>. Much cleaner than <code>range(len(fruits))</code>.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">List Comprehensions: One-Line Magic</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Want to create a list from another list in a single line? List comprehensions are basically a for loop compacted into an expression. They\\\'re Pythonic, elegant, and make you look like a pro:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">squares = [x**2 for x in range(10)]      # [0, 1, 4, 9, ...]\\nevens = [x for x in range(20) if x % 2 == 0]  # only evens</code></pre>'
+      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
+      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Create a list of 3 favorite movies, then loop through and print each one with <code>enumerate()</code></p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Use a list comprehension to get even numbers from 0 to 20</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Append "durian" to your fruit list, sort it — what order does Python use?</p>'
+      + '</div>'
   },
   {
     id:'python-dicts',
     title:'Dictionaries & Sets',
     category:'Python',
-    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Dictionaries and Sets</h3>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Dictionaries (dicts) store key-value pairs. They are unordered (in Python 3.6 and earlier), mutable, and indexed by keys rather than numeric positions. Keys must be immutable types like strings, numbers, or tuples. Create a dict with curly braces and colons separating keys from values.</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">person = {\n    "name": "Alice",\n    "age": 25,\n    "city": "New York"\n}\n\n# Accessing values\nprint(person["name"])        # Alice\nprint(person.get("age"))     # 25\nprint(person.get("country", "USA"))  # default value</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Modifying Dictionaries</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Dictionaries are mutable — you can add, update, and delete key-value pairs easily:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">person["email"] = "alice@example.com"  # add new\nperson["age"] = 26                      # update\ndel person["city"]                      # delete\npopped = person.pop("name")             # remove and return\n\n# Check if key exists\nif "email" in person:\n    print(person["email"])</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Dictionary Methods</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Common dict methods include <code>keys()</code>, <code>values()</code>, and <code>items()</code> for iteration:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">for key in person.keys():\n    print(key)\n\nfor value in person.values():\n    print(value)\n\nfor key, value in person.items():\n    print(f"{key}: {value}")</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Sets</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Sets are unordered collections of unique elements. They are useful for removing duplicates and for mathematical set operations like union, intersection, and difference.</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">fruits = {"apple", "banana", "cherry", "apple"}\nprint(fruits)  # {"apple", "banana", "cherry"}\n\n# Set operations\na = {1, 2, 3, 4}\nb = {3, 4, 5, 6}\nprint(a | b)  # union: {1,2,3,4,5,6}\nprint(a & b)  # intersection: {3,4}\nprint(a - b)  # difference: {1,2}\nprint(a ^ b)  # symmetric difference: {1,2,5,6}</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Set Methods</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Sets have methods like <code>add()</code>, <code>remove()</code>, <code>discard()</code>, <code>pop()</code>, <code>clear()</code>, and <code>update()</code>. <code>add()</code> inserts an element, <code>remove()</code> deletes (raising KeyError if missing), and <code>discard()</code> deletes silently:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">nums = {1, 2, 3}\nnums.add(4)\nnums.discard(2)  # no error if missing\nnums.remove(1)   # raises KeyError if missing\ncopy = nums.copy()</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Dictionary Comprehensions</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Just like list comprehensions, you can create dictionaries concisely:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">squares = {x: x**2 for x in range(5)}\n# {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}\n\neven_squares = {x: x**2 for x in range(10) if x % 2 == 0}</code></pre>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Dictionaries and sets are essential tools for organizing and processing data efficiently. Dictionaries provide O(1) lookup time, making them ideal for fast data retrieval.</p>'
+    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Dictionaries: Like a Phonebook for Your Code</h3>'
+      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">A list is great for ordered items, but what if you want to look things up by NAME, not by number? Enter the <strong>dictionary</strong> — a collection of key-value pairs. Think of it as a phonebook: you look up a name (key) and get a number (value). Keys are usually strings, and they must be unique.</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">person = {\\n    "name": "Alice",\\n    "age": 25,\\n    "city": "New York"\\n}\\n\\nprint(person["name"])        # Alice — but crashes if key missing!\\nprint(person.get("age"))     # 25 — .get() is safer\\nprint(person.get("country", "USA"))  # default if missing</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Watch out!</strong> <code>person["country"]</code> on a missing key = <code>KeyError</code> = crash! Use <code>.get()</code> instead. It returns <code>None</code> (or your default) if the key doesn\\\'t exist. Your program will thank you.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Adding, Changing, Deleting</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Dicts are flexible — add or update with assignment, delete with <code>del</code> or <code>.pop()</code>. And always check <code>if key in dict</code> before accessing:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">person["email"] = "alice@example.com"  # add new key\\nperson["age"] = 26                      # update value\\ndel person["city"]                      # delete key\\npopped = person.pop("name")             # remove and return value\\n\\n# Safe check before access\\nif "email" in person:\\n    print(person["email"])</code></pre>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Looping Through a Dict</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7"><code>.keys()</code> gives keys, <code>.values()</code> gives values, <code>.items()</code> gives BOTH. <code>.items()</code> is the MVP — use it most of the time:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">for key, value in person.items():\\n    print(f"{key}: {value}")  # clean and readable</code></pre>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Sets: The Anti-Duplicate Squad</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">A <strong>set</strong> is like a list that hates duplicates. Perfect for \"have I seen this before?\" questions and math operations like union (<code>|</code>) and intersection (<code>&</code>):</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">fruits = {"apple", "banana", "cherry", "apple"}\\nprint(fruits)  # {"apple", "banana", "cherry"} — no dupes!\\n\\na = {1, 2, 3, 4}\\nb = {3, 4, 5, 6}\\nprint(a | b)  # union:        {1,2,3,4,5,6}\\nprint(a & b)  # intersection: {3,4}\\nprint(a - b)  # difference:   {1,2}</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Easy to forget:</strong> <code>{}</code> makes an empty <strong>dictionary</strong>, not a set! For an empty set, use <code>set()</code>. This has tripped up every Python programmer at least once.</p>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">💡 <strong>Pro Tip:</strong> Dicts and sets have super-fast lookups (O(1)). Need to check if something exists? Use a set or dict, not a list. It\\\'s thousands of times faster for large collections.</p>'
+      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
+      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Create a dict with "title", "author", "year" for your favorite book</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Loop through it with <code>.items()</code> and print each key-value pair</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Take a list of numbers with duplicates, convert to a set — what happens?</p>'
+      + '</div>'
   },
   {
     id:'python-funcs',
     title:'Functions & Scope',
     category:'Python',
-    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Functions and Scope</h3>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Functions are reusable blocks of code that perform a specific task. They help you organize code, avoid repetition, and make programs more readable. Define a function using the <code>def</code> keyword, followed by the function name, parentheses for parameters, and a colon.</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">def greet(name):\n    """Return a greeting message."""\n    return f"Hello, {name}!"\n\nmessage = greet("Alice")\nprint(message)  # Hello, Alice!</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Parameters and Arguments</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Functions can accept parameters and return values. Parameters are the variables listed in the function definition; arguments are the values passed when calling the function. Python supports positional, keyword, default, and variable-length arguments:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Default parameters\ndef power(base, exp=2):\n    return base ** exp\n\nprint(power(3))     # 9 (3^2)\nprint(power(3, 3))  # 27 (3^3)\n\n# Keyword arguments\nprint(power(exp=4, base=2))  # 16\n\n# Variable-length arguments\ndef sum_all(*args):\n    return sum(args)\n\ndef print_info(**kwargs):\n    for key, value in kwargs.items():\n        print(f"{key}: {value}")</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Return Values</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Use <code>return</code> to send a value back to the caller. A function without a return statement returns <code>None</code>. You can return multiple values as a tuple:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">def min_max(nums):\n    return min(nums), max(nums)\n\nlow, high = min_max([3, 1, 7, 2, 9])\nprint(low, high)  # 1 9</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Scope</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Variables defined inside a function are local to that function. Variables defined outside all functions are global. Python follows the LEGB rule: Local, Enclosing, Global, Built-in — the interpreter searches these scopes in order when resolving a variable name.</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">x = 10  # global\n\ndef outer():\n    y = 5  # enclosing\n    def inner():\n        z = 1  # local\n        nonlocal y\n        y += z\n        return x + y + z\n    return inner()\n\nprint(outer())  # 17</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Lambda Functions</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Lambda functions are small, anonymous functions defined with the <code>lambda</code> keyword. They can have any number of arguments but only one expression:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">square = lambda x: x**2\nprint(square(5))  # 25\n\n# Often used with map/filter\nnums = [1, 2, 3, 4, 5]\ndoubled = list(map(lambda x: x*2, nums))\nevens = list(filter(lambda x: x % 2 == 0, nums))</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Docstrings</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Always document your functions with docstrings — triple-quoted strings immediately after the function definition. They describe what the function does, its parameters, and its return value:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">def calculate_bmi(weight, height):\n    """\n    Calculate Body Mass Index.\n\n    Args:\n        weight: Weight in kilograms.\n        height: Height in meters.\n\n    Returns:\n        BMI as a float rounded to 1 decimal.\n    """\n    bmi = weight / (height ** 2)\n    return round(bmi, 1)</code></pre>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Functions are the building blocks of modular code. Mastering them will make your programs cleaner, more maintainable, and easier to debug.</p>'
+    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Functions: Don\\\'t Repeat Yourself!</h3>'
+      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Have you ever copy-pasted the same code five times and thought \"there must be a better way\"? There is. It\\\'s called a <strong>function</strong>. A function is a reusable recipe — write the steps once, give it a name, and call it whenever you need it. It\\\'s the DRY principle: Don\\\'t Repeat Yourself.</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">def greet(name):\\n    """Return a friendly greeting."""\\n    return f"Hello, {name}!"\\n\\nmessage = greet("Alice")\\nprint(message)  # Hello, Alice!</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7"><code>def</code> says \"I\\\'m making a function.\" <code>name</code> is a parameter (a placeholder). <code>return</code> sends the result back. Without <code>return</code>, you get <code>None</code> — Python\\\'s way of saying \"I did the thing but there\\\'s nothing to give back.\"</p>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Classic newbie trap:</strong> Forgetting <code>return</code>! If you write <code>def add(a, b): a + b</code> without <code>return</code>, the function calculates the sum and then... throws it into the void. Always <code>return</code> if you want a result!</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Parameters: The Many Flavors</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Python functions are flexible. Default parameters let you skip arguments. Keyword arguments let you pass in any order. <code>*args</code> catches extra positional args like a baseball mitt:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Default parameter — if they don\\\'t pass exp, it\\\'s 2\\ndef power(base, exp=2):\\n    return base ** exp\\n\\nprint(power(3))     # 9 (3^2) — uses default\\nprint(power(3, 3))  # 27 (3^3) — overrides default\\n\\n# Keyword arguments — order doesn\\\'t matter!\\nprint(power(exp=4, base=2))  # 16\\n\\n# *args catches any number of arguments\\ndef sum_all(*args):\\n    return sum(args)\\n\\nprint(sum_all(1, 2, 3, 4, 5))  # 15</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Big gotcha:</strong> Don\\\'t use mutable defaults like <code>def f(x=[]):</code>! That list is created ONCE and shared across all calls. Use <code>None</code> and create the list inside: <code>def f(x=None): x = x or []</code>.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Scope: Where Variables Live</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Variables inside a function are <strong>local</strong> — they don\\\'t exist outside. Variables outside are <strong>global</strong>. Python uses the LEGB rule (Local, Enclosing, Global, Built-in) when looking up names. It\\\'s like asking \"is it in this room? this building? this city?\"</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">x = 10  # global — everyone can see it\\n\\ndef outer():\\n    y = 5  # enclosing — inner() can access this\\n    def inner():\\n        z = 1  # local — only inner() knows z\\n        return x + y + z\\n    return inner()\\n\\nprint(outer())  # 16</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">💡 <strong>Pro Tip:</strong> Keep global variables to a minimum. Pass data as parameters instead. Your code will be easier to debug, test, and your future self will send you a thank-you note.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Lambda: The Express Lane</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Need a quick one-line function? <code>lambda</code> is your friend. It\\\'s an anonymous function you can define on the fly. Perfect for simple operations with <code>map()</code> and <code>filter()</code>:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">square = lambda x: x**2\\nprint(square(5))  # 25\\n\\nnums = [1, 2, 3, 4, 5]\\ndoubled = list(map(lambda x: x*2, nums))  # [2,4,6,8,10]\\nevens = list(filter(lambda x: x % 2 == 0, nums))  # [2,4]</code></pre>'
+      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
+      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Write a function <code>is_even(n)</code> that returns <code>True</code> for even numbers</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Create a function <code>greet(name, greeting="Hello")</code> with a default greeting</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Use a lambda with <code>map()</code> to convert ["apple", "banana"] to ALL CAPS</p>'
+      + '</div>'
   },
   {
     id:'python-classes',
     title:'Classes & OOP',
     category:'Python',
-    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Classes and Object-Oriented Programming</h3>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Object-oriented programming (OOP) organizes code around objects — instances of classes that bundle data (attributes) and behavior (methods). Python supports OOP with classes, inheritance, polymorphism, encapsulation, and abstraction.</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Defining a Class</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Use the <code>class</code> keyword to define a class. The <code>__init__</code> method is the constructor, called when you create an instance. The <code>self</code> parameter refers to the instance itself:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">class Dog:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n\n    def bark(self):\n        return f"{self.name} says Woof!"\n\n    def get_human_years(self):\n        return self.age * 7\n\nmy_dog = Dog("Buddy", 3)\nprint(my_dog.bark())             # Buddy says Woof!\nprint(my_dog.get_human_years())  # 21</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Inheritance</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">A class can inherit attributes and methods from a parent class using the syntax <code>class Child(Parent):</code>. The child can override or extend the parent\'s behavior:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">class Animal:\n    def __init__(self, name):\n        self.name = name\n    def speak(self):\n        return "..."\n\nclass Cat(Animal):\n    def speak(self):\n        return f"{self.name} says Meow!"\n\nclass Dog(Animal):\n    def speak(self):\n        return f"{self.name} says Woof!"\n\nanimals = [Cat("Whiskers"), Dog("Buddy")]\nfor a in animals:\n    print(a.speak())  # Polymorphism in action</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Encapsulation</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Python uses naming conventions for access control. A single underscore prefix (<code>_protected</code>) suggests internal use. A double underscore prefix (<code>__private</code>) triggers name mangling, making it harder (but not impossible) to access from outside:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">class BankAccount:\n    def __init__(self, owner, balance):\n        self.owner = owner\n        self.__balance = balance  # private\n\n    def deposit(self, amount):\n        if amount > 0:\n            self.__balance += amount\n\n    def get_balance(self):\n        return self.__balance\n\nacc = BankAccount("Alice", 1000)\nacc.deposit(500)\nprint(acc.get_balance())  # 1500\n# acc.__balance  # AttributeError</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Class Methods and Static Methods</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Use <code>@classmethod</code> for methods that operate on the class itself (receiving <code>cls</code>), and <code>@staticmethod</code> for utility methods that don\'t need instance or class data:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">class MathUtils:\n    @staticmethod\n    def add(a, b):\n        return a + b\n\n    @classmethod\n    def create_default(cls):\n        return cls()\n\nprint(MathUtils.add(3, 4))  # 7</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Properties</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">The <code>@property</code> decorator lets you define methods that are accessed like attributes, with getters, setters, and deleters:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">class Circle:\n    def __init__(self, radius):\n        self._radius = radius\n\n    @property\n    def radius(self):\n        return self._radius\n\n    @radius.setter\n    def radius(self, value):\n        if value < 0:\n            raise ValueError("Radius cannot be negative")\n        self._radius = value\n\n    @property\n    def area(self):\n        return 3.14159 * self._radius ** 2</code></pre>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">OOP helps model real-world entities in code, making complex programs easier to understand and maintain.</p>'
+    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Classes: Cookie Cutters for Your Code</h3>'
+      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">A <strong>class</strong> is a blueprint. An <strong>object</strong> is what you make from that blueprint. Think of a class as a cookie cutter (shape = blueprint) and objects as actual cookies. Each cookie can have different sprinkles, but they all share the same shape. This is <strong>Object-Oriented Programming (OOP)</strong> — modeling real-world things as objects with data (attributes) and actions (methods).</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Your First Class</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7"><code>class</code> defines the blueprint. <code>__init__</code> is the constructor (runs when you create an object). <code>self</code> is how the object refers to itself — think of it as saying \"me\" or \"this cookie right here\":</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">class Dog:\\n    def __init__(self, name, age):\\n        self.name = name\\n        self.age = age\\n\\n    def bark(self):\\n        return f"{self.name} says Woof!"\\n\\n    def human_years(self):\\n        return self.age * 7\\n\\nbuddy = Dog("Buddy", 3)\\nprint(buddy.bark())              # Buddy says Woof!\\nprint(buddy.human_years())       # 21</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Most common mistake:</strong> Forgetting <code>self</code> as the first parameter of every method! <code>def bark():</code> won\\\'t work — Python will silently pass the object as the first argument and fail. Every method needs <code>self</code> at minimum.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Inheritance: Kids Inheriting Traits</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">A class can inherit from another class, getting all its features for free. Then override the ones you want to customize. It\\\'s like inheriting your parent\\\'s car but adding your own bumper stickers:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">class Animal:\\n    def __init__(self, name):\\n        self.name = name\\n    def speak(self):\\n        return "..."\\n\\nclass Cat(Animal):  # Cat inherits from Animal\\n    def speak(self):\\n        return f"{self.name} says Meow!"\\n\\nclass Dog(Animal):\\n    def speak(self):\\n        return f"{self.name} says Woof!"\\n\\npets = [Cat("Whiskers"), Dog("Buddy")]\\nfor p in pets:\\n    print(p.speak())  # Same method name, different behavior!</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">💡 <strong>Pro Tip:</strong> The \"same method, different results\" thing is called <strong>polymorphism</strong>. It\\\'s a fancy word for \"cat and dog both speak() but differently.\" Say it at parties. You\\\'ll sound super smart.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Magic Methods: The __dunder__ Powers</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Methods like <code>__init__</code>, <code>__str__</code>, <code>__len__</code> are \"magic\" or \"dunder\" (double underscore) methods. They let your objects behave like built-in types — printing nicely, supporting <code>len()</code>, etc:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">class Book:\\n    def __init__(self, title, author):\\n        self.title = title\\n        self.author = author\\n    def __str__(self):\\n        return f"\\\'{self.title}\\\' by {self.author}"\\n    def __len__(self):\\n        return len(self.title)\\n\\nb = Book("1984", "George Orwell")\\nprint(b)       # \\\'1984\\\' by George Orwell — thanks __str__!\\nprint(len(b))  # 4 — thanks __len__!</code></pre>'
+      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
+      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Create a <code>Student</code> class with <code>name</code> and <code>grades</code> (a list). Add a method to calculate the average grade.</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Create a <code>Car</code> class that inherits from a <code>Vehicle</code> parent class</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Add <code>__str__</code> to your Student class so <code>print(student)</code> shows a nice summary</p>'
+      + '</div>'
   },
   {
     id:'python-files',
     title:'File I/O',
     category:'Python',
-    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">File Input/Output</h3>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">File I/O allows your programs to read from and write to files on disk. Python makes file operations simple with built-in functions and the <code>with</code> statement for automatic resource management.</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Opening and Closing Files</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Use the <code>open()</code> function to open a file. It returns a file object. Always close files when done — the <code>with</code> statement handles this automatically:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Writing to a file\nwith open("hello.txt", "w") as f:\n    f.write("Hello, World!\\n")\n    f.write("This is a second line.\\n")\n\n# File is automatically closed after the with block</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">File Modes</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">The second argument to <code>open()</code> is the mode: <code>"r"</code> for read (default), <code>"w"</code> for write (overwrites), <code>"a"</code> for append, <code>"x"</code> for exclusive creation (fails if file exists), <code>"b"</code> for binary mode, and <code>"+"</code> for read/write. Combine modes like <code>"rb"</code> or <code>"w+"</code>:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Append to file\nwith open("log.txt", "a") as f:\n    f.write("New log entry\\n")\n\n# Read binary mode\nwith open("image.jpg", "rb") as f:\n    data = f.read()</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Reading Files</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Python provides several ways to read file content: <code>read()</code> reads the entire file, <code>readline()</code> reads one line, and <code>readlines()</code> reads all lines into a list:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Read entire file\nwith open("hello.txt", "r") as f:\n    content = f.read()\n\n# Read line by line\nwith open("hello.txt", "r") as f:\n    for line in f:\n        print(line.strip())  # strip removes trailing newline</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Working with Paths</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">The <code>os</code> and <code>pathlib</code> modules help manage file paths. <code>os.path.join()</code> creates platform-appropriate paths, and <code>pathlib.Path</code> provides an object-oriented approach:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">import os\nimport pathlib\n\n# Using os.path\npath = os.path.join("data", "subdir", "file.txt")\nprint(os.path.exists(path))\nprint(os.path.getsize(path))\n\n# Using pathlib (Python 3.4+)\np = pathlib.Path("data/subdir/file.txt")\nprint(p.exists())\nprint(p.suffix)  # .txt\nprint(p.stem)    # file</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">JSON Files</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Python\'s <code>json</code> module makes it easy to read and write JSON data — a common format for data exchange:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">import json\n\ndata = {"name": "Alice", "age": 25, "scores": [85, 92, 78]}\n\n# Write JSON\nwith open("data.json", "w") as f:\n    json.dump(data, f, indent=2)\n\n# Read JSON\nwith open("data.json", "r") as f:\n    loaded = json.load(f)\n    print(loaded["name"])  # Alice</code></pre>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">File I/O is essential for saving program state, reading configuration files, processing data, and exporting results. Always handle file operations with care — use <code>try/except</code> to catch <code>FileNotFoundError</code> and <code>PermissionError</code>.</p>'
+    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">File I/O: Making Your Data Immortal</h3>'
+      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Everything we\\\'ve done so far vanishes when the program ends. Like tears in rain. But with file I/O, your data lives on! Python makes reading and writing files almost boringly simple. The secret weapon: the <code>with</code> statement.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Writing: Save Stuff Forever</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Use <code>open("filename", "w")</code> to write. The <code>with</code> block auto-closes the file — even if your code crashes. No more forgetting <code>.close()</code>! (Raise your hand if you\\\'ve forgotten. Yeah, me too.)</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">with open("hello.txt", "w") as f:\\n    f.write("Hello, World!\\n")\\n    f.write("This data is now IMMORTAL.\\n")\\n# File auto-closes. You\\\'re welcome.</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Warning!</strong> Mode <code>"w"</code> obliterates the file and starts fresh. POOF — gone. If your file had important data, it\\\'s history. Use <code>"a"</code> (append) to add to the end, or <code>"x"</code> to create a new file (safely failing if it exists).</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Reading: Bring Data Back to Life</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Mode <code>"r"</code> reads. You can slurp the whole file with <code>.read()</code> or iterate line by line (great for massive files that would eat your memory):</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Read entire file at once\\nwith open("hello.txt", "r") as f:\\n    content = f.read()\\n\\n# Read line by line (memory-friendly!)\\nwith open("hello.txt", "r") as f:\\n    for line in f:\\n        print(line.strip())  # strip() removes the trailing \\n</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Classic error:</strong> Trying to open a file that doesn\\\'t exist = <code>FileNotFoundError</code>! Always wrap file reading in try/except, or check <code>Path("file.txt").exists()</code> first.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Paths: Where Is That File Anyway?</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Windows uses backslashes, Mac/Linux use forward slashes. Hard-coding paths is a recipe for disaster. Use <code>pathlib.Path</code> — it works everywhere and has smart methods:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">from pathlib import Path\\n\\np = Path("data/subdir/file.txt")\\nprint(p.exists())    # Does it exist?\\nprint(p.suffix)      # .txt\\nprint(p.stem)        # file (no extension)\\nprint(p.parent)      # data/subdir</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">💡 <strong>Pro Tip:</strong> <code>pathlib</code> is the modern way (Python 3.4+). It\\\'s cleaner than <code>os.path.join()</code> and works cross-platform. Use it. Love it.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">JSON: The Universal Data Language</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">JSON is everywhere — web APIs, config files, you name it. Python\\\'s <code>json</code> module can save your dicts/lists directly to a file and load them back. Mind = blown:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">import json\\n\\ndata = {"name": "Alice", "age": 25, "scores": [85, 92, 78]}\\n\\nwith open("data.json", "w") as f:\\n    json.dump(data, f, indent=2)\\n\\nwith open("data.json", "r") as f:\\n    loaded = json.load(f)\\n    print(loaded["name"])  # Alice</code></pre>'
+      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
+      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Write a program that saves your name and age to a file called "me.txt"</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Read it back and print the contents</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Store your favorite movies as a JSON list and load them back</p>'
+      + '</div>'
   },
   {
     id:'python-errors',
     title:'Error Handling',
     category:'Python',
-    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Error Handling and Exceptions</h3>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Errors happen in every program. Python uses exceptions to handle errors gracefully. When an error occurs, Python raises an exception that, if not caught, crashes the program. You can catch and handle exceptions using <code>try/except</code> blocks.</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Try-Except Basics</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Wrap potentially error-prone code in a <code>try</code> block, and handle errors in one or more <code>except</code> blocks:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">try:\n    num = int(input("Enter a number: "))\n    result = 10 / num\n    print(f"Result: {result}")\nexcept ValueError:\n    print("That was not a valid number!")\nexcept ZeroDivisionError:\n    print("Cannot divide by zero!")\nexcept Exception as e:\n    print(f"Unexpected error: {e}")</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Common Exception Types</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Python has many built-in exception types. <code>ValueError</code> for invalid values, <code>TypeError</code> for wrong types, <code>IndexError</code> for invalid list indices, <code>KeyError</code> for missing dictionary keys, <code>FileNotFoundError</code> for missing files, <code>AttributeError</code> for missing attributes, and <code>ImportError</code> for missing modules:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">try:\n    my_list = [1, 2, 3]\n    print(my_list[10])\nexcept IndexError:\n    print("Index out of range!")\n\ntry:\n    my_dict = {"a": 1}\n    print(my_dict["b"])\nexcept KeyError:\n    print("Key not found!")</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Else and Finally</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">An <code>else</code> block runs if no exception occurred. A <code>finally</code> block always runs, whether an exception happened or not — useful for cleanup like closing files:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">try:\n    f = open("file.txt", "r")\n    content = f.read()\nexcept FileNotFoundError:\n    print("File not found!")\nelse:\n    print(f"Read {len(content)} characters")\nfinally:\n    f.close()\n    print("File closed.")</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Raising Exceptions</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">You can raise exceptions intentionally with the <code>raise</code> keyword. This is useful for input validation and signaling error conditions:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">def divide(a, b):\n    if b == 0:\n        raise ValueError("Cannot divide by zero")\n    return a / b\n\ndef set_age(age):\n    if age < 0 or age > 150:\n        raise ValueError(f"Invalid age: {age}")\n    print(f"Age set to {age}")</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Custom Exceptions</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Create custom exception classes by inheriting from <code>Exception</code>:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">class InsufficientFundsError(Exception):\n    pass\n\nclass BankAccount:\n    def __init__(self, balance):\n        self.balance = balance\n\n    def withdraw(self, amount):\n        if amount > self.balance:\n            raise InsufficientFundsError(\n                f"Need {amount - self.balance} more"\n            )\n        self.balance -= amount</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Assertions</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Use <code>assert</code> statements to check conditions that should always be true. They are useful for debugging and testing:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">def calculate_bmi(weight, height):\n    assert weight > 0, "Weight must be positive"\n    assert height > 0, "Height must be positive"\n    return weight / (height ** 2)</code></pre>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Good error handling makes your programs robust and user-friendly. Always anticipate what could go wrong and handle it gracefully.</p>'
+    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Error Handling: When Things Go Wrong (And They Will)</h3>'
+      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Let\\\'s be real — your code WILL crash. Mine does. Every programmer\\\'s does. The difference between a beginner and a pro isn\\\'t that the pro never makes mistakes; it\\\'s that the pro handles them gracefully. Python uses <strong>exceptions</strong> to deal with errors, and <code>try/except</code> blocks are your safety net.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Try / Except: The Safety Net</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Wrap risky code in <code>try</code>, catch specific errors in <code>except</code>. Python checks each except block in order, so put specific errors first and the general catch-all <code>Exception</code> last:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">try:\\n    num = int(input("Enter a number: "))\\n    result = 10 / num\\n    print(f"Result: {result}")\\nexcept ValueError:\\n    print("That was not a valid number!")\\nexcept ZeroDivisionError:\\n    print("Cannot divide by zero!")\\nexcept Exception as e:\\n    print(f"Something unexpected happened: {e}")</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Common mistake:</strong> Catching <code>Exception</code> too broadly! Only catch specific exceptions you expect. A bare <code>except:</code> hides bugs and makes debugging a nightmare. Be specific — your future self will thank you.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">The Rogues\\\' Gallery of Exceptions</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">You\\\'ll meet these troublemakers often: <code>ValueError</code> (wrong value), <code>TypeError</code> (wrong type), <code>IndexError</code> (list index out of range), <code>KeyError</code> (dict key missing), <code>FileNotFoundError</code> (file MIA), <code>AttributeError</code> (method doesn\\\'t exist), <code>ZeroDivisionError</code> (math says nope):</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">try:\\n    my_list = [1, 2, 3]\\n    print(my_list[10])\\nexcept IndexError:\\n    print("Too far! That index doesn\\\'t exist.")\\n\\ntry:\\n    my_dict = {"a": 1}\\n    print(my_dict["b"])\\nexcept KeyError:\\n    print("Key not found — try .get() next time!")</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Classic gotcha:</strong> Forgetting that <code>ZeroDivisionError</code> is separate from <code>ValueError</code>! When dividing, always handle both, or use an <code>if</code> check before dividing.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Else and Finally: The Cleanup Crew</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7"><code>else</code> runs if NO exception happened. <code>finally</code> ALWAYS runs — even if the program crashes. <code>finally</code> is for cleanup: closing files, releasing resources, saying goodbye:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">try:\\n    f = open("file.txt", "r")\\n    content = f.read()\\nexcept FileNotFoundError:\\n    print("File not found!")\\nelse:\\n    print(f"Read {len(content)} characters — success!") \\nfinally:\\n    f.close()\\n    print("File closed. Always clean up after yourself.")</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">💡 <strong>Pro Tip:</strong> The <code>with</code> statement (like <code>with open(...) as f:</code>) auto-closes files even without <code>finally</code>. But <code>finally</code> is still useful for other cleanup tasks.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Raising Exceptions: You\\\'re the Boss</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Sometimes YOU need to raise an exception. Use <code>raise</code> when someone passes bad data to your function. It\\\'s like saying \"I can\\\'t work with this, fix it and try again\":</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">def divide(a, b):\\n    if b == 0:\\n        raise ValueError("Can\\\'t divide by zero — nice try though!")\\n    return a / b\\n\\ndef set_age(age):\\n    if age < 0 or age > 150:\\n        raise ValueError(f"{age} years old? Really?")</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">You can even create custom exceptions — just inherit from <code>Exception</code>. It\\\'s the classiest way to signal your own error types:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">class InsufficientFundsError(Exception):\\n    pass\\n\\ndef withdraw(balance, amount):\\n    if amount > balance:\\n        raise InsufficientFundsError(f"Short by ${amount - balance}")\\n    return balance - amount</code></pre>'
+      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
+      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Write a try/except that catches a <code>ZeroDivisionError</code> and prints a friendly message</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Create a function <code>get_item(lst, index)</code> that returns the item OR a friendly error if the index is out of range</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Add a <code>finally</code> block to your try/except that prints "Thanks for using this program!"</p>'
+      + '</div>'
   },
   {
     id:'python-modules',
     title:'Modules & Imports',
     category:'Python',
-    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Modules and Imports</h3>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Modules are Python files containing functions, classes, and variables that you can reuse across multiple programs. Python\'s standard library includes hundreds of modules for everything from math to web development. You can also create your own modules for code organization.</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Importing Modules</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Use the <code>import</code> keyword to bring module functionality into your program. You can import entire modules, specific items, or give them aliases:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">import math\nfrom datetime import datetime\nimport numpy as np\nfrom os.path import join, exists\n\nprint(math.pi)                # 3.14159...\nprint(datetime.now())         # current date/time\nprint(join("a", "b", "c"))    # a/b/c</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">The Standard Library</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Python\'s standard library is vast. Key modules include <code>os</code> (operating system interface), <code>sys</code> (system-specific parameters), <code>json</code> (JSON encoding/decoding), <code>re</code> (regular expressions), <code>math</code> (mathematical functions), <code>random</code> (random number generation), <code>datetime</code> (date and time handling), <code>collections</code> (specialized data structures), <code>itertools</code> (iterator functions), and <code>functools</code> (higher-order functions):</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">import random\nfrom collections import Counter, defaultdict\n\nprint(random.randint(1, 10))  # random integer 1-10\n\n# Counter counts hashable items\ncounts = Counter("mississippi")\nprint(counts)  # Counter({\'i\': 4, \'s\': 4, \'p\': 2, \'m\': 1})</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Creating Your Own Module</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Any <code>.py</code> file is a module. Create a file called <code>mymodule.py</code> with functions, then import it in another script:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># mymodule.py\ndef greet(name):\n    return f"Hello, {name}!"\n\nPI = 3.14159\n\nclass Calculator:\n    @staticmethod\n    def add(a, b):\n        return a + b</code></pre>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># main.py\nimport mymodule\n\nprint(mymodule.greet("Alice"))\nprint(mymodule.PI)\ncalc = mymodule.Calculator()\nprint(calc.add(3, 4))</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Packages</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">A package is a directory containing multiple module files and an <code>__init__.py</code> file (which can be empty). Packages let you organize modules hierarchically:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">mypackage/\n  __init__.py\n  math_ops.py\n  string_ops.py\n\n# Usage\nfrom mypackage import math_ops\nfrom mypackage.string_ops import capitalize_all</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Third-Party Packages (pip)</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">The Python Package Index (PyPI) hosts hundreds of thousands of third-party packages. Install them with <code>pip install package_name</code>. Popular packages include <code>requests</code> (HTTP), <code>numpy</code> (numerical computing), <code>pandas</code> (data analysis), <code>flask</code> (web framework), <code>django</code> (web framework), <code>beautifulsoup4</code> (web scraping), and <code>matplotlib</code> (plotting):</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Install: pip install requests\nimport requests\n\nresponse = requests.get("https://api.github.com")\nprint(response.status_code)  # 200\nprint(response.json())       # parsed JSON</code></pre>'
-      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Modules and packages are the backbone of Python code reuse. They keep your code organized and let you leverage the work of millions of developers worldwide.</p>'
+    content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Modules: Standing on the Shoulders of Giants</h3>'
+      + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Imagine having a toolbox where you only grab the tools you need, when you need them. That\\\'s what modules are in Python. A module is just a <code>.py</code> file with functions, classes, and variables that you can import into other programs. Python comes with a massive standard library — hundreds of pre-built tools so you don\\\'t have to reinvent the wheel.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">The Many Ways to Import</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">There are several import styles. Import the whole module, import specific items, or give them aliases so you don\\\'t have to type as much:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">import math\\nfrom datetime import datetime\\nimport numpy as np  # alias — saves keystrokes!\\nfrom os.path import join, exists\\n\\nprint(math.pi)                # 3.14159...\\nprint(datetime.now())         # current date/time\\nprint(join("a", "b", "c"))    # a/b/c</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Watch out!</strong> Avoid <code>from module import *</code> — it dumps everything into your namespace and can silently overwrite your variables. It\\\'s the wild west of imports. Be explicit instead!</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">The Standard Library: Python\\\'s Superpower</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Python\\\'s standard library is massive. Here are some crowd favorites: <code>os</code> and <code>pathlib</code> for files, <code>json</code> for data, <code>re</code> for pattern matching, <code>math</code> for math stuff, <code>random</code> for... randomness, <code>datetime</code> for time, <code>collections</code> for fancy data structures, and <code>itertools</code> for clever loops:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">import random\\nfrom collections import Counter\\n\\nprint(random.randint(1, 10))  # random number between 1 and 10\\n\\ncounts = Counter("mississippi")\\nprint(counts)  # Counter({\\\'i\\\': 4, \\\'s\\\': 4, \\\'p\\\': 2, \\\'m\\\': 1})</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">💡 <strong>Pro Tip:</strong> Before writing a function yourself, ask: \"Is this already in the standard library?\" The answer is often yes. Python\\\'s motto is \"batteries included\" for a reason!</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Create Your Own Module</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Any <code>.py</code> file is a module. Create one, put some functions in it, then import it from another script. That\\\'s it — you\\\'re a library author now:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># mymodule.py\\ndef greet(name):\\n    return f"Hello, {name}!"\\n\\nPI = 3.14159\\n\\nclass Calculator:\\n    @staticmethod\\n    def add(a, b):\\n        return a + b</code></pre>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># main.py\\nimport mymodule\\n\\nprint(mymodule.greet("Alice"))\\nprint(mymodule.PI)\\ncalc = mymodule.Calculator()\\nprint(calc.add(3, 4))</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">💡 <strong>Pro Tip:</strong> To make a directory of modules (a package), add an <code>__init__.py</code> file (can be empty) and organize your modules inside. Then <code>from mypackage import mymodule</code>.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">pip: The Python App Store</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">The Python Package Index (PyPI) has over 400,000 packages. Install anything with <code>pip install package_name</code>. Want to scrape websites? <code>pip install requests</code>. Analyze data? <code>pip install pandas</code>. Make a web app? <code>pip install flask</code>. The world is your oyster:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Install first: pip install requests\\nimport requests\\n\\nresponse = requests.get("https://api.github.com")\\nprint(response.status_code)  # 200 — it works!\\nprint(response.json())       # parsed JSON data</code></pre>'
+      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
+      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Import <code>math</code> and use <code>math.sqrt(144)</code> to calculate a square root</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Use <code>random.choice(["red", "green", "blue"])</code> to pick a random color</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Create a module called <code>helpers.py</code> with a function, then import and use it in another file</p>'
+      + '</div>'
   }
 ];
 
@@ -646,6 +689,7 @@ function clRunCode() {
   var output = $('cl-output');
   var langSelect = $('cl-lang-select');
   var runBtn = $('cl-run-btn');
+  var cancelBtn = $('cl-cancel-btn');
 
   if (!editor || !output) return;
 
@@ -661,37 +705,65 @@ function clRunCode() {
     runBtn.disabled = true;
     runBtn.textContent = 'Running...';
   }
+  if (cancelBtn) cancelBtn.style.display = 'inline-block';
 
   output.innerHTML = '<div style="color:var(--fg-dim);font-size:11px">Running...</div>';
 
+  _clAbortController = new AbortController();
+
   fetch('/api/code/run', {
+    signal: _clAbortController.signal,
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({code: code, language: lang})
   })
   .then(function(r) { return r.json(); })
   .then(function(data) {
-    if (data.success) {
-      if (data.output) {
-        var escaped = escapeHtml(data.output);
-        output.innerHTML = '<pre style="margin:0;font-size:11px;color:var(--fg);line-height:1.5;white-space:pre-wrap;word-break:break-word">' + escaped + '</pre>';
-      } else {
-        output.innerHTML = '<div style="color:var(--teal);font-size:11px">Code executed successfully (no output).</div>';
-      }
+    var html = '';
+    if (data.error) {
+      html = '<div style="color:var(--red);font-size:11px">' + escapeHtml(data.error) + '</div>';
     } else {
-      var errMsg = data.error || 'Unknown error';
-      output.innerHTML = '<div style="color:var(--red);font-size:11px;line-height:1.5">' + escapeHtml(errMsg) + '</div>';
+      if (data.stdout) {
+        html += '<div style="color:var(--teal);font-size:10px;margin-bottom:4px">▸ stdout</div>'
+          + '<pre style="margin:0 0 6px;font-size:11px;color:var(--fg);line-height:1.5;white-space:pre-wrap;word-break:break-word">' + escapeHtml(data.stdout) + '</pre>';
+      }
+      if (data.stderr) {
+        html += '<div style="color:var(--amber);font-size:10px;margin-bottom:4px">▸ stderr</div>'
+          + '<pre style="margin:0;font-size:11px;color:var(--amber);line-height:1.5;white-space:pre-wrap;word-break:break-word">' + escapeHtml(data.stderr) + '</pre>';
+      }
+      if (!data.stdout && !data.stderr) {
+        html = '<div style="color:var(--fg-dim);font-size:11px">✓ Done (no output)</div>';
+      } else if (data.exit_code !== 0) {
+        html += '<div style="color:var(--red);font-size:10px;margin-top:4px">Exit code: ' + data.exit_code + '</div>';
+      }
     }
+    output.innerHTML = html || '<div style="color:var(--fg-dim);font-size:11px">No output</div>';
   })
   .catch(function(err) {
-    output.innerHTML = '<div style="color:var(--red);font-size:11px">Error: ' + escapeHtml(err.message) + '</div>';
+    if (err.name === 'AbortError') {
+      output.innerHTML = '<div style="color:var(--fg-dim);font-size:11px">⏹ Execution cancelled.</div>';
+    } else {
+      output.innerHTML = '<div style="color:var(--red);font-size:11px">Error: ' + escapeHtml(err.message) + '</div>';
+    }
   })
   .finally(function() {
     if (runBtn) {
       runBtn.disabled = false;
-      runBtn.textContent = 'Run';
+      runBtn.textContent = '▶ Run';
     }
+    if (cancelBtn) cancelBtn.style.display = 'none';
+    _clAbortController = null;
   });
+}
+
+function clCancelRun() {
+  if (_clAbortController) {
+    _clAbortController.abort();
+  }
+  var runBtn = $('cl-run-btn');
+  var cancelBtn = $('cl-cancel-btn');
+  if (runBtn) { runBtn.disabled = false; runBtn.textContent = '▶ Run'; }
+  if (cancelBtn) cancelBtn.style.display = 'none';
 }
 
 function clClearOutput() {
