@@ -488,7 +488,13 @@ function notesFindReplace() {
   const replace = prompt('Replace with:');
   if (replace === null) return;
   const regex = new RegExp(find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
-  editor.innerHTML = editor.innerHTML.replace(regex, replace);
+  const walker = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT, null, false);
+  var node;
+  while (node = walker.nextNode()) {
+    if (regex.test(node.textContent)) {
+      node.textContent = node.textContent.replace(regex, replace);
+    }
+  }
   markNotesDirty();
 }
 
@@ -529,8 +535,9 @@ function notesFontManager() {
 
         html += '<div style="margin-top:12px;font-size:10px;color:var(--fg-dim)">Preview: ';
         fonts.forEach(function(f) {
-          const name = f.name.replace(/\.[^.]+$/, '');
-          html += '<span style="font-family:\'' + name + '\';margin-right:10px;font-size:14px">' + escapeHtml(name) + '</span> ';
+          var name = f.name.replace(/\.[^.]+$/, '');
+          var safeName = name.replace(/[^a-zA-Z0-9\s-]/g, '');
+          html += '<span style="font-family:\'' + safeName + '\';margin-right:10px;font-size:14px">' + escapeHtml(name) + '</span> ';
         });
         html += '</div>';
       } else {
@@ -608,9 +615,10 @@ function addFontFace(filename) {
   const format = formatMap[ext] || 'truetype';
   const url = '/api/fonts/download?name=' + encodeURIComponent(filename);
 
+  const safeName = name.replace(/[^a-zA-Z0-9\s-]/g, '');
   const style = document.createElement('style');
-  style.id = 'fontface-' + name.replace(/[^a-zA-Z0-9]/g, '-');
-  style.textContent = '@font-face { font-family: "' + name + '"; src: url("' + url + '") format("' + format + '"); font-display: swap; }';
+  style.id = 'fontface-' + safeName.replace(/\s+/g, '-');
+  style.textContent = '@font-face { font-family: "' + safeName + '"; src: url("' + url + '") format("' + format + '"); font-display: swap; }';
   document.head.appendChild(style);
 
   const select = $('nt-font-family');
@@ -1069,6 +1077,10 @@ function initNotes() {
   }, 30000);
 
   _notesDirty = false;
+
+  window.addEventListener('beforeunload', function() {
+    if (_notesAutoTimer) { clearInterval(_notesAutoTimer); _notesAutoTimer = null; }
+  });
 
   const fontInput = $('notes-font-input');
   if (fontInput) {

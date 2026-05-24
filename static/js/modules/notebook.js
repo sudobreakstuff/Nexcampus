@@ -1,6 +1,6 @@
 // STUDY LAB — Summarize, Q&A, Quiz, Flashcards
 
-var currentNbTool = 'summarizer';
+var currentNbTool = 'summarize';
 
 function initNotebook() {
   loadDocuments();

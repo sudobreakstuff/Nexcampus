@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-import http.server, json, sys, os, threading, socket, urllib.request, urllib.error, base64, re, glob, random
+import http.server, json, sys, os, threading, socket, urllib.request, base64, re, glob, random
 from pathlib import Path
-from collections import Counter
 from io import BytesIO
 
 # Clean up stale PyInstaller temp dirs left from previous runs
@@ -1267,7 +1266,5 @@ def main():
     print('[NexCampus] Made by Shahid Singh | NexCore Systems and Technologies')
 
     open_window(url)
-    httpd.serve_forever()
-
 if __name__ == '__main__':
     main()

@@ -185,7 +185,7 @@ function timerToggle() {
           _timerSeconds = (parseInt($('timer-focus-min') ? $('timer-focus-min').value : '25') || 25) * 60;
         }
         updateTimerDisplay();
-        alert(prevMode === 'focus' ? 'Focus complete! Time for a break.' : 'Break over! Time to focus.');
+        showNotification(prevMode === 'focus' ? 'Focus complete! Time for a break.' : 'Break over! Time to focus.');
         updateTimerDisplay();
         return;
       }
@@ -1220,7 +1220,7 @@ function ttDiff() {
   fetch('/api/notebook/diff', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text_a: a.value, text_b: b.value })
+    body: JSON.stringify({ text1: a.value, text2: b.value })
   }).then(function(r) { return r.json(); }).then(function(data) {
     if (data.html) {
       out.innerHTML = '<div style="font-size:10px;line-height:1.6">' + data.html + '</div>';
@@ -1597,7 +1597,7 @@ var SOLAR_PLANETS = [
   { name:'Mars',    color:'#e57373', orbit:120, size:7, speed:0.53, angle:4.5,
     info:{diameter:'6,792 km', distSun:'227.9M km', year:'687 days', day:'24.6 hours', moons:2, fact:'Mars has the tallest mountain in the solar system — Olympus Mons is 2.5 times the height of Mount Everest!'} },
   { name:'Jupiter', color:'#d4a574', orbit:155, size:14, speed:0.084, angle:1.0,
-    info:{diameter:'142,984 km', distSun:'778.5M km', year:'11.86 years', day:'9.9 hours', moons:95, fact:'Jupiter\'s Great Red Spot is a storm bigger than Earth that has been raging for hundreds of years!'} },
+    info:{diameter:'142,984 km', distSun:'778.5M km', year:'11.86 years', day:'9.9 hours', moons:96, fact:'Jupiter\'s Great Red Spot is a storm bigger than Earth that has been raging for hundreds of years!'} },
   { name:'Saturn',  color:'#f0d58c', orbit:185, size:12, speed:0.034, angle:2.5,
     info:{diameter:'120,536 km', distSun:'1.43B km', year:'29.46 years', day:'10.7 hours', moons:146, fact:'Saturn\'s rings are made of ice and rock stretching 280,000 km wide but only about 10 meters thick!'} },
   { name:'Uranus',  color:'#7ec8e3', orbit:215, size:10, speed:0.012, angle:0.5,
@@ -1624,7 +1624,7 @@ var SOLAR_FACTS = [
   "Jupiter has 95 known moons — more than any other planet.",
   "The solar system is about 4.6 billion years old.",
   "A teaspoon of neutron star would weigh 6 billion tons!",
-  "UFOs sounds weird when said backwards: SOFUs"
+  "The solar system moves through the galaxy at 828,000 km/h!"
 ];
 
 var SOLAR = { canvas:null, ctx:null, paused:false, speed:1, animId:null, selected:null, lastTime:0, planets:[], factIdx:0, w:800, h:500 };
@@ -1896,7 +1896,7 @@ function tryBrowserOcr(imageData, status, output, btn, fileInput) {
     return;
   }
 
-  var TESS_PATH = 'static/js/tesseract/';
+  var TESS_PATH = '/static/js/tesseract/';
   Tesseract.createWorker({
     workerPath: TESS_PATH + 'worker.min.js',
     corePath: TESS_PATH + 'tesseract-core.wasm.js',

@@ -1,0 +1,63 @@
+/* ====== Cyberpunk — dark purple with neon magenta/green ====== */
+html[data-theme="cyberpunk"] {
+  --bg: #0a0a14;
+  --bg2: #14102a;
+  --fg: #d4d0f0;
+  --fg-dim: #6a5a9a;
+  --fg-bright: #e8e0ff;
+  --cyan: #00ffc8;
+  --teal: #00e5a0;
+  --amber: #ff6bdf;
+  --pink: #ff2d95;
+  --border: #2a1a4a;
+  --glow-cyan: rgba(0, 255, 200, 0.12);
+  --accent: var(--cyan);
+}
+
+/* ====== Ocean Deep — deep blue with cerulean accents ====== */
+html[data-theme="ocean"] {
+  --bg: #060d1a;
+  --bg2: #0c1a30;
+  --fg: #c8daf0;
+  --fg-dim: #4a6a8a;
+  --fg-bright: #dce8f5;
+  --cyan: #40c4ff;
+  --teal: #4dd0e1;
+  --amber: #ffb74d;
+  --pink: #ef5350;
+  --border: #142a44;
+  --glow-cyan: rgba(64, 196, 255, 0.10);
+  --accent: var(--cyan);
+}
+
+/* ====== Forest Night — deep green with warm amber ====== */
+html[data-theme="forest"] {
+  --bg: #0a100a;
+  --bg2: #101a10;
+  --fg: #c8dcc8;
+  --fg-dim: #4a6a4a;
+  --fg-bright: #dcecdc;
+  --cyan: #66bb6a;
+  --teal: #4db6ac;
+  --amber: #ffb300;
+  --pink: #ef6c00;
+  --border: #1a2a1a;
+  --glow-cyan: rgba(102, 187, 106, 0.10);
+  --accent: var(--cyan);
+}
+
+/* ====== Paper Light — warm cream with navy ====== */
+html[data-theme="paper"] {
+  --bg: #f5f0e8;
+  --bg2: #eae3d3;
+  --fg: #2c2416;
+  --fg-dim: #7a6e5a;
+  --fg-bright: #1a140a;
+  --cyan: #2a6f97;
+  --teal: #3a7a6a;
+  --amber: #b85a00;
+  --pink: #b8405a;
+  --border: #c8bca8;
+  --glow-cyan: rgba(42, 111, 151, 0.08);
+  --accent: var(--cyan);
+}

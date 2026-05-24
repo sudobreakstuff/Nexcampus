@@ -8,9 +8,9 @@
   --teal: #26c6da;
   --amber: #ffb74d;
   --pink: #f06292;
-  --bg-light: #111820;
   --border: #1a2436;
   --glow-cyan: rgba(79, 195, 247, 0.1);
+  --accent: var(--cyan);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { font-size: 14px; }
@@ -151,7 +151,7 @@ body {
 .update-result { margin-top: 8px; font-size: 12px; }
 .input-group { display: flex; gap: 8px; align-items: center; margin: 8px 0; flex-wrap: wrap; }
 
-kbd { background: var(--bg-light); border: 1px solid var(--border); border-radius: 3px; padding: 1px 5px; font-family: monospace; font-size: 10px; color: var(--teal); }
+kbd { background: var(--bg2); border: 1px solid var(--border); border-radius: 3px; padding: 1px 5px; font-family: monospace; font-size: 10px; color: var(--teal); }
 
 /* Buttons */
 button {
@@ -420,12 +420,12 @@ a:hover { color: var(--fg-bright); }
 .tool-inline .tool-section-title { font-size: 10px; color: var(--fg-dim); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
 .tool-inline .tool-form-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
 .tool-inline .tool-form-row label { font-size: 11px; color: var(--fg-dim); display: flex; align-items: center; gap: 4px; }
-.tool-inline .tool-result-box { margin-top: 10px; padding: 12px; background: var(--bg-light); border: 1px solid var(--border); border-radius: 4px; display: none; font-size: 11px; line-height: 1.6; }
+.tool-inline .tool-result-box { margin-top: 10px; padding: 12px; background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; display: none; font-size: 11px; line-height: 1.6; }
 .tool-inline .tool-result-box.visible { display: block; }
-.tool-result-box { padding: 12px; margin-top: 8px; background: var(--bg-light); border: 1px solid var(--border); border-radius: 4px; font-size: 11px; line-height: 1.6; max-height: 300px; overflow-y: auto; }
+.tool-result-box { padding: 12px; margin-top: 8px; background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; font-size: 11px; line-height: 1.6; max-height: 300px; overflow-y: auto; }
 .tt-output-ta { width: 100%; min-height: 80px; padding: 8px; background: var(--bg); border: 1px solid var(--border); color: var(--fg); font-family: inherit; font-size: 11px; line-height: 1.5; border-radius: 3px; resize: vertical; box-sizing: border-box; }
 .tool-inline .tool-status { font-size: 9px; color: var(--fg-dim); margin: 4px 0; min-height: 16px; }
-.tool-info-panel { background: var(--bg-light); border: 1px solid var(--border); border-radius: 4px; padding: 12px; margin-top: 10px; font-size: 11px; line-height: 1.6; }
+.tool-info-panel { background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; padding: 12px; margin-top: 10px; font-size: 11px; line-height: 1.6; }
 
 /* Periodic table inline improvements */
 .pt-wrapper { font-size: 10px; }
@@ -443,7 +443,7 @@ a:hover { color: var(--fg-bright); }
 .pt-cat-btn { font-size: 9px; padding: 3px 10px; border: 1px solid var(--border); border-radius: 3px; background: transparent; color: var(--fg-dim); cursor: pointer; }
 .pt-cat-btn:hover { border-color: var(--cyan); color: var(--cyan); }
 .pt-cat-btn.active { background: rgba(79,195,247,0.1); border-color: var(--cyan); color: var(--cyan); }
-.pt-detail-panel { display: flex; gap: 14px; margin-top: 10px; padding: 12px; background: var(--bg-light); border: 1px solid var(--border); border-radius: 4px; display: none; }
+.pt-detail-panel { display: flex; gap: 14px; margin-top: 10px; padding: 12px; background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; display: none; }
 .pt-detail-panel.visible { display: flex; }
 .pt-detail-icon { width: 56px; height: 56px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
 .pt-detail-icon .pt-di-symbol { font-size: 26px; }
@@ -478,7 +478,12 @@ a:hover { color: var(--fg-bright); }
     position: absolute; left: 0; top: 0; width: 100%;
     border: none; padding: 0.5in; margin: 0;
     background: white; color: black; font-size: 12pt;
-  }
+}
+
+/* Theme buttons */
+.theme-btn.active { box-shadow: 0 0 12px var(--glow-cyan); opacity: 1 !important; }
+.theme-btn { opacity: 0.7; }
+.theme-btn:hover { opacity: 1; }
   #notes-editor h1, #notes-editor h2, #notes-editor h3 { color: black; }
   #notes-editor p { color: black; }
   #notes-editor a { color: #0000ee; }

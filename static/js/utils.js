@@ -61,3 +61,19 @@ function log(msg) {
   const sb = $('mem-status');
   if (sb) sb.textContent = msg;
 }
+
+function showNotification(msg, duration) {
+  duration = duration || 4000;
+  var existing = $('nex-notification');
+  if (existing) existing.remove();
+  var el = document.createElement('div');
+  el.id = 'nex-notification';
+  el.textContent = msg;
+  el.style.cssText = 'position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--cyan);color:var(--fg);padding:10px 24px;border-radius:6px;font-size:12px;z-index:9999;box-shadow:0 0 20px rgba(79,195,247,0.15);animation:fadeIn 0.3s ease;max-width:80vw;text-align:center';
+  document.body.appendChild(el);
+  setTimeout(function() {
+    el.style.opacity = '0';
+    el.style.transition = 'opacity 0.5s ease';
+    setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 500);
+  }, duration);
+}

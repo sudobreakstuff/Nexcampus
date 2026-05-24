@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NexCampus - Offline Student Toolkit</title>
 <link rel="stylesheet" href="static/css/retro.css">
+<link rel="stylesheet" href="static/css/themes.css">
 <link rel="icon" href="static/icons/favicon.png">
 </head>
 <body>
@@ -20,7 +21,7 @@
 <div id="app" style="display:none;">
   <div id="sidebar">
     <div class="sidebar-header">NEXCAMPUS <span class="connection-dot"></span></div>
-    <div class="sidebar-subtitle">v2.1</div>
+    <div class="sidebar-subtitle" id="sidebar-version">v2.1</div>
     <nav id="nav">
       <button class="nav-btn active" data-tab="home">HOME</button>
       <button class="nav-btn" data-tab="notebook">STUDY LAB</button>
@@ -41,11 +42,11 @@
       <!-- HOME -->
       <div class="tab-pane active section" id="tab-home">
         <div class="greeting">Hey there.</div>
-        <div class="greeting-sub">NexCampus v2.1</div>
+        <div class="greeting-sub" id="greeting-version">NexCampus v2.1</div>
 
         <div class="stat-row">
           <div class="stat-item">
-            <span class="stat-value">v2.1</span>
+            <span class="stat-value" id="home-version">v2.1</span>
             <span class="stat-label">Version</span>
           </div>
           <div class="stat-item">
@@ -714,7 +715,7 @@
         <div class="about-block">
           <div class="about-block-title">Updates</div>
           <div class="about-block-text" style="margin-bottom:8px">Version: <strong id="about-current-ver">loading...</strong></div>
-          <div class="update-status">Click "Check for Updates" to see if a newer version is available.</div>
+          <div class="update-status" id="update-status">Click "Check for Updates" to see if a newer version is available.</div>
           <div class="input-group">
             <button onclick="checkForUpdates()">Check for Updates</button>
             <button id="btn-download-update" onclick="downloadUpdate()" style="display:none">Download Update</button>
@@ -731,6 +732,18 @@
           <div class="about-block-title">Roadmap</div>
           <div class="about-block-text">More tools and features coming in future updates. Stay tuned.</div>
         </div>
+
+        <div class="about-block">
+          <div class="about-block-title">Theme</div>
+          <div class="about-block-text" style="margin-bottom:8px">Choose your preferred look:</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button onclick="setTheme('retro')" class="theme-btn" data-theme-btn="retro" style="background:#0b0f14;color:#d4dcec;border-color:#4fc3f7">Retro Dark</button>
+            <button onclick="setTheme('cyberpunk')" class="theme-btn" data-theme-btn="cyberpunk" style="background:#0a0a14;color:#d4d0f0;border-color:#00ffc8">Cyberpunk</button>
+            <button onclick="setTheme('ocean')" class="theme-btn" data-theme-btn="ocean" style="background:#060d1a;color:#c8daf0;border-color:#40c4ff">Ocean Deep</button>
+            <button onclick="setTheme('forest')" class="theme-btn" data-theme-btn="forest" style="background:#0a100a;color:#c8dcc8;border-color:#66bb6a">Forest Night</button>
+            <button onclick="setTheme('paper')" class="theme-btn" data-theme-btn="paper" style="background:#f5f0e8;color:#2c2416;border-color:#2a6f97">Paper Light</button>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -738,7 +751,8 @@
 </div>
 
   <div id="statusbar">
-    <span>NexCampus v2.1 · Made by Shahid Singh · NexCore&trade; Systems and Technologies · 2026</span>
+    <span id="statusbar-version">NexCampus v2.1 · Made by Shahid Singh · NexCore&trade; Systems and Technologies · 2026</span>
+    <span id="mem-status" style="margin-left:auto;font-size:9px;color:var(--fg-dim)"></span>
   </div>
 
   <script src="static/js/utils.js"></script>

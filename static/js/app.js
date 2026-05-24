@@ -17,16 +17,20 @@ function initApp() {
   initNotebook();
   initNotes();
   initMouseGlow();
+  initTheme();
   log('Ready');
 }
 
 function initMouseGlow() {
   const root = document.documentElement;
-  document.addEventListener('mousemove', e => {
-    const gx = (e.clientX / window.innerWidth) * 100;
-    const gy = (e.clientY / window.innerHeight) * 100;
-    root.style.setProperty('--gx', gx + '%');
-    root.style.setProperty('--gy', gy + '%');
+  var frameId = null;
+  document.addEventListener('mousemove', function(e) {
+    if (frameId) return;
+    frameId = requestAnimationFrame(function() {
+      frameId = null;
+      root.style.setProperty('--gx', ((e.clientX / window.innerWidth) * 100) + '%');
+      root.style.setProperty('--gy', ((e.clientY / window.innerHeight) * 100) + '%');
+    });
   });
 }
 
@@ -57,17 +61,23 @@ function switchTab(tab) {
 }
 
 async function loadVersion() {
-  const ver = $('about-version');
-  const cur = $('about-current-ver');
+  const els = ['about-version','sidebar-version','greeting-version','home-version','statusbar-version','about-current-ver'];
+  const ids = {};
+  els.forEach(function(id) { var el = $(id); if (el) ids[id] = el; });
   try {
     const resp = await fetch('/api/version');
     const data = await resp.json();
     if (data && data.version) {
-      if (ver) ver.textContent = 'v' + data.version;
-      if (cur) cur.textContent = 'v' + data.version + ' (' + data.name + ')';
+      var v = 'v' + data.version;
+      if (ids['about-version']) ids['about-version'].textContent = v;
+      if (ids['sidebar-version']) ids['sidebar-version'].textContent = v;
+      if (ids['greeting-version']) ids['greeting-version'].textContent = 'NexCampus ' + v;
+      if (ids['home-version']) ids['home-version'].textContent = v;
+      if (ids['statusbar-version']) ids['statusbar-version'].textContent = 'NexCampus ' + v + ' · Made by Shahid Singh · NexCore™ Systems and Technologies · 2026';
+      if (ids['about-current-ver']) ids['about-current-ver'].textContent = v + ' (' + (data.name || '') + ')';
     }
   } catch(e) {
-    if (cur) cur.textContent = 'unknown';
+    if (ids['about-current-ver']) ids['about-current-ver'].textContent = 'unknown';
   }
 }
 
@@ -114,4 +124,21 @@ function downloadUpdate() {
   if (_updateData && _updateData.download_url) {
     window.open(_updateData.download_url, '_blank');
   }
+}
+
+function initTheme() {
+  var saved = localStorage.getItem('nexcampus-theme') || 'retro';
+  setTheme(saved, true);
+}
+
+function setTheme(name, silent) {
+  document.documentElement.setAttribute('data-theme', name);
+  localStorage.setItem('nexcampus-theme', name);
+  if (!silent) {
+    var logEl = document.getElementById('mem-status');
+    if (logEl) logEl.textContent = 'Theme: ' + name;
+  }
+  qsa('.theme-btn').forEach(function(b) {
+    b.classList.toggle('active', b.getAttribute('data-theme-btn') === name);
+  });
 }
