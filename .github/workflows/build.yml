@@ -35,12 +35,20 @@ jobs:
       - name: Build
         run: python3 -m PyInstaller --onefile --add-data "static:static" --add-data "index.html:." --add-data "tesseract-pkg/tesseract-bin:tesseract-bin" --name "NexCampus-linux" server.py
 
-      - name: Upload
+      - name: Upload binary
         uses: softprops/action-gh-release@v2
         with:
           files: dist/NexCampus-linux
           generate_release_notes: true
           make_latest: true
+
+      - name: Upload install scripts
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            install/install.sh
+            install/install.ps1
+            install/nexcampus.desktop
 
   build-windows:
     runs-on: windows-latest

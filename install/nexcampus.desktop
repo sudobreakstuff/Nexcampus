@@ -2,7 +2,7 @@
 Type=Application
 Name=NexCampus
 Comment=Offline Student Toolkit — Notes, Study Lab, Text Tools, Dictionary & more
-Exec=/opt/nexcampus/NexCampus-v2.0-linux
+Exec=/opt/nexcampus/NexCampus-linux
 Icon=/opt/nexcampus/nexcampus-icon.png
 Terminal=false
 Categories=Education;Office;Utility;

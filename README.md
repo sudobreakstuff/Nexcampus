@@ -3,36 +3,34 @@
 Offline Student Toolkit — Notes, Study Lab, Text Tools, Dictionary & OCR.  
 Built with Python, vanilla JS, and pywebview. Fully offline.
 
-## Download
+## Quick Install
 
-Get the latest build from **[Releases](https://github.com/sudobreakstuff/Nexcampus/releases)**.
-
-| Platform | File | Notes |
-|----------|------|-------|
-| **Linux** | `NexCampus-linux` | Make executable: `chmod +x NexCampus-linux && ./NexCampus-linux` |
-| **Windows** | `NexCampus-windows.exe` | Double-click to run |
-
-> Both builds include bundled Tesseract 5 for OCR.
-
-## Install
-
-### Linux (app menu)
+### Linux (one-liner, appears in app drawer)
 
 ```bash
-# Download NexCampus-linux from Releases
-chmod +x NexCampus-linux
-sudo mkdir -p /opt/nexcampus
-sudo cp NexCampus-linux /opt/nexcampus/
-sudo cp install/nexcampus.desktop /usr/share/applications/
-sudo cp static/icons/icon-512.png /opt/nexcampus/nexcampus-icon.png
+curl -sS https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/install.sh | bash
 ```
 
-Now find "NexCampus" in your app menu.
+Then find "NexCampus" in your app drawer.
+
+Manual alternative — download `NexCampus-linux` and `install.sh` from **[Releases](https://github.com/sudobreakstuff/Nexcampus/releases)**, then run:
+
+```bash
+chmod +x install.sh && ./install.sh
+```
 
 ### Windows
 
-1. Download `NexCampus-windows.exe` from Releases
-2. Double-click to run
+Download `NexCampus-windows.exe` from **[Releases](https://github.com/sudobreakstuff/Nexcampus/releases)** and double-click to run.  
+A desktop shortcut is created automatically on first run.
+
+Or use the PowerShell installer:
+
+```powershell
+powershell -c "irm https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/install.ps1 | iex"
+```
+
+> Both builds include bundled Tesseract 5 for offline OCR.
 
 ## Build from source
 
