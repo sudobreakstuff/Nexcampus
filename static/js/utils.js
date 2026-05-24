@@ -82,3 +82,28 @@ function showNotification(msg, duration, type) {
     setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 500);
   }, duration);
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  var search = $('sidebar-search');
+  if (!search) return;
+  search.addEventListener('input', function() {
+    var q = this.value.toLowerCase();
+    qsa('.nav-btn, .nb-tab-btn, .cl-sidebar-btn').forEach(function(btn) {
+      var text = (btn.textContent || '').toLowerCase();
+      var dataTab = (btn.getAttribute('data-tab') || '').toLowerCase();
+      var dataTool = (btn.getAttribute('data-nb-tool') || '').toLowerCase();
+      var match = !q || text.indexOf(q) !== -1 || dataTab.indexOf(q) !== -1 || dataTool.indexOf(q) !== -1;
+      btn.style.display = match ? '' : 'none';
+    });
+    // Show/hide section labels
+    qsa('.nb-tab-section-label, .cl-section-label').forEach(function(el) {
+      var parent = el.closest('.nb-tab-container, .cl-sidebar');
+      if (!parent) return;
+      var visible = parent.querySelectorAll('.nb-tab-btn:not([style*="display: none"]), .cl-sidebar-btn:not([style*="display: none"])');
+      el.style.display = visible.length > 0 ? '' : 'none';
+    });
+  });
+  search.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { this.value = ''; this.dispatchEvent(new Event('input')); this.blur(); }
+  });
+});

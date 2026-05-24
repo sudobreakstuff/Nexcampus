@@ -1,14 +1,16 @@
 {
-  "version": "2.3.4",
-  "name": "NexCampus v2.3.4",
+  "version": "2.3.5",
+  "name": "NexCampus v2.3.5",
   "update_url": "",
   "changelog": [
-    "Self-update now fully automatic — installs to ~/.nexcampus/, updates desktop entry, restarts seamlessly",
-    "No more manual steps or sudo needed for updates",
-    "Code runner fix — uses system python3 instead of app binary (no more crashes)",
-    "HiDPI Solar System — crisp rendering, hover glow, orbit trails",
-    "Desktop shortcut auto-created on Linux (~/.local/share/applications/) and Windows",
-    "Better code runner error messages with install instructions",
-    "Canvas aspect-ratio fix, Iron Man theme, styled notifications, Code Lab, uninstall scripts"
+    "Code Lab projects now work out of the box — all input() replaced with hardcoded examples",
+    "JavaScript runs directly in the browser — no Node.js required",
+    "Solar System overhaul — 900 stars with color tints, vignette, dashed orbits, multi-layer sun, nebula clouds",
+    "Midnight Purple theme added",
+    "Search bar — find any tool instantly from the sidebar (press Esc to clear)",
+    "Self-update fully automatic — installs to ~/.nexcampus/, updates desktop entry, restarts seamlessly",
+    "HiDPI canvas rendering — crisp on all displays",
+    "Desktop shortcut auto-created on Linux and Windows",
+    "Better code runner error messages"
   ]
 }

@@ -77,3 +77,19 @@ html[data-theme="paper"] {
   --glow-cyan: rgba(42, 111, 151, 0.08);
   --accent: var(--cyan);
 }
+
+/* ====== Midnight Purple — deep violet with neon accents ====== */
+html[data-theme="purple"] {
+  --bg: #0d0814;
+  --bg2: #19102a;
+  --fg: #e0d6f0;
+  --fg-dim: #8a7aaf;
+  --fg-bright: #f5eeff;
+  --cyan: #c084fc;
+  --teal: #a78bfa;
+  --amber: #fbbf24;
+  --pink: #f472b6;
+  --border: #2d1f4a;
+  --glow-cyan: rgba(192, 132, 252, 0.1);
+  --accent: var(--cyan);
+}

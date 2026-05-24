@@ -1658,7 +1658,7 @@ var SOLAR_FACTS = [
   "The solar system's boundary (heliopause) is about 18 billion km from the Sun."
 ];
 
-var SOLAR = { canvas:null, ctx:null, paused:false, speed:1, animId:null, selected:null, hovered:null, lastTime:0, planets:[], dwarfs:[], factIdx:0, w:800, h:500, zoom:1, panX:0, panY:0, isDragging:false, dragStartX:0, dragStartY:0, panStartX:0, panStartY:0, clicked:false, infoTab:'overview', dpr:1, displayW:800, displayH:500 };
+var SOLAR = { canvas:null, ctx:null, paused:false, speed:1, animId:null, selected:null, hovered:null, lastTime:0, planets:[], dwarfs:[], factIdx:0, w:800, h:500, zoom:1, panX:0, panY:0, isDragging:false, dragStartX:0, dragStartY:0, panStartX:0, panStartY:0, clicked:false, infoTab:'overview', dpr:1 };
 
 function solarResize() {
   var c = SOLAR.canvas;
@@ -1716,62 +1716,123 @@ function solarDraw() {
   var t = performance.now() / 1000;
   if (!SOLAR._stars) {
     SOLAR._stars = [];
-    for (var i = 0; i < 400; i++) {
+    var tints = ['#ffffff','#c8d8ff','#ffe8c8','#ffcccc','#d8ffe8','#ffffcc'];
+    for (var i = 0; i < 600; i++) {
       var angle = Math.random() * 2 * Math.PI;
-      var dist = Math.random() * w * 0.85;
-      var colors = ['#fff','#c8d8ff','#ffe8c8','#ffd8d8','#e8ffe8'];
-      SOLAR._stars.push({ x:w/2 + Math.cos(angle)*dist, y:h/2 + Math.sin(angle)*dist, r:Math.random()*1.5+0.2, a:Math.random()*0.5+0.1, t:Math.random()*1000, c:colors[Math.floor(Math.random()*colors.length)] });
+      var dist = Math.random() * w * 0.9;
+      SOLAR._stars.push({ x:w/2 + Math.cos(angle)*dist, y:h/2 + Math.sin(angle)*dist, r:Math.random()*1.8+0.2, a:Math.random()*0.6+0.1, t:Math.random()*2000, c:tints[Math.floor(Math.random()*tints.length)], twinkle:Math.random()*0.5+0.5 });
     }
     SOLAR._milkyStars = [];
-    for (var i = 0; i < 200; i++) {
-      var angle = -0.5 + Math.random() * 1.0;
+    for (var i = 0; i < 300; i++) {
+      var angle = -0.4 + Math.random() * 0.9;
       var dist = Math.random() * w * 0.7 + 30;
-      SOLAR._milkyStars.push({ x:w/2 + Math.cos(angle)*dist, y:h/2 + Math.sin(angle * 2.5)*dist*0.25, r:Math.random()*2+0.4, a:Math.random()*0.4+0.05, c:['#c8d8ff','#d8c8ff','#ffd8c8'][Math.floor(Math.random()*3)] });
+      SOLAR._milkyStars.push({ x:w/2 + Math.cos(angle)*dist, y:h/2 + Math.sin(angle * 2.2)*dist*0.18, r:Math.random()*2.5+0.5, a:Math.random()*0.5+0.05, c:'#b8c8ff', twinkle:Math.random()*0.3+0.7 });
     }
+    // Background nebula clouds
     SOLAR._nebula = [];
-    for (var i = 0; i < 40; i++) {
+    for (var i = 0; i < 60; i++) {
       var a = Math.random() * 2 * Math.PI;
-      var d = 80 + Math.random() * 200;
-      SOLAR._nebula.push({ x:w/2 + Math.cos(a)*d, y:h/2 + Math.sin(a)*d, r:10+Math.random()*40, c:'rgba(' + Math.floor(20+Math.random()*30) + ',' + Math.floor(10+Math.random()*20) + ',' + Math.floor(40+Math.random()*50) + ',0.015)' });
+      var d = 60 + Math.random() * 300;
+      SOLAR._nebula.push({ x:w/2 + Math.cos(a)*d, y:h/2 + Math.sin(a)*d, r:15+Math.random()*50, c:'rgba(' + Math.floor(15+Math.random()*25) + ',' + Math.floor(8+Math.random()*18) + ',' + Math.floor(30+Math.random()*60) + ',0.012)' });
     }
   }
+
+  // Deep space vignette
+  var vignette = ctx.createRadialGradient(cx, cy, h*0.3, cx, cy, h*0.85);
+  vignette.addColorStop(0, 'rgba(0,0,0,0)');
+  vignette.addColorStop(0.5, 'rgba(0,0,0,0.15)');
+  vignette.addColorStop(1, 'rgba(0,0,0,0.55)');
+
+  // Draw nebula clouds
   SOLAR._nebula.forEach(function(n) {
     ctx.fillStyle = n.c; ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI*2); ctx.fill();
   });
+
+  // Draw stars
   SOLAR._stars.forEach(function(s) {
-    ctx.globalAlpha = s.a * (0.7 + 0.3 * Math.sin(t + s.t));
-    ctx.fillStyle = s.c; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
+    var flicker = s.twinkle * (0.6 + 0.4 * Math.sin(t * (1.5 + s.t * 0.005) + s.t));
+    ctx.globalAlpha = s.a * flicker;
+    ctx.fillStyle = s.c;
+    ctx.beginPath();
+    if (s.r > 1.2 && Math.random() > 0.995) {
+      // Occasional cross-shaped bright star
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    } else {
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    }
+    ctx.fill();
   });
+
+  // Milky Way band
   SOLAR._milkyStars.forEach(function(s) {
-    ctx.globalAlpha = s.a * (0.5 + 0.4 * Math.sin(t * 0.3 + s.x));
-    ctx.fillStyle = s.c; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
+    ctx.globalAlpha = s.a * (0.5 + 0.4 * Math.sin(t * 0.3 + s.x * 0.01));
+    ctx.fillStyle = s.c;
+    ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
   });
   ctx.globalAlpha = 1;
 
-  ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 0.5;
-  SOLAR.planets.forEach(function(p) { ctx.beginPath(); ctx.arc(cx, cy, p.orbit, 0, Math.PI*2); ctx.stroke(); });
-  ctx.strokeStyle = 'rgba(255,255,255,0.035)';
-  SOLAR.dwarfs.forEach(function(p) { ctx.beginPath(); ctx.arc(cx, cy, p.orbit, 0, Math.PI*2); ctx.stroke(); });
+  // Draw vignette
+  ctx.fillStyle = vignette; ctx.fillRect(0, 0, w, h);
 
-  if (z > 0.3) {
-    for (var i = 0; i < 150; i++) {
+  // Orbit lines — dashed style for better depth
+  ctx.lineWidth = 0.5;
+  SOLAR.planets.forEach(function(p, i) {
+    var alpha = 0.03 + i * 0.005;
+    ctx.strokeStyle = 'rgba(255,255,255,' + alpha.toFixed(3) + ')';
+    ctx.setLineDash([4, 20 + i * 5]);
+    ctx.beginPath(); ctx.arc(cx, cy, p.orbit, 0, Math.PI*2); ctx.stroke();
+  });
+  ctx.setLineDash([]);
+  SOLAR.dwarfs.forEach(function(p) {
+    ctx.strokeStyle = 'rgba(255,255,255,0.02)';
+    ctx.setLineDash([2, 16]);
+    ctx.beginPath(); ctx.arc(cx, cy, p.orbit, 0, Math.PI*2); ctx.stroke();
+  });
+  ctx.setLineDash([]);
+
+  if (z > 0.15) {
+    for (var i = 0; i < 200; i++) {
       var a = Math.random() * 2 * Math.PI;
-      var r = 123 + Math.random() * 29;
-      ctx.fillStyle = 'rgba(200,200,200,' + (0.015 + Math.random() * 0.035) + ')';
-      ctx.fillRect(cx + Math.cos(a)*r - 0.4, cy + Math.sin(a)*r - 0.4, 0.8, 0.8);
+      var r = 122 + Math.random() * 30;
+      var alpha = 0.012 + Math.random() * 0.025;
+      var sz = 0.4 + Math.random() * 0.5;
+      ctx.fillStyle = 'rgba(200,200,200,' + alpha.toFixed(4) + ')';
+      ctx.fillRect(cx + Math.cos(a)*r - sz, cy + Math.sin(a)*r - sz, sz*2, sz*2);
     }
   }
 
-  var pulse = 1 + 0.05 * Math.sin(t * 1.5) + 0.02 * Math.sin(t * 3.7);
+  // Multi-layer sun with corona
+  var pulse = 1 + 0.05 * Math.sin(t * 1.5) + 0.03 * Math.sin(t * 3.7);
   var sunR = 36 * pulse;
-  var sg = ctx.createRadialGradient(cx, cy, 0, cx, cy, sunR * 1.5);
-  sg.addColorStop(0,'#fffef0'); sg.addColorStop(0.1,'#ffe066'); sg.addColorStop(0.25,'#ff8c00');
-  sg.addColorStop(0.5,'rgba(255,100,0,0.3)'); sg.addColorStop(0.7,'rgba(255,50,0,0.1)'); sg.addColorStop(1,'rgba(255,30,0,0)');
-  ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(cx, cy, sunR * 1.5, 0, Math.PI*2); ctx.fill();
-  var corona = ctx.createRadialGradient(cx, cy, sunR * 0.2, cx, cy, sunR * 2.5);
-  corona.addColorStop(0,'rgba(255,200,100,0.06)'); corona.addColorStop(0.4,'rgba(255,100,0,0.03)'); corona.addColorStop(1,'rgba(255,50,0,0)');
-  ctx.fillStyle = corona; ctx.beginPath(); ctx.arc(cx, cy, sunR * 2.5, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = '#fffef0'; ctx.beginPath(); ctx.arc(cx, cy, 13 * pulse, 0, Math.PI*2); ctx.fill();
+
+  // Outer corona halo
+  var corona = ctx.createRadialGradient(cx, cy, sunR*0.5, cx, cy, sunR*3);
+  corona.addColorStop(0, 'rgba(255,200,80,0.08)');
+  corona.addColorStop(0.3, 'rgba(255,100,20,0.04)');
+  corona.addColorStop(0.6, 'rgba(255,40,0,0.015)');
+  corona.addColorStop(1, 'rgba(255,20,0,0)');
+  ctx.fillStyle = corona; ctx.beginPath(); ctx.arc(cx, cy, sunR*3, 0, Math.PI*2); ctx.fill();
+
+  // Main glow
+  var sg = ctx.createRadialGradient(cx, cy, 0, cx, cy, sunR*1.6);
+  sg.addColorStop(0, '#fffef0');
+  sg.addColorStop(0.08, '#fff8cc');
+  sg.addColorStop(0.2, '#ffcc33');
+  sg.addColorStop(0.4, 'rgba(255,120,0,0.5)');
+  sg.addColorStop(0.65, 'rgba(255,60,0,0.15)');
+  sg.addColorStop(1, 'rgba(255,20,0,0)');
+  ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(cx, cy, sunR*1.6, 0, Math.PI*2); ctx.fill();
+
+  // Bright core
+  var core = ctx.createRadialGradient(cx, cy, 0, cx, cy, sunR*0.7);
+  core.addColorStop(0, '#ffffff');
+  core.addColorStop(0.3, '#fffbe6');
+  core.addColorStop(0.7, '#ffe066');
+  core.addColorStop(1, 'rgba(255,140,0,0.4)');
+  ctx.fillStyle = core; ctx.beginPath(); ctx.arc(cx, cy, sunR, 0, Math.PI*2); ctx.fill();
+
+  // Hot center
+  ctx.fillStyle = '#fffef8'; ctx.beginPath(); ctx.arc(cx, cy, 14*pulse, 0, Math.PI*2); ctx.fill();
 
   var allBodies = SOLAR.planets.concat(SOLAR.dwarfs);
   allBodies.forEach(function(p) {

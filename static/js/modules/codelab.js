@@ -391,89 +391,89 @@ var CODEPROJECTS = [
     id:'hello-world',
     title:'Hello, World!',
     difficulty:'Beginner',
-    description:'Write a program that prints a personalized greeting. Ask the user for their name, then print a welcome message.',
-    starter:'# Hello, World!\n# Ask the user for their name and print a greeting\n\nname = input("Enter your name: ")\nprint(f"Hello, {name}!")',
-    hint:'Use the input() function to get the user\'s name, then use an f-string or concatenation to include it in the greeting.'
+    description:'Write a program that prints a personalized greeting.',
+    starter:'# Hello, World!\n# Change the name below and run again!\n\nname = "Alex"\nprint(f"Hello, {name}!")\n\n# Try with different names or add more messages',
+    hint:'Use an f-string to include the name in the greeting: f"Hello, {name}!"'
   },
   {
     id:'calculator',
     title:'Simple Calculator',
     difficulty:'Beginner',
-    description:'Create a calculator that takes two numbers and an operator (+, -, *, /) from the user and displays the result.',
-    starter:'# Simple Calculator\n\na = float(input("Enter first number: "))\nop = input("Enter operator (+, -, *, /): ")\nb = float(input("Enter second number: "))\n\nif op == "+":\n    result = a + b\nelif op == "-":\n    result = a - b\nelif op == "*":\n    result = a * b\nelif op == "/":\n    result = a / b\nelse:\n    result = "Invalid operator"\n\nprint(f"Result: {result}")',
-    hint:'Use float() to convert input to numbers. Handle division by zero with a try/except block.'
+    description:'Create a calculator that takes two numbers and an operator and displays the result.',
+    starter:'# Simple Calculator\n# Change these values to try different calculations\n\na = 15\nb = 7\nop = "+"\n\nif op == "+":\n    result = a + b\nelif op == "-":\n    result = a - b\nelif op == "*":\n    result = a * b\nelif op == "/":\n    result = a / b\nelse:\n    result = "Invalid operator"\n\nprint(f"{a} {op} {b} = {result}")',
+    hint:'Change a, b, and op to test different calculations. Try division by zero — what happens?'
   },
   {
     id:'number-guessing',
     title:'Number Guessing Game',
     difficulty:'Beginner',
-    description:'Generate a random number between 1 and 100. Let the user guess, giving hints like "Too high" or "Too low" until they get it right. Show the number of attempts.',
-    starter:'# Number Guessing Game\nimport random\n\nsecret = random.randint(1, 100)\nattempts = 0\n\nwhile True:\n    guess = int(input("Guess a number (1-100): "))\n    attempts += 1\n\n    if guess < secret:\n        print("Too low!")\n    elif guess > secret:\n        print("Too high!")\n    else:\n        print(f"Correct! You guessed it in {attempts} tries!")\n        break',
-    hint:'Use random.randint(1, 100) to generate the secret number. Use a while True loop with break when guessed correctly.'
+    description:'Generate a random number between 1 and 100 and try to guess it with hints.',
+    starter:'# Number Guessing Game\nimport random\n\nsecret = random.randint(1, 100)\n# Simulate guesses (change these to try different strategies!)\nguesses = [50, 75, 88, 82, 80]\n\nfor i, guess in enumerate(guesses, 1):\n    print(f"Guess #{i}: {guess}")\n    if guess < secret:\n        print("Too low!")\n    elif guess > secret:\n        print("Too high!")\n    else:\n        print(f"Correct! Found in {i} tries!")\n        break\nelse:\n    print(f"The number was {secret}")',
+    hint:'Use random.randint(1, 100) to generate the secret number. Try binary search: start at 50, then 25 or 75.'
   },
   {
     id:'todo-list',
     title:'To-Do List Manager',
     difficulty:'Intermediate',
-    description:'Build a command-line to-do list that can add tasks, view all tasks, mark tasks as complete, and delete tasks.',
-    starter:'# To-Do List Manager\ntodos = []\n\ndef show_todos():\n    if not todos:\n        print("No tasks yet!")\n        return\n    for i, task in enumerate(todos, 1):\n        status = "✓" if task["done"] else " " \n        print(f"{i}. [{status}] {task[\"title\"]}")\n\ndef add_task(title):\n    todos.append({"title": title, "done": False})\n    print(f"Added: {title}")\n\ndef toggle_task(index):\n    if 0 <= index < len(todos):\n        todos[index]["done"] = not todos[index]["done"]\n\ndef delete_task(index):\n    if 0 <= index < len(todos):\n        removed = todos.pop(index)\n        print(f"Deleted: {removed[\"title\"]}")\n\nwhile True:\n    cmd = input("\\nCommand (add/show/done/delete/quit): ")\n    if cmd == "quit":\n        break\n    elif cmd == "add":\n        add_task(input("Task title: "))\n    elif cmd == "show":\n        show_todos()\n    elif cmd == "done":\n        show_todos()\n        toggle_task(int(input("Task number: ")) - 1)\n    elif cmd == "delete":\n        show_todos()\n        delete_task(int(input("Task number: ")) - 1)',
-    hint:'Store tasks as dictionaries with title and done keys. Use enumerate() to display numbered lists.'
+    description:'Build a to-do list that can add, view, complete, and delete tasks.',
+    starter:'# To-Do List Manager\ntodos = []\n\ndef show_todos():\n    if not todos:\n        print("No tasks yet!")\n    else:\n        for i, task in enumerate(todos, 1):\n            status = "[✓]" if task["done"] else "[ ]"\n            print(f"{i}. {status} {task[\'title\']}")\n\ndef add_task(title):\n    todos.append({"title": title, "done": False})\n    print(f"Added: {title}")\n\ndef complete_task(index):\n    if 0 <= index < len(todos):\n        todos[index]["done"] = True\n        print(f"Completed: {todos[index][\'title\']}")\n\ndef delete_task(index):\n    if 0 <= index < len(todos):\n        removed = todos.pop(index)\n        print(f"Deleted: {removed[\'title\']}")\n\n# Demo — change these commands to try the app!\nadd_task("Learn Python")\nadd_task("Build a project")\nadd_task("Practice daily")\nshow_todos()\ncomplete_task(0)\nprint("\\nAfter completing task 1:")\nshow_todos()',
+    hint:'Try adding more tasks, completing different ones, or deleting tasks. The index starts at 0!'
   },
   {
     id:'temperature-converter',
     title:'Temperature Converter',
     difficulty:'Beginner',
-    description:'Create a program that converts temperatures between Celsius, Fahrenheit, and Kelvin. Let the user choose the conversion direction.',
-    starter:'# Temperature Converter\n\ndef celsius_to_fahrenheit(c):\n    return (c * 9/5) + 32\n\ndef fahrenheit_to_celsius(f):\n    return (f - 32) * 5/9\n\ndef celsius_to_kelvin(c):\n    return c + 273.15\n\ndef kelvin_to_celsius(k):\n    return k - 273.15\n\nprint("Temperature Converter")\nprint("1: Celsius to Fahrenheit")\nprint("2: Fahrenheit to Celsius")\nprint("3: Celsius to Kelvin")\nprint("4: Kelvin to Celsius")\n\nchoice = input("Choose conversion (1-4): ")\ntemp = float(input("Enter temperature: "))\n\nif choice == "1":\n    result = celsius_to_fahrenheit(temp)\n    print(f"{temp}°C = {result}°F")\nelif choice == "2":\n    result = fahrenheit_to_celsius(temp)\n    print(f"{temp}°F = {result}°C")\nelif choice == "3":\n    result = celsius_to_kelvin(temp)\n    print(f"{temp}°C = {result}K")\nelif choice == "4":\n    result = kelvin_to_celsius(temp)\n    print(f"{temp}K = {result}°C")\nelse:\n    print("Invalid choice")',
-    hint:'Use conversion formulas: C to F = (C × 9/5) + 32, F to C = (F - 32) × 5/9, C to K = C + 273.15.'
+    description:'Convert temperatures between Celsius, Fahrenheit, and Kelvin.',
+    starter:'# Temperature Converter\n\ndef c_to_f(c): return (c * 9/5) + 32\ndef f_to_c(f): return (f - 32) * 5/9\ndef c_to_k(c): return c + 273.15\ndef k_to_c(k): return k - 273.15\n\n# Try changing these values!\ntemp = 25  # Celsius\n\nprint(f"Input: {temp}°C")\nprint(f"  Fahrenheit: {c_to_f(temp):.1f}°F")\nprint(f"  Kelvin: {c_to_k(temp):.1f}K")\n\n# Convert back\nf = c_to_f(temp)\nprint(f"\\nRound-trip: {f}°F -> {f_to_c(f):.1f}°C")',
+    hint:'Try different temperatures. Bonus: add rankine, reaumur, or other scales!'
   },
   {
     id:'word-counter',
     title:'Word Counter',
     difficulty:'Beginner',
-    description:'Write a program that reads a text file or user input and counts the number of words, characters, lines, and the frequency of each word.',
-    starter:'# Word Counter\nfrom collections import Counter\n\ntext = input("Enter text (or type FILE:filename): ")\n\nif text.startswith("FILE:"):\n    filename = text[5:]\n    try:\n        with open(filename, "r") as f:\n            text = f.read()\n    except FileNotFoundError:\n        print("File not found!")\n        exit()\n\nwords = text.split()\nchars = len(text)\nlines = text.count("\\n") + 1\n\nprint(f"\\nWords: {len(words)}")\nprint(f"Characters: {chars}")\nprint(f"Lines: {lines}")\nprint(f"Avg word length: {chars / len(words):.1f}")\n\nword_freq = Counter(word.lower().strip(".,!?;:\\\'\\\"") for word in words)\nprint("\\nTop 10 words:")\nfor word, count in word_freq.most_common(10):\n    print(f"  {word}: {count}")',
-    hint:'Use the collections.Counter class for word frequency. Strip punctuation from words using strip() with a string of punctuation characters.'
+    description:'Count words, characters, lines, and word frequency in a text.',
+    starter:'# Word Counter\nfrom collections import Counter\n\n# Change this text to count different passages\ntext = """Python is a great programming language.\nPython is easy to learn and fun to use.\nMany developers love Python for its simplicity."""\n\nwords = text.split()\nchars = len(text)\nlines = text.count("\\n") + 1\n\nprint(f"Words: {len(words)}")\nprint(f"Characters: {chars}")\nprint(f"Lines: {lines}")\nprint(f"Avg word length: {chars / len(words):.1f}")\n\nword_freq = Counter(w.lower().strip(".,!?;:\\\'\\\"") for w in words)\nprint("\\nTop 5 words:")\nfor word, count in word_freq.most_common(5):\n    print(f"  {word}: {count}")',
+    hint:'Use collections.Counter for frequency. Replace the text variable with your own paragraph!'
   },
   {
     id:'quiz-game',
     title:'Quiz Game',
     difficulty:'Intermediate',
-    description:'Build a multiple-choice quiz game with questions about Python. Keep score, show correct answers, and give a final grade.',
-    starter:'# Quiz Game\n\nquestions = [\n    {\n        "question": "What keyword defines a function in Python?",\n        "options": ["func", "def", "define", "lambda"],\n        "answer": 1\n    },\n    {\n        "question": "Which data type is immutable?",\n        "options": ["list", "dict", "tuple", "set"],\n        "answer": 2\n    },\n    {\n        "question": "What does len() return?",\n        "options": ["Type", "Length", "Memory size", "Hash"],\n        "answer": 1\n    }\n]\n\nscore = 0\nfor i, q in enumerate(questions, 1):\n    print(f"\\n{i}. {q[\'question\']}")\n    for j, opt in enumerate(q["options"]):\n        print(f"   {j+1}. {opt}")\n    \n    try:\n        answer = int(input("Your answer (1-4): ")) - 1\n        if answer == q["answer"]:\n            print("✓ Correct!")\n            score += 1\n        else:\n            correct_opt = q["options"][q["answer"]]\n            print(f"✗ Wrong! Answer: {correct_opt}")\n    except:\n        print("Invalid input!")\n\nprint(f"\\nFinal Score: {score}/{len(questions)}")\npercentage = (score / len(questions)) * 100\nprint(f"Grade: {percentage:.0f}%")',
-    hint:'Store questions as dictionaries with question, options (list), and answer (index). Use try/except to handle non-numeric input.'
+    description:'Build a multiple-choice quiz that keeps score and shows a final grade.',
+    starter:'# Quiz Game\n\nquestions = [\n    {"q": "What keyword defines a function in Python?",\n     "opts": ["func", "def", "define", "lambda"], "ans": 1},\n    {"q": "Which data type is immutable?",\n     "opts": ["list", "dict", "tuple", "set"], "ans": 2},\n    {"q": "What does len([]) return?",\n     "opts": ["Type", "Length", "Memory", "Hash"], "ans": 1},\n    {"q": "What is 2 ** 3?",\n     "opts": ["6", "8", "9", "5"], "ans": 1},\n    {"q": "Which creates a list?",\n     "opts": ["(1,2)", "[1,2]", "{1,2}", "1,2"], "ans": 1},\n]\n\n# Simulated answers (change indexes to test different scores!)\nuser_answers = [1, 2, 1, 1, 1]\nscore = 0\n\nfor i, q in enumerate(questions):\n    print(f"\\nQ{i+1}: {q[\'q\']}")\n    for j, opt in enumerate(q["opts"]):\n        print(f"  {j+1}. {opt}")\n    ans = user_answers[i]\n    if ans == q["ans"]:\n        print(f"  ✓ Correct! (you chose {ans+1})")\n        score += 1\n    else:\n        correct = q["opts"][q["ans"]]\n        print(f"  ✗ Wrong! (you chose {ans+1}, answer: {correct})")\n\npct = score / len(questions) * 100\nprint(f"\\nScore: {score}/{len(questions)} — {pct:.0f}%")',
+    hint:'Change user_answers to test different scores. Can you add more questions?'
   },
   {
     id:'password-generator',
     title:'Password Generator',
     difficulty:'Beginner',
-    description:'Create a program that generates random passwords with customizable length and character types (uppercase, lowercase, digits, symbols).',
-    starter:'# Password Generator\nimport random\nimport string\n\ndef generate_password(length=12, use_upper=True, use_lower=True, use_digits=True, use_symbols=True):\n    chars = ""\n    if use_upper:\n        chars += string.ascii_uppercase\n    if use_lower:\n        chars += string.ascii_lowercase\n    if use_digits:\n        chars += string.digits\n    if use_symbols:\n        chars += string.punctuation\n    \n    if not chars:\n        return "Select at least one character type"\n    \n    password = "".join(random.choice(chars) for _ in range(length))\n    return password\n\nprint("Password Generator")\nlength = int(input("Password length (default 12): ") or 12)\n\npassword = generate_password(length)\nprint(f"Generated password: {password}")\nprint(f"Length: {len(password)}")',
-    hint:'Use the string module for character sets (ascii_uppercase, ascii_lowercase, digits, punctuation). Use random.choice() in a loop or comprehension.'
+    description:'Generate random passwords with customizable length and character types.',
+    starter:'# Password Generator\nimport random\nimport string\n\ndef generate_password(length=12, upper=True, lower=True, digits=True, symbols=True):\n    chars = ""\n    if upper: chars += string.ascii_uppercase\n    if lower: chars += string.ascii_lowercase\n    if digits: chars += string.digits\n    if symbols: chars += string.punctuation\n    if not chars: return "Select at least one character type!"\n    return "".join(random.choice(chars) for _ in range(length))\n\n# Try changing the settings!\nprint("=== Password Generator ===")\np1 = generate_password()\nprint(f"Default (12 chars, all types): {p1}")\n\np2 = generate_password(20, symbols=False)\nprint(f"20 chars, no symbols:         {p2}")\n\np3 = generate_password(8, lower=False, digits=False)\nprint(f"8 chars, upper+symbols only:  {p3}")\n\nprint(f"\\nAll passwords are {len(p1)}-{len(p2)} characters")',
+    hint:'Use string.ascii_uppercase, string.digits, etc. Try generate_password(16) for longer passwords!'
   },
   {
     id:'hangman',
     title:'Hangman Game',
     difficulty:'Intermediate',
-    description:'Implement the classic Hangman word-guessing game. Choose a random word, display blanks, and let the player guess letters with limited attempts.',
-    starter:'# Hangman Game\nimport random\n\nwords = ["python", "programming", "computer", "algorithm", "database", "network", "function", "variable"]\nword = random.choice(words).lower()\nguessed = set()\ntries = 6\n\nwhile tries > 0:\n    display = "".join(c if c in guessed else "_" for c in word)\n    print(f"\\nWord: {display}")\n    print(f"Tries left: {tries}")\n    \n    if "_" not in display:\n        print("🎉 You won!")\n        break\n    \n    guess = input("Guess a letter: ").lower()\n    if len(guess) != 1 or not guess.isalpha():\n        print("Enter a single letter!")\n        continue\n    \n    if guess in guessed:\n        print("Already guessed!")\n        continue\n    \n    guessed.add(guess)\n    if guess not in word:\n        tries -= 1\n        print(f"Wrong! {guess} is not in the word.")\n\nif tries == 0:\n    print(f"\\nGame over! The word was: {word}")',
-    hint:'Keep a set of guessed letters. Use a list comprehension with conditional to display underscores for unguessed letters.'
+    description:'Build the classic Hangman word-guessing game.',
+    starter:'# Hangman Game\nimport random\n\nwords = ["python", "programming", "computer", "algorithm",\n         "database", "network", "function", "variable"]\nword = random.choice(words).lower()\n\n# Simulated guesses (change these!)\nguesses = ["a", "e", "i", "o", "u", "p", "n", "t"]\nguessed = set()\ntries = 6\n\nfor guess in guesses:\n    if tries <= 0: break\n    if len(guess) != 1 or not guess.isalpha():\n        print(f"\'{guess}\' is not a valid letter")\n        continue\n    if guess in guessed:\n        print(f"\'{guess}\' already guessed")\n        continue\n    guessed.add(guess)\n    if guess not in word:\n        tries -= 1\n        print(f"✗ \'{guess}\' not in word ({tries} tries left)")\n    else:\n        display = "".join(c if c in guessed else "_" for c in word)\n        print(f"✓ \'{guess}\' found! Word: {display}")\n        if "_" not in display:\n            print(f"🎉 You won! The word was: {word}")\n            break\nelse:\n    display = "".join(c if c in guessed else "_" for c in word)\n    if "_" in display:\n        print(f"Game over! Word was: {word}")',
+    hint:'Try different sets of guesses to win faster. Which letters are most common in English?'
   },
   {
     id:'tic-tac-toe',
     title:'Tic-Tac-Toe',
     difficulty:'Intermediate',
-    description:'Build a two-player Tic-Tac-Toe game on the command line. Display the board, alternate turns, and detect wins or draws.',
-    starter:'# Tic-Tac-Toe\n\ndef print_board(board):\n    print("\\n" + "---".join(" " for _ in range(3)))\n    for row in board:\n        print(" " + " | ".join(row))\n        print("---".join(" " for _ in range(3)))\n\ndef check_winner(board):\n    for row in board:\n        if row[0] == row[1] == row[2] != " ":\n            return row[0]\n    for col in range(3):\n        if board[0][col] == board[1][col] == board[2][col] != " ":\n            return board[0][col]\n    if board[0][0] == board[1][1] == board[2][2] != " ":\n        return board[0][0]\n    if board[0][2] == board[1][1] == board[2][0] != " ":\n        return board[0][2]\n    return None\n\ndef is_full(board):\n    return all(cell != " " for row in board for cell in row)\n\nboard = [[" " for _ in range(3)] for _ in range(3)]\nplayer = "X"\n\nwhile True:\n    print_board(board)\n    print(f"Player {player}\'s turn")\n    \n    try:\n        row = int(input("Row (0-2): "))\n        col = int(input("Col (0-2): \'"))\n    except ValueError:\n        print("Enter numbers 0-2!")\n        continue\n    \n    if row < 0 or row > 2 or col < 0 or col > 2 or board[row][col] != " ":\n        print("Invalid move!")\n        continue\n    \n    board[row][col] = player\n    \n    winner = check_winner(board)\n    if winner:\n        print_board(board)\n        print(f"Player {winner} wins!")\n        break\n    \n    if is_full(board):\n        print_board(board)\n        print("It\'s a draw!")\n        break\n    \n    player = "O" if player == "X" else "X"',
-    hint:'Use a 3x3 list of lists for the board. Check rows, columns, and both diagonals for a winner.'
+    description:'Build a two-player Tic-Tac-Toe game on the command line.',
+    starter:'# Tic-Tac-Toe\n\ndef print_board(board):\n    print()\n    for row in board:\n        print(" " + " | ".join(row))\n        print("---" * 3)\n\ndef check_winner(board):\n    for i in range(3):\n        if board[i][0] == board[i][1] == board[i][2] != " ":\n            return board[i][0]\n        if board[0][i] == board[1][i] == board[2][i] != " ":\n            return board[0][i]\n    if board[0][0] == board[1][1] == board[2][2] != " ":\n        return board[0][0]\n    if board[0][2] == board[1][1] == board[2][0] != " ":\n        return board[0][2]\n    return None\n\nboard = [[" " for _ in range(3)] for _ in range(3)]\n# Simulated moves: (row, col, player)\nmoves = [(0,0,"X"), (1,1,"O"), (0,1,"X"), (2,2,"O"), (0,2,"X")]\n\nfor row, col, player in moves:\n    if board[row][col] != " ":\n        print(f"Invalid move at ({row},{col})")\n        continue\n    board[row][col] = player\n    print(f"Player {player} plays ({row},{col}):")\n    print_board(board)\n    winner = check_winner(board)\n    if winner:\n        print(f"Player {winner} wins! 🎉")\n        break\nelse:\n    if all(c != " " for r in board for c in r):\n        print("It\'s a draw!")\n    else:\n        print("Game incomplete — add more moves!")',
+    hint:'Add more moves to the list to finish the game. Try creating a win for O!'
   },
   {
     id:'simple-webpage',
     title:'Simple Web Page Generator',
     difficulty:'Intermediate',
-    description:'Create a program that generates a simple HTML webpage. Ask the user for a title, heading, and paragraphs, then write the HTML to a file.',
-    starter:'# Simple Web Page Generator\n\ndef generate_html(title, heading, paragraphs, bg_color="#ffffff", text_color="#333333"):\n    html = f"""<!DOCTYPE html>\n<html>\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>{title}</title>\n    <style>\n        body {{ font-family: Arial, sans-serif; background: {bg_color}; color: {text_color}; padding: 40px; line-height: 1.6; }}\n        h1 {{ color: {text_color}; }}\n    </style>\n</head>\n<body>\n    <h1>{heading}</h1>\\n"""\n    for p in paragraphs:\n        html += f"    <p>{p}</p>\\n"\n    html += """</body>\n</html>"""\n    return html\n\ntitle = input("Page title: ")\nheading = input("Main heading: ")\nprint("Enter paragraphs (empty line to stop):")\nparagraphs = []\nwhile True:\n    p = input()\n    if not p:\n        break\n    paragraphs.append(p)\n\nhtml = generate_html(title, heading, paragraphs)\nfilename = title.lower().replace(" ", "-") + ".html"\n\nwith open(filename, "w") as f:\n    f.write(html)\n\nprint(f"Page saved as {filename}")',
-    hint:'Use f-strings with triple quotes for multi-line HTML. Be careful with curly braces in CSS/f-strings — use double curly braces {{ }} for literal braces.'
+    description:'Generate a simple HTML webpage from Python data.',
+    starter:'# Simple Web Page Generator\n\ndef generate_html(title, heading, paragraphs, bg="#f0f4f8", color="#333"):\n    html = f"""<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>{title}</title>\n    <style>\n        body {{ font-family: system-ui, sans-serif;\n               background: {bg}; color: {color};\n               padding: 40px; line-height: 1.7; }}\n        h1 {{ color: {color}; }}\n        p {{ margin-bottom: 16px; }}\n    </style>\n</head>\n<body>\n    <h1>{heading}</h1>\\n"""\n    for p in paragraphs:\n        html += f"    <p>{p}</p>\\n"\n    html += """</body>\\n</html>"""\n    return html\n\n# Change these to create your own page!\ntitle = "My First Webpage"\nheading = "Welcome to PythonWeb"\nparagraphs = [\n    "Python can generate HTML files automatically.",\n    "This page was created by a Python script!",\n    "You can change the title, heading, and text above.",\n]\n\nhtml = generate_html(title, heading, paragraphs)\nprint(html)\nprint(f"\\n({len(html)} characters of HTML generated)")',
+    hint:'Try changing the title, heading, and paragraphs. Use double curly braces {{ }} for literal braces in f-strings.'
   }
 ];
 
