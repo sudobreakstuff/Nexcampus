@@ -103,6 +103,10 @@ def load_version():
 
 VERSION = load_version()
 
+# Update state
+_update_status = {'state': 'idle', 'progress': 0, 'message': ''}
+_update_lock = threading.Lock()
+
 # Load dictionary (lazy)
 DICTIONARY = {}
 DICTIONARY_LOADED = False
@@ -195,6 +199,9 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
             return
         if self.path.startswith('/api/update/check'):
             self.api_check_update()
+            return
+        if self.path.startswith('/api/update/status'):
+            self.api_update_status()
             return
         if self.path == '/api/notebook/documents':
             self.api_notebook_list()
@@ -376,69 +383,94 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
     # --- Code Lab API ---
 
     def api_update_install(self, data=None):
-        """Download and install update binary. Runs restart script and exits."""
+        """Start download in background thread, return immediately."""
+        global _update_status
         BINARY_NAME = 'NexCampus-windows.exe' if PLATFORM == 'windows' else 'NexCampus-linux'
-        try:
-            req = urllib.request.Request(
-                'https://api.github.com/repos/sudobreakstuff/Nexcampus/releases/latest',
-                headers={'User-Agent': 'NexCampus/2.0', 'Accept': 'application/vnd.github.v3+json'}
-            )
-            with urllib.request.urlopen(req, timeout=10) as resp:
-                release = json.loads(resp.read())
-            download_url = ''
-            for asset in release.get('assets', []):
-                if asset['name'] == BINARY_NAME:
-                    download_url = asset['browser_download_url']
-                    break
-            if not download_url:
-                self.send_json({'error': 'No binary found in latest release', 'success': False})
+        with _update_lock:
+            if _update_status['state'] == 'downloading':
+                self.send_json({'error': 'Update already in progress', 'success': False})
                 return
+            _update_status = {'state': 'starting', 'progress': 0, 'message': 'Starting download...'}
 
-            can_self = os.access(EXE_DIR, os.W_OK)
-            install_dir = EXE_DIR if can_self else Path.home() / '.nexcampus'
-            install_dir.mkdir(parents=True, exist_ok=True)
-            new_path = install_dir / (BINARY_NAME + '.new')
-            target_path = install_dir / BINARY_NAME
-
-            self.send_json({'status': 'downloading', 'progress': 0, 'success': True})
-
-            import subprocess as sp
-            sp.run(['curl', '-sSL', '-o', str(new_path), download_url], timeout=600, check=True)
-            if not new_path.exists() or new_path.stat().st_size < 10000000:
-                self.send_json({'error': 'Download failed', 'success': False})
-                return
-
-            new_path.chmod(0o755)
-
-            if can_self and PLATFORM == 'linux':
-                restart_script = install_dir / 'restart.sh'
-                restart_script.write_text(
-                    '#!/bin/bash\n'
-                    f'sleep 1\n'
-                    f'mv -f "{new_path}" "{target_path}"\n'
-                    f'chmod +x "{target_path}"\n'
-                    f'nohup "{target_path}" > /dev/null 2>&1 &\n'
-                    f'rm -f "{restart_script}"\n'
-                )
-                restart_script.chmod(0o755)
-                sp.Popen(['bash', str(restart_script)], start_new_session=True)
-                self.send_json({'status': 'installed', 'success': True})
-                time.sleep(0.5)
-                os._exit(0)
-            elif can_self:
-                # Windows or other: just replace and show message
-                new_path.replace(target_path)
-                self.send_json({'status': 'installed', 'success': True, 'message': 'Restart to apply update.'})
-            else:
-                self.send_json({
-                    'status': 'downloaded', 'success': True,
-                    'message': 'Downloaded to ' + str(new_path) + '. Run: mv ' + str(new_path) + ' ' + str(target_path) + ' && ' + str(target_path)
-                })
-        except Exception as e:
+        def _do_install():
+            global _update_status
             try:
-                self.send_json({'error': 'Update failed: ' + str(e), 'success': False})
-            except:
-                pass
+                with _update_lock:
+                    _update_status['state'] = 'downloading'
+                    _update_status['message'] = 'Fetching release info...'
+                req = urllib.request.Request(
+                    'https://api.github.com/repos/sudobreakstuff/Nexcampus/releases/latest',
+                    headers={'User-Agent': 'NexCampus/2.0', 'Accept': 'application/vnd.github.v3+json'}
+                )
+                with urllib.request.urlopen(req, timeout=10) as resp:
+                    release = json.loads(resp.read())
+                download_url = ''
+                for asset in release.get('assets', []):
+                    if asset['name'] == BINARY_NAME:
+                        download_url = asset['browser_download_url']
+                        break
+                if not download_url:
+                    with _update_lock:
+                        _update_status = {'state': 'error', 'progress': 0, 'message': 'No binary found in release'}
+                    return
+
+                can_self = os.access(EXE_DIR, os.W_OK)
+                install_dir = EXE_DIR if can_self else Path.home() / '.nexcampus'
+                install_dir.mkdir(parents=True, exist_ok=True)
+                new_path = install_dir / (BINARY_NAME + '.new')
+                target_path = install_dir / BINARY_NAME
+
+                with _update_lock:
+                    _update_status['message'] = 'Downloading ' + BINARY_NAME + '...'
+
+                import subprocess as sp
+                sp.run(['curl', '-#', '-L', '-o', str(new_path), download_url], timeout=600, check=True)
+
+                if not new_path.exists() or new_path.stat().st_size < 10000000:
+                    with _update_lock:
+                        _update_status = {'state': 'error', 'progress': 0, 'message': 'Download failed (file too small)'}
+                    return
+
+                new_path.chmod(0o755)
+                total_mb = new_path.stat().st_size // 1048576
+
+                if can_self and PLATFORM == 'linux':
+                    with _update_lock:
+                        _update_status = {'state': 'installing', 'progress': 95, 'message': 'Installing... (' + str(total_mb) + 'MB)'}
+                    restart_script = install_dir / 'restart.sh'
+                    restart_script.write_text(
+                        '#!/bin/bash\n'
+                        f'sleep 1\n'
+                        f'mv -f "{new_path}" "{target_path}"\n'
+                        f'chmod +x "{target_path}"\n'
+                        f'nohup "{target_path}" > /dev/null 2>&1 &\n'
+                        f'rm -f "{restart_script}"\n'
+                    )
+                    restart_script.chmod(0o755)
+                    sp.Popen(['bash', str(restart_script)], start_new_session=True)
+                    with _update_lock:
+                        _update_status = {'state': 'installed', 'progress': 100, 'message': 'Restarting...'}
+                    time.sleep(1)
+                    os._exit(0)
+                elif can_self:
+                    new_path.replace(target_path)
+                    with _update_lock:
+                        _update_status = {'state': 'installed', 'progress': 100, 'message': 'Installed! Restart to apply. (' + str(total_mb) + 'MB)'}
+                else:
+                    with _update_lock:
+                        _update_status = {'state': 'downloaded', 'progress': 100, 'message': 'Saved to ' + str(new_path) + ' (' + str(total_mb) + 'MB). Run: mv ' + str(new_path) + ' ' + str(target_path) + ' && ' + str(target_path)}
+            except Exception as e:
+                with _update_lock:
+                    _update_status = {'state': 'error', 'progress': 0, 'message': str(e)}
+
+        threading.Thread(target=_do_install, daemon=True).start()
+        self.send_json({'success': True, 'message': 'Download started'})
+
+    def api_update_status(self):
+        global _update_status
+        with _update_lock:
+            s = dict(_update_status)
+        self.send_json(s)
 
     # --- Code Lab API ---
 

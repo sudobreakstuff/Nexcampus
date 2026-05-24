@@ -120,18 +120,52 @@ async function checkForUpdates() {
   }
 }
 
+var _updatePollTimer = null;
+
 function downloadUpdate() {
   var dlBtn = $('btn-download-update');
   var status = $('update-status');
+  var result = $('update-result');
   if (dlBtn) dlBtn.disabled = true;
   if (dlBtn) dlBtn.textContent = 'Installing...';
-  if (status) status.textContent = 'Downloading update...';
+  if (status) status.textContent = 'Starting download...';
+  if (result) result.innerHTML = '';
+
   fetch('/api/update/install', {method: 'POST'})
     .then(function(r) { return r.json(); })
     .then(function(data) {
       if (data.success) {
-        if (status) status.textContent = 'Update installed! Restarting...';
-        // App restarts automatically from the server side
+        if (status) status.textContent = 'Downloading update...';
+        // Poll for status
+        if (_updatePollTimer) clearInterval(_updatePollTimer);
+        _updatePollTimer = setInterval(function() {
+          fetch('/api/update/status')
+            .then(function(r) { return r.json(); })
+            .then(function(s) {
+              if (result) result.innerHTML = '<div style="color:var(--teal);font-size:11px">' + escapeHtml(s.message || s.state) + '</div>';
+              if (s.state === 'installed') {
+                if (status) status.textContent = 'Update complete!';
+                if (result) result.innerHTML = '<div style="color:var(--teal);font-size:11px">' + escapeHtml(s.message) + '</div>';
+                clearInterval(_updatePollTimer);
+                _updatePollTimer = null;
+                if (dlBtn) dlBtn.style.display = 'none';
+              } else if (s.state === 'error') {
+                if (status) status.textContent = 'Update failed';
+                if (result) result.innerHTML = '<div style="color:var(--red);font-size:11px">' + escapeHtml(s.message) + '</div>';
+                clearInterval(_updatePollTimer);
+                _updatePollTimer = null;
+                if (dlBtn) dlBtn.disabled = false;
+                if (dlBtn) dlBtn.textContent = 'Retry Update';
+              } else if (s.state === 'downloaded') {
+                if (status) status.textContent = 'Downloaded — manual install needed';
+                clearInterval(_updatePollTimer);
+                _updatePollTimer = null;
+                if (dlBtn) dlBtn.disabled = false;
+                if (dlBtn) dlBtn.textContent = 'Download Update';
+              }
+            })
+            .catch(function() {});
+        }, 1500);
       } else {
         if (status) status.textContent = 'Update failed: ' + (data.error || 'unknown');
         if (dlBtn) dlBtn.disabled = false;
