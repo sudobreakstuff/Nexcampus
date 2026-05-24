@@ -75,23 +75,57 @@ FONTS_DIR.mkdir(exist_ok=True)
 TEMPLATES_DIR.mkdir(exist_ok=True)
 BIBLIOGRAPHY_DIR.mkdir(exist_ok=True)
 
-# Create desktop shortcut on Windows (frozen/onefile)
-if getattr(sys, 'frozen', False) and sys.platform == 'win32':
+# Create desktop shortcut / .desktop entry
+if getattr(sys, 'frozen', False):
     try:
-        desktop = Path(os.environ.get('USERPROFILE', '')) / 'Desktop' / 'NexCampus.lnk'
-        if not desktop.exists():
+        if sys.platform == 'win32':
             import subprocess
-            ps_script = f'''
-$ws = New-Object -ComObject WScript.Shell
-$s = $ws.CreateShortcut("{desktop}")
-$s.TargetPath = "{sys.executable}"
-$s.WorkingDirectory = "{EXE_DIR}"
-$s.Description = "NexCampus - Offline Student Toolkit"
-$s.Save()
-'''
-            subprocess.run(['powershell', '-NoProfile', '-Command', ps_script],
-                capture_output=True, timeout=10)
-    except:
+            # Try standard Desktop and OneDrive Desktop
+            for desktop_dir in [
+                Path(os.environ.get('USERPROFILE', '')) / 'Desktop',
+                Path(os.environ.get('USERPROFILE', '')) / 'OneDrive' / 'Desktop',
+                Path(os.environ.get('HOMEDRIVE', 'C:') + os.environ.get('HOMEPATH', '')) / 'Desktop',
+            ]:
+                if desktop_dir.exists():
+                    break
+            shortcut = desktop_dir / 'NexCampus.lnk'
+            if not shortcut.exists():
+                ps_script = (
+                    '$ws = New-Object -ComObject WScript.Shell; '
+                    f'$s = $ws.CreateShortcut("{shortcut}"); '
+                    f'$s.TargetPath = "{sys.executable}"; '
+                    f'$s.WorkingDirectory = "{EXE_DIR}"; '
+                    '$s.Description = "NexCampus - Offline Student Toolkit"; '
+                    '$s.Save()'
+                )
+                subprocess.run(['powershell', '-NoProfile', '-Command', ps_script],
+                    capture_output=True, timeout=10)
+        else:
+            # Linux .desktop entry
+            apps_dir = Path.home() / '.local' / 'share' / 'applications'
+            apps_dir.mkdir(parents=True, exist_ok=True)
+            desktop_file = apps_dir / 'nexcampus.desktop'
+            icon_dir = Path.home() / '.local' / 'share' / 'nexcampus'
+            icon_dir.mkdir(parents=True, exist_ok=True)
+            icon_path = icon_dir / 'icon.png'
+            # Copy icon from bundle to permanent location
+            icon_src = STATIC_DIR / 'icons' / 'icon-512.png'
+            if icon_src.exists() and not icon_path.exists():
+                import shutil
+                shutil.copy2(icon_src, icon_path)
+            if not desktop_file.exists():
+                desktop_file.write_text(
+                    '[Desktop Entry]\n'
+                    'Type=Application\n'
+                    'Name=NexCampus\n'
+                    f'Comment=NexCampus - Offline Student Toolkit\n'
+                    f'Exec={sys.executable}\n'
+                    f'Icon={icon_path}\n'
+                    'Categories=Education;Office;\n'
+                    'Terminal=false\n'
+                )
+                desktop_file.chmod(0o755)
+    except Exception:
         pass
 
 def load_version():
@@ -480,16 +514,26 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
         if not code:
             self.send_json({'error': 'No code provided', 'success': False})
             return
-        import subprocess, tempfile, textwrap
+        import subprocess, tempfile, textwrap, shutil
         result = {'stdout': '', 'stderr': '', 'exit_code': -1, 'success': True}
         try:
             if language == 'python':
+                # In PyInstaller onefile, sys.executable is the app binary, not python
+                if getattr(sys, 'frozen', False):
+                    python = shutil.which('python3') or shutil.which('python')
+                    if not python:
+                        result['stderr'] = 'Python is not installed on this system.'
+                        result['exit_code'] = -1
+                        self.send_json(result)
+                        return
+                else:
+                    python = sys.executable
                 with tempfile.TemporaryDirectory() as tmp:
                     fpath = os.path.join(tmp, 'script.py')
                     with open(fpath, 'w') as f:
                         f.write(code)
                     p = subprocess.run(
-                        [sys.executable, fpath],
+                        [python, fpath],
                         capture_output=True, timeout=8, text=True,
                         cwd=tmp
                     )
@@ -497,17 +541,22 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
                     result['stderr'] = p.stderr[-10000:]
                     result['exit_code'] = p.returncode
             elif language == 'javascript':
-                try:
-                    p = subprocess.run(
-                        ['node', '-e', code],
-                        capture_output=True, timeout=8, text=True
-                    )
-                    result['stdout'] = p.stdout[-10000:]
-                    result['stderr'] = p.stderr[-10000:]
-                    result['exit_code'] = p.returncode
-                except FileNotFoundError:
-                    result['stderr'] = 'Node.js is not installed on this system.'
+                node = shutil.which('node')
+                if not node:
+                    result['stderr'] = 'Node.js is not installed. Install it from https://nodejs.org or: sudo apt install nodejs'
                     result['exit_code'] = -1
+                else:
+                    try:
+                        p = subprocess.run(
+                            ['node', '-e', code],
+                            capture_output=True, timeout=8, text=True
+                        )
+                        result['stdout'] = p.stdout[-10000:]
+                        result['stderr'] = p.stderr[-10000:]
+                        result['exit_code'] = p.returncode
+                    except Exception as e:
+                        result['stderr'] = str(e)
+                        result['exit_code'] = -1
             elif language == 'bash':
                 p = subprocess.run(
                     ['bash', '-c', code],

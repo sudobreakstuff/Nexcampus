@@ -1664,11 +1664,8 @@ function solarResize() {
   var c = SOLAR.canvas;
   if (!c) return;
   SOLAR.dpr = window.devicePixelRatio || 1;
-  var rect = c.getBoundingClientRect();
-  SOLAR.displayW = rect.width;
-  SOLAR.displayH = rect.height;
-  c.width = Math.round(rect.width * SOLAR.dpr);
-  c.height = Math.round(rect.height * SOLAR.dpr);
+  c.width = Math.round(SOLAR.w * SOLAR.dpr);
+  c.height = Math.round(SOLAR.h * SOLAR.dpr);
 }
 
 function initSolarSystem() {
