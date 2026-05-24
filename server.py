@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import http.server, json, sys, os, threading, socket, urllib.request, base64, re, glob, random
+import http.server, json, sys, os, threading, socket, urllib.request, base64, re, glob, random, signal
 from pathlib import Path
 from io import BytesIO
 
@@ -1225,7 +1225,7 @@ def open_window(url):
             if edge:
                 subprocess.Popen([edge, f'--app={url}'],
                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                return True
+                return False
             import webbrowser
             webbrowser.open(url)
             return False
@@ -1244,14 +1244,32 @@ def open_window(url):
             try:
                 subprocess.Popen([browser, f'--app={url}', '--no-sandbox'],
                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                return True
+                return False
             except FileNotFoundError:
                 continue
         webbrowser.open(url)
         return False
 
+def _kill_stale():
+    pid_file = Path('/tmp/nexcampus.pid')
+    try:
+        if pid_file.exists():
+            old = int(pid_file.read_text().strip())
+            if old != os.getpid():
+                try:
+                    os.kill(old, signal.SIGTERM)
+                    time.sleep(0.3)
+                except (ProcessLookupError, PermissionError):
+                    pass
+        pid_file.write_text(str(os.getpid()))
+    except:
+        pass
+    import atexit
+    atexit.register(lambda: pid_file.unlink(missing_ok=True))
+
 def main():
     import traceback
+    _kill_stale()
     STARTUP_LOG = Path.home() / '.nexcampus-startup.log'
     try:
         port = find_port(8080)
@@ -1271,7 +1289,14 @@ def main():
         print(f'[NexCampus] Server: {url}')
         print('[NexCampus] Made by Shahid Singh | NexCore Systems and Technologies')
 
-        open_window(url)
+        ok = open_window(url)
+        if not ok:
+            print('[NexCampus] Opened in browser. Server running in background.')
+            print('[NexCampus] Press Ctrl+C to stop.')
+            try:
+                while True: time.sleep(3600)
+            except KeyboardInterrupt:
+                print('\n[NexCampus] Shutting down...')
     except Exception as e:
         tb = traceback.format_exc()
         print(f'[NexCampus] Fatal error: {e}\n{tb}')
