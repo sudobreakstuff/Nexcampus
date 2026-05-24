@@ -510,7 +510,11 @@ function clSwitchTab(tab) {
   qsa('.cl-sb-btn').forEach(function(btn) { btn.classList.remove('active'); });
   var activeContent = $('cl-' + tab);
   if (activeContent) activeContent.style.display = 'block';
-  // Init challenges if first time
+  // Highlight the active tab button
+  qsa('.cl-sb-btn').forEach(function(btn) {
+    var onclick = btn.getAttribute('onclick') || '';
+    if (onclick.indexOf("'" + tab + "'") !== -1) btn.classList.add('active');
+  });
   if (tab === 'challenges' && !window._clChallengesInit) {
     clInitChallenges();
     window._clChallengesInit = true;

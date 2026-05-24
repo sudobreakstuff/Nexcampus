@@ -2399,15 +2399,18 @@ function initMindMap() {
 
 function mmDraw() {
   var ctx = MM.ctx, c = MM.canvas;
-  c.width = c.width;
-  ctx.fillStyle = 'var(--bg)';
+  var style = getComputedStyle(document.documentElement);
+  var bg = style.getPropertyValue('--bg').trim() || '#0a0e14';
+  var border = style.getPropertyValue('--border').trim() || '#1e2a3a';
+  var fg = style.getPropertyValue('--fg').trim() || '#d4dcec';
+  ctx.fillStyle = bg;
   ctx.fillRect(0, 0, c.width, c.height);
   // Draw connections
   MM.nodes.forEach(function(n) {
     if (n.parent !== null) {
       var parent = MM.nodes.find(function(p) { return p.id === n.parent; });
       if (parent) {
-        ctx.strokeStyle = 'var(--border)';
+        ctx.strokeStyle = border;
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(parent.x, parent.y);

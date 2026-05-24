@@ -86,24 +86,61 @@ function showNotification(msg, duration, type) {
 document.addEventListener('DOMContentLoaded', function() {
   var search = $('sidebar-search');
   if (!search) return;
+
+  // Build tool map: label -> {tab, tool}
+  var toolMap = [];
+  qsa('.nb-tab-btn').forEach(function(btn) {
+    var tool = btn.getAttribute('data-nb-tool');
+    if (tool) toolMap.push({ label: btn.textContent.trim(), tab: 'notebook', tool: tool, el: btn });
+  });
+  qsa('[data-tt-tool]').forEach(function(btn) {
+    var tool = btn.getAttribute('data-tt-tool');
+    if (tool) toolMap.push({ label: btn.textContent.trim(), tab: 'texttools', tool: tool, el: btn });
+  });
+  qsa('.nav-btn[data-tab]').forEach(function(btn) {
+    var tab = btn.getAttribute('data-tab');
+    if (tab) toolMap.push({ label: btn.textContent.trim(), tab: tab, tool: null, el: btn });
+  });
+
   search.addEventListener('input', function() {
     var q = this.value.toLowerCase();
-    qsa('.nav-btn, .nb-tab-btn, .cl-sidebar-btn').forEach(function(btn) {
+    qsa('.nav-btn, .nb-tab-btn, .cl-sb-btn').forEach(function(btn) {
       var text = (btn.textContent || '').toLowerCase();
-      var dataTab = (btn.getAttribute('data-tab') || '').toLowerCase();
-      var dataTool = (btn.getAttribute('data-nb-tool') || '').toLowerCase();
-      var match = !q || text.indexOf(q) !== -1 || dataTab.indexOf(q) !== -1 || dataTool.indexOf(q) !== -1;
-      btn.style.display = match ? '' : 'none';
-    });
-    // Show/hide section labels
-    qsa('.nb-tab-section-label, .cl-section-label').forEach(function(el) {
-      var parent = el.closest('.nb-tab-container, .cl-sidebar');
-      if (!parent) return;
-      var visible = parent.querySelectorAll('.nb-tab-btn:not([style*="display: none"]), .cl-sidebar-btn:not([style*="display: none"])');
-      el.style.display = visible.length > 0 ? '' : 'none';
+      var match = !q || text.indexOf(q) !== -1;
+      btn.style.opacity = match ? '' : '0.3';
     });
   });
+
   search.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') { this.value = ''; this.dispatchEvent(new Event('input')); this.blur(); }
+    if (e.key === 'Enter') {
+      var q = this.value.toLowerCase().trim();
+      if (!q) return;
+      // Find best match
+      var best = null;
+      for (var i = 0; i < toolMap.length; i++) {
+        if (toolMap[i].label.toLowerCase().indexOf(q) !== -1) {
+          best = toolMap[i]; break;
+        }
+      }
+      if (!best) {
+        for (var i = 0; i < toolMap.length; i++) {
+          if (toolMap[i].label.toLowerCase().indexOf(q.charAt(0)) !== -1) {
+            best = toolMap[i]; break;
+          }
+        }
+      }
+      if (best) {
+        // Switch to the correct tab
+        switchTab(best.tab);
+        // Then switch to the specific tool if applicable
+        if (best.tool) {
+          if (best.tab === 'notebook') setTimeout(function() { switchNbTool(best.tool); }, 100);
+          else if (best.tab === 'texttools') setTimeout(function() { switchTtTool(best.tool); }, 100);
+        }
+        this.blur();
+        showNotification('Navigated to: ' + best.label, 1500, 'info');
+      }
+    }
   });
 });
