@@ -1,6 +1,6 @@
 {
-  "version": "2.4.1",
-  "name": "NexCampus v2.4.1",
+  "version": "2.4.2",
+  "name": "NexCampus v2.4.2",
   "update_url": "",
   "changelog": [
     "Code Lab tab switching fixed \u2014 uses toggle for active state",
