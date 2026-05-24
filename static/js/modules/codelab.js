@@ -701,6 +701,11 @@ function clRunCode() {
 
   var lang = langSelect ? langSelect.value : 'python';
 
+  if (lang === 'javascript') {
+    clRunJavaScript(code, output);
+    return;
+  }
+
   if (runBtn) {
     runBtn.disabled = true;
     runBtn.textContent = 'Running...';
@@ -757,6 +762,38 @@ function clRunCode() {
     if (cancelBtn) cancelBtn.style.display = 'none';
     _clAbortController = null;
   });
+}
+
+function clRunJavaScript(code, output) {
+  output.innerHTML = '<div style="color:var(--fg-dim);font-size:11px">Running...</div>';
+  var logs = [];
+  var errors = [];
+  var _log = console.log;
+  var _error = console.error;
+  var _warn = console.warn;
+  try {
+    console.log = function() { logs.push(Array.prototype.slice.call(arguments).map(function(a) { return typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a); }).join(' ')); };
+    console.error = function() { errors.push(Array.prototype.slice.call(arguments).join(' ')); };
+    console.warn = function() { logs.push('[warn] ' + Array.prototype.slice.call(arguments).join(' ')); };
+    var result = eval(code);
+    if (result !== undefined) logs.push(String(result));
+  } catch(e) {
+    errors.push(e.message || String(e));
+  } finally {
+    console.log = _log;
+    console.error = _error;
+    console.warn = _warn;
+  }
+  var html = '';
+  if (logs.length) {
+    html += '<div style="color:var(--teal);font-size:10px;margin-bottom:4px">▸ output</div>'
+      + '<pre style="margin:0 0 6px;font-size:11px;color:var(--fg);line-height:1.5;white-space:pre-wrap;word-break:break-word">' + escapeHtml(logs.join('\n')) + '</pre>';
+  }
+  if (errors.length) {
+    html += '<div style="color:var(--amber);font-size:10px;margin-bottom:4px">▸ error</div>'
+      + '<pre style="margin:0;font-size:11px;color:var(--amber);line-height:1.5;white-space:pre-wrap;word-break:break-word">' + escapeHtml(errors.join('\n')) + '</pre>';
+  }
+  output.innerHTML = html || '<div style="color:var(--fg-dim);font-size:11px">✓ Done (no output)</div>';
 }
 
 function clCancelRun() {

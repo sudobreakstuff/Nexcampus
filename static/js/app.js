@@ -144,8 +144,7 @@ function downloadUpdate() {
             .then(function(s) {
               if (result) result.innerHTML = '<div style="color:var(--teal);font-size:11px">' + escapeHtml(s.message || s.state) + '</div>';
               if (s.state === 'installed') {
-                if (status) status.textContent = 'Update complete!';
-                if (result) result.innerHTML = '<div style="color:var(--teal);font-size:11px">' + escapeHtml(s.message) + '</div>';
+                if (status) status.textContent = s.message || 'Update complete!';
                 clearInterval(_updatePollTimer);
                 _updatePollTimer = null;
                 if (dlBtn) dlBtn.style.display = 'none';
@@ -156,12 +155,6 @@ function downloadUpdate() {
                 _updatePollTimer = null;
                 if (dlBtn) dlBtn.disabled = false;
                 if (dlBtn) dlBtn.textContent = 'Retry Update';
-              } else if (s.state === 'downloaded') {
-                if (status) status.textContent = 'Downloaded — manual install needed';
-                clearInterval(_updatePollTimer);
-                _updatePollTimer = null;
-                if (dlBtn) dlBtn.disabled = false;
-                if (dlBtn) dlBtn.textContent = 'Download Update';
               }
             })
             .catch(function() {});

@@ -449,10 +449,11 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
                     return
 
                 can_self = os.access(EXE_DIR, os.W_OK)
-                install_dir = EXE_DIR if can_self else Path.home() / '.nexcampus'
-                install_dir.mkdir(parents=True, exist_ok=True)
-                new_path = install_dir / (BINARY_NAME + '.new')
-                target_path = install_dir / BINARY_NAME
+                # Always install to user-writable directory for seamless updates
+                user_dir = Path.home() / '.nexcampus'
+                user_dir.mkdir(parents=True, exist_ok=True)
+                new_path = user_dir / (BINARY_NAME + '.new')
+                target_path = user_dir / BINARY_NAME
 
                 with _update_lock:
                     _update_status['message'] = 'Downloading ' + BINARY_NAME + '...'
@@ -467,11 +468,32 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
 
                 new_path.chmod(0o755)
                 total_mb = new_path.stat().st_size // 1048576
+                has_restarted = False
 
-                if can_self and PLATFORM == 'linux':
+                if PLATFORM == 'linux':
                     with _update_lock:
                         _update_status = {'state': 'installing', 'progress': 95, 'message': 'Installing... (' + str(total_mb) + 'MB)'}
-                    restart_script = install_dir / 'restart.sh'
+                    # Update desktop entry to point to user dir
+                    desktop_file = Path.home() / '.local' / 'share' / 'applications' / 'nexcampus.desktop'
+                    icon_path = user_dir / 'icon.png'
+                    icon_src = STATIC_DIR / 'icons' / 'icon-512.png'
+                    if icon_src.exists() and not icon_path.exists():
+                        import shutil
+                        shutil.copy2(icon_src, icon_path)
+                    desktop_file.parent.mkdir(parents=True, exist_ok=True)
+                    desktop_file.write_text(
+                        '[Desktop Entry]\n'
+                        'Type=Application\n'
+                        'Name=NexCampus\n'
+                        'Comment=NexCampus - Offline Student Toolkit\n'
+                        f'Exec={target_path}\n'
+                        f'Icon={icon_path}\n'
+                        'Categories=Education;Office;\n'
+                        'Terminal=false\n'
+                    )
+                    desktop_file.chmod(0o755)
+                    # Write restart script
+                    restart_script = user_dir / 'restart.sh'
                     restart_script.write_text(
                         '#!/bin/bash\n'
                         f'sleep 1\n'
@@ -482,17 +504,17 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
                     )
                     restart_script.chmod(0o755)
                     sp.Popen(['bash', str(restart_script)], start_new_session=True)
-                    with _update_lock:
-                        _update_status = {'state': 'installed', 'progress': 100, 'message': 'Restarting...'}
-                    time.sleep(1)
-                    os._exit(0)
-                elif can_self:
-                    new_path.replace(target_path)
-                    with _update_lock:
-                        _update_status = {'state': 'installed', 'progress': 100, 'message': 'Installed! Restart to apply. (' + str(total_mb) + 'MB)'}
+                    has_restarted = True
                 else:
-                    with _update_lock:
-                        _update_status = {'state': 'downloaded', 'progress': 100, 'message': 'Saved to ' + str(new_path) + ' (' + str(total_mb) + 'MB). Run: mv ' + str(new_path) + ' ' + str(target_path) + ' && ' + str(target_path)}
+                    # Windows: replace in place
+                    new_path.replace(target_path)
+
+                with _update_lock:
+                    _update_status = {'state': 'installed', 'progress': 100, 'message': 'Installed! (' + str(total_mb) + 'MB)'}
+
+                if has_restarted:
+                    time.sleep(0.5)
+                    os._exit(0)
             except Exception as e:
                 with _update_lock:
                     _update_status = {'state': 'error', 'progress': 0, 'message': str(e)}

@@ -1,21 +1,14 @@
 {
-  "version": "2.3.3",
-  "name": "NexCampus v2.3.3",
+  "version": "2.3.4",
+  "name": "NexCampus v2.3.4",
   "update_url": "",
   "changelog": [
-    "Code runner fix — no longer crashes the app (sys.executable bug on PyInstaller)",
+    "Self-update now fully automatic — installs to ~/.nexcampus/, updates desktop entry, restarts seamlessly",
+    "No more manual steps or sudo needed for updates",
+    "Code runner fix — uses system python3 instead of app binary (no more crashes)",
     "HiDPI Solar System — crisp rendering, hover glow, orbit trails",
-    "In-app self-update with real-time progress polling",
-    "Desktop shortcut now created on both Linux and Windows",
-    "Better code runner error messages for missing interpreters",
-    "JavaScript/Node.js detection with install instructions",
-    "Canvas aspect-ratio fix prevents stretching distortion",
-    "Solar System overhaul: zoom/pan, Milky Way, asteroid belt, Saturn rings, pulsing Sun, dwarf planets, tabbed info, 34 facts",
-    "Code Lab: 10 Python guides, code runner, 85-term dictionary, 11 projects",
-    "Inline Find/Replace bar in Notes (Ctrl+F)",
-    "Styled notifications (error/success/info)",
-    "Iron Man theme",
-    "Startup crash fixes, stale process cleanup",
-    "Uninstall scripts (Linux + Windows)"
+    "Desktop shortcut auto-created on Linux (~/.local/share/applications/) and Windows",
+    "Better code runner error messages with install instructions",
+    "Canvas aspect-ratio fix, Iron Man theme, styled notifications, Code Lab, uninstall scripts"
   ]
 }
