@@ -2399,10 +2399,11 @@ function initMindMap() {
 
 function mmDraw() {
   var ctx = MM.ctx, c = MM.canvas;
+  if (!ctx || !c) return;
   var style = getComputedStyle(document.documentElement);
   var bg = style.getPropertyValue('--bg').trim() || '#0a0e14';
   var border = style.getPropertyValue('--border').trim() || '#1e2a3a';
-  var fg = style.getPropertyValue('--fg').trim() || '#d4dcec';
+  ctx.clearRect(0, 0, c.width, c.height);
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, c.width, c.height);
   // Draw connections
@@ -2421,18 +2422,23 @@ function mmDraw() {
   });
   // Draw nodes
   MM.nodes.forEach(function(n) {
-    var r = 30;
+    var r = 28;
+    ctx.shadowColor = 'rgba(0,0,0,0.5)';
+    ctx.shadowBlur = 8;
     ctx.fillStyle = n.color || '#4fc3f7';
     ctx.beginPath();
     ctx.arc(n.x, n.y, r, 0, Math.PI*2);
     ctx.fill();
+    ctx.shadowBlur = 0;
     if (MM.selected === n.id) {
       ctx.strokeStyle = '#fff';
       ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, r + 3, 0, Math.PI*2);
       ctx.stroke();
     }
     ctx.fillStyle = '#000';
-    ctx.font = '10px sans-serif';
+    ctx.font = 'bold 10px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     var label = n.label.length > 12 ? n.label.slice(0, 10) + '..' : n.label;
