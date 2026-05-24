@@ -107,7 +107,7 @@ function genCitation() {
   var author = $('cit-author') ? $('cit-author').value.trim() : '';
   var title = $('cit-title') ? $('cit-title').value.trim() : '';
   var year = $('cit-year') ? $('cit-year').value.trim() : '';
-  if (!title) { alert('Title is required.'); return; }
+  if (!title) { showNotification('Title is required.', 3000, 'error'); return; }
   function fmtAuthor(s, fallback) {
     if (!author) return fallback;
     var parts = author.replace(/,?\s*(jr|sr|ii|iii|iv)\.?$/i, '').split(',');
@@ -218,7 +218,7 @@ TOOL_INIT.readability = function() {
 
 function calcReadability() {
   var text = $('rd-text') ? $('rd-text').value.trim() : '';
-  if (!text) { alert('Enter or paste some text.'); return; }
+  if (!text) { showNotification('Enter or paste some text.', 3000, 'error'); return; }
   var sentences = text.split(/[.!?]+/).filter(function(s) { return s.trim().length > 0; }).length || 1;
   var words = text.trim().split(/\s+/).length || 1;
   var chars = text.replace(/\s/g, '').length;
@@ -293,7 +293,7 @@ function doMerge() {
   var cbs = document.querySelectorAll('.merge-cb:checked');
   var names = [];
   cbs.forEach(function(cb) { names.push(cb.value); });
-  if (!names.length) { alert('Select at least one document.'); return; }
+  if (!names.length) { showNotification('Select at least one document.', 3000, 'error'); return; }
   var result = $('merge-result');
   if (result) { result.innerHTML = '<div style="color:var(--fg-dim)">Merging...</div>'; result.classList.add('visible'); }
   fetch('/api/notebook/merge', {
@@ -379,7 +379,7 @@ function genVocab() {
     if (data.success && data.words && data.words.length) {
       var html = '<div style="font-size:10px;color:var(--fg-dim);margin-bottom:6px">' + data.total_words + ' total words, ' + data.unique_words + ' unique. Showing ' + data.words.length + ' vocabulary words:</div>';
       data.words.forEach(function(w) {
-        html += '<span class="vocab-word" style="display:inline-block;padding:4px 8px;margin:3px;background:var(--bg-light);border:1px solid var(--border);border-radius:4px;font-size:11px;cursor:pointer" onclick="lookupWord(this.textContent)">' + escapeHtml(w) + '</span>';
+        html += '<span class="vocab-word" style="display:inline-block;padding:4px 8px;margin:3px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;font-size:11px;cursor:pointer" onclick="lookupWord(this.textContent)">' + escapeHtml(w) + '</span>';
       });
       if (result) { result.innerHTML = html; }
     } else {
@@ -473,7 +473,7 @@ TOOL_INIT.diff = function() {
 function doDiff() {
   var text1 = $('diff-text1') ? $('diff-text1').value : '';
   var text2 = $('diff-text2') ? $('diff-text2').value : '';
-  if (!text1 || !text2) { alert('Enter text in both fields.'); return; }
+  if (!text1 || !text2) { showNotification('Enter text in both fields.', 3000, 'error'); return; }
   var result = $('diff-result');
   if (result) { result.innerHTML = '<div style="color:var(--fg-dim)">Comparing...</div>'; result.classList.add('visible'); }
   fetch('/api/notebook/diff', {
@@ -486,11 +486,11 @@ function doDiff() {
       var html = '';
       if (data.diff) {
         html += '<div class="tool-section-title" style="margin:0 0 6px">Unified Diff</div>'
-          + '<pre style="background:var(--bg-light);border:1px solid var(--border);border-radius:4px;padding:8px;font-size:10px;overflow-x:auto;max-height:200px;color:var(--fg-dim)">' + escapeHtml(data.diff) + '</pre>';
+          + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px;font-size:10px;overflow-x:auto;max-height:200px;color:var(--fg-dim)">' + escapeHtml(data.diff) + '</pre>';
       }
       if (data.html_diff) {
         html += '<div class="tool-section-title" style="margin:0 0 6px;margin-top:10px">Side-by-Side View</div>'
-          + '<div style="font-size:10px;overflow-x:auto;background:var(--bg-light);border:1px solid var(--border);border-radius:4px;padding:4px">' + data.html_diff + '</div>';
+          + '<div style="font-size:10px;overflow-x:auto;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:4px">' + data.html_diff + '</div>';
       }
       if (result) { result.innerHTML = html; }
     } else {
@@ -517,7 +517,7 @@ function loadBibList() {
     }
     var html = '';
     _bibRefs.forEach(function(r, i) {
-      html += '<div class="bib-item" style="padding:8px;margin-bottom:4px;background:var(--bg-light);border:1px solid var(--border);border-radius:4px;font-size:10px;line-height:1.5">'
+      html += '<div class="bib-item" style="padding:8px;margin-bottom:4px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;font-size:10px;line-height:1.5">'
         + '<div style="display:flex;justify-content:space-between;align-items:start">'
         + '<div style="flex:1"><strong>' + escapeHtml(r.title || 'Untitled') + '</strong>' + (r.author ? ' by ' + escapeHtml(r.author) : '') + (r.year ? ' (' + escapeHtml(r.year) + ')' : '') + '</div>'
         + '<div style="display:flex;gap:4px">'
@@ -561,7 +561,7 @@ function saveBibEntry(idx) {
     var ePublisher = document.getElementById('bib-publisher');
     var eYear = document.getElementById('bib-year');
     if (!eType || !eAuthor || !eTitle || !ePublisher || !eYear) {
-      alert('Form elements not found. Make sure the modal is open.');
+      showNotification('Form elements not found. Make sure the modal is open.', 4000, 'error');
       return;
     }
     var entry = {
@@ -571,17 +571,17 @@ function saveBibEntry(idx) {
       publisher: ePublisher.value.trim() || '',
       year: eYear.value.trim() || ''
     };
-    if (!entry.title) { alert('Title is required.'); return; }
+    if (!entry.title) { showNotification('Title is required.', 3000, 'error'); return; }
     if (idx >= 0 && idx < _bibRefs.length) { _bibRefs[idx] = entry; }
     else { _bibRefs.push(entry); }
     apiPost('/bibliography/save', {references: _bibRefs}).then(function() {
       loadBibList();
       closeModal();
     }).catch(function(err) {
-      alert('Error saving reference: ' + (err.message || err));
+      showNotification('Error saving reference: ' + (err.message || err), 5000, 'error');
     });
   } catch(e) {
-    alert('Error saving reference: ' + e.message);
+    showNotification('Error saving reference: ' + e.message, 5000, 'error');
   }
 }
 
@@ -594,12 +594,12 @@ function deleteBibEntry(idx) {
 }
 
 function exportBib() {
-  if (!_bibRefs.length) { alert('No references to export.'); return; }
+  if (!_bibRefs.length) { showNotification('No references to export.', 3000, 'error'); return; }
   var lines = _bibRefs.map(function(r) {
     var a = r.author || '', t = r.title || '', p = r.publisher || '', y = r.year || '';
     return (a ? a + '. ' : '') + '<i>' + t + '</i>. ' + p + (y ? ', ' + y : '') + '.';
   });
-  var html = '<pre style="background:var(--bg-light);border:1px solid var(--border);border-radius:4px;padding:8px;font-size:10px;line-height:1.8;overflow-x:auto">'
+  var html = '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px;font-size:10px;line-height:1.8;overflow-x:auto">'
     + lines.join('\n') + '</pre>'
     + '<button class="nb-gen-btn" onclick="copyBib()" style="margin-top:6px">Copy to Clipboard</button>';
   showModal('Bibliography (MLA)', html);
@@ -611,7 +611,7 @@ function copyBib() {
     var text = el.textContent || el.innerText || '';
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(function() {
-        alert('Bibliography copied to clipboard!');
+        showNotification('Bibliography copied to clipboard!', 2000, 'success');
       }).catch(function() {
         fallbackCopy(text);
       });
@@ -627,8 +627,8 @@ function fallbackCopy(text) {
   ta.style.position = 'fixed'; ta.style.opacity = '0';
   document.body.appendChild(ta);
   ta.select();
-  try { document.execCommand('copy'); alert('Bibliography copied to clipboard!'); }
-  catch(e) { alert('Press Ctrl+C to copy from the pre block.'); }
+  try { document.execCommand('copy'); showNotification('Bibliography copied to clipboard!', 2000, 'success'); }
+  catch(e) { showNotification('Press Ctrl+C to copy from the pre block.', 4000, 'info'); }
   document.body.removeChild(ta);
 }
 
@@ -1759,7 +1759,7 @@ function lookupDictionary() {
   var input = $('dict-input');
   if (!input) return;
   var word = input.value.trim().toLowerCase();
-  if (!word) { alert('Enter a word to look up.'); return; }
+  if (!word) { showNotification('Enter a word to look up.', 3000, 'error'); return; }
   fetchDictDefinition(word);
 }
 

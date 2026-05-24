@@ -256,13 +256,24 @@
                 <div class="nt-group">
                   <button class="nt-btn nt-btn-icon" onclick="execCmd('superscript')" title="Superscript">x²</button>
                   <button class="nt-btn nt-btn-icon" onclick="execCmd('subscript')" title="Subscript">x₂</button>
-                  <button class="nt-btn" onclick="notesFindReplace()" title="Find and Replace">Find</button>
+                  <button class="nt-btn" onclick="toggleFindBar()" title="Find and Replace (Ctrl+F)">Find</button>
                 </div>
                 <span class="nt-divider"></span>
                 <div class="nt-group">
                   <button class="nt-btn nt-btn-icon" onclick="execCmd('undo')" title="Undo (Ctrl+Z)">↩</button>
                   <button class="nt-btn nt-btn-icon" onclick="execCmd('redo')" title="Redo (Ctrl+Shift+Z)">↪</button>
                 </div>
+              </div>
+              <div id="notes-findbar" style="display:none;padding:6px 8px;background:var(--bg2);border-bottom:1px solid var(--border);gap:6px;align-items:center;font-size:11px">
+                <input type="text" id="notes-find-input" placeholder="Find…" oninput="findBarHighlight()" style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:4px 8px;color:var(--fg);font-size:11px;outline:none">
+                <input type="text" id="notes-replace-input" placeholder="Replace…" style="width:100px;background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:4px 8px;color:var(--fg);font-size:11px;outline:none">
+                <span id="notes-find-count" style="color:var(--fg-dim);font-size:10px;min-width:40px"></span>
+                <button class="nt-btn" onclick="findBarPrev()" title="Previous" style="padding:2px 8px">▲</button>
+                <button class="nt-btn" onclick="findBarNext()" title="Next" style="padding:2px 8px">▼</button>
+                <button class="nt-btn" onclick="findBarReplace()" title="Replace" style="padding:2px 8px">Rpl</button>
+                <button class="nt-btn" onclick="findBarReplaceAll()" title="Replace all" style="padding:2px 8px">All</button>
+                <label style="display:flex;align-items:center;gap:3px;font-size:10px"><input type="checkbox" id="notes-find-case" onchange="findBarHighlight()"> Aa</label>
+                <button class="nt-btn" onclick="toggleFindBar()" title="Close" style="padding:2px 8px">✕</button>
               </div>
               <div id="notes-editor" contenteditable="true"><div style="color:var(--fg-dim);font-family:sans-serif">Start typing your notes here...</div></div>
               <input type="file" id="notes-file-input" accept=".txt,.md,.pdf" style="display:none">
@@ -459,7 +470,7 @@
                       <span id="solar-fact" class="update-result" style="font-size:10px;color:var(--teal);flex:1;text-align:right"></span>
                     </div>
                   </div>
-                  <div id="solar-info" style="width:220px;min-width:220px;padding:12px;background:var(--bg-light);border:1px solid var(--border);border-radius:6px;font-size:11px;line-height:1.6">
+                  <div id="solar-info" style="width:220px;min-width:220px;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;font-size:11px;line-height:1.6">
                     <div style="font-size:10px;color:var(--fg-dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Planet Info</div>
                     <div id="solar-info-content" style="color:var(--fg-dim)">Click on a planet above to see its details!</div>
                   </div>

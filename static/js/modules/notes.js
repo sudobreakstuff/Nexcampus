@@ -191,11 +191,11 @@ function notesSave() {
       const fn = $('notes-filename');
       if (fn) fn.textContent = _notesFilename;
     } else {
-      alert('Failed to save: ' + (data.error || 'unknown error'));
+      showNotification('Failed to save: ' + (data.error || 'unknown error'));
     }
   })
   .catch(function(err) {
-    alert('Failed to save: ' + err.message);
+    showNotification('Failed to save: ' + err.message);
   });
 }
 
@@ -210,7 +210,7 @@ function notesOpenFile(file) {
 
   const ext = file.name.split('.').pop().toLowerCase();
   if (ext !== 'txt' && ext !== 'md' && ext !== 'pdf') {
-    alert('Only .txt, .md, and .pdf files are supported.');
+    showNotification('Only .txt, .md, and .pdf files are supported.', 4000, 'error');
     return;
   }
 
@@ -234,11 +234,11 @@ function notesOpenFile(file) {
           editor.innerHTML = lines.map(l => l.trim() ? '<p>' + l + '</p>' : '<p><br></p>').join('\n');
           markNotesDirty();
         } else {
-          alert('Failed: ' + (data.error || 'unknown error'));
+          showNotification('Failed: ' + (data.error || 'unknown error'));
         }
       })
       .catch(function(err) {
-        alert('Error: ' + err.message);
+        showNotification('Error: ' + err.message);
       });
     } else {
       try {
@@ -247,7 +247,7 @@ function notesOpenFile(file) {
         editor.innerHTML = lines.map(l => l.trim() ? '<p>' + l + '</p>' : '<p><br></p>').join('\n');
         markNotesDirty();
       } catch(err) {
-        alert('Error reading file: ' + err.message);
+        showNotification('Error reading file: ' + err.message);
       }
     }
   };
@@ -348,10 +348,10 @@ function notesOpenSaved(name) {
             if (fn) fn.textContent = name;
             updateNoteStats();
           } else {
-            alert('Could not load note.');
+            showNotification('Could not load note.', 3000, 'error');
           }
         } catch(e) {
-          alert('Could not load note.');
+          showNotification('Could not load note.', 3000, 'error');
         }
       }
     })
@@ -369,10 +369,10 @@ function notesOpenSaved(name) {
           if (fn) fn.textContent = name;
           updateNoteStats();
         } else {
-          alert('Could not load note.');
+          showNotification('Could not load note.', 3000, 'error');
         }
       } catch(e) {
-        alert('Could not load note.');
+        showNotification('Could not load note.', 3000, 'error');
       }
     });
 }
@@ -422,7 +422,7 @@ function notesRename(name) {
         if (fn) fn.textContent = _notesFilename;
       }
     } else {
-      alert('Rename failed: ' + (data.error || 'unknown error'));
+      showNotification('Rename failed: ' + (data.error || 'unknown error'));
     }
     notesManager();
   })
@@ -480,22 +480,176 @@ function notesExportPDF() {
   notesPrint();
 }
 
-function notesFindReplace() {
+var _findBarActive = false;
+var _findBarMatches = [];
+var _findBarIndex = -1;
+
+function toggleFindBar() {
+  const bar = $('notes-findbar');
+  if (!bar) return;
+  _findBarActive = !_findBarActive;
+  bar.style.display = _findBarActive ? 'flex' : 'none';
+  if (_findBarActive) {
+    const input = $('notes-find-input');
+    if (input) { input.focus(); input.select(); }
+    findBarHighlight();
+  } else {
+    clearFindHighlights();
+    _findBarMatches = [];
+    _findBarIndex = -1;
+    updateFindCount();
+  }
+}
+
+function findBarHighlight() {
   const editor = $('notes-editor');
-  if (!editor) return;
-  const find = prompt('Find:');
-  if (!find) return;
-  const replace = prompt('Replace with:');
-  if (replace === null) return;
-  const regex = new RegExp(find.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+  const input = $('notes-find-input');
+  if (!editor || !input) return;
+  const query = input.value;
+  clearFindHighlights();
+  _findBarMatches = [];
+  _findBarIndex = -1;
+  if (!query) { updateFindCount(); return; }
+
+  const flags = $('notes-find-case').checked ? 'g' : 'gi';
+  const regex = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), flags);
   const walker = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT, null, false);
   var node;
   while (node = walker.nextNode()) {
+    if (!node.textContent || !node.parentNode) continue;
+    var match;
+    while ((match = regex.exec(node.textContent)) !== null) {
+      _findBarMatches.push({node: node, start: match.index, end: match.index + match[0].length});
+      if (_findBarMatches.length >= 500) break;
+    }
+    if (_findBarMatches.length >= 500) break;
+  }
+  if (_findBarMatches.length) _findBarIndex = 0;
+  applyFindHighlights();
+  scrollToMatch(0);
+  updateFindCount();
+}
+
+function applyFindHighlights() {
+  const editor = $('notes-editor');
+  if (!editor) return;
+  _findBarMatches.forEach(function(m, i) {
+    try {
+      var r = document.createRange();
+      r.setStart(m.node, m.start);
+      r.setEnd(m.node, m.end);
+      var span = document.createElement('span');
+      span.className = 'find-highlight';
+      span.setAttribute('data-find-idx', i);
+      r.surroundContents(span);
+    } catch(e) {}
+  });
+  if (_findBarIndex >= 0) {
+    var active = editor.querySelector('.find-highlight[data-find-idx="' + _findBarIndex + '"]');
+    if (active) active.style.background = 'var(--amber)';
+  }
+}
+
+function clearFindHighlights() {
+  const editor = $('notes-editor');
+  if (!editor) return;
+  var spans = editor.querySelectorAll('.find-highlight');
+  spans.forEach(function(span) {
+    var parent = span.parentNode;
+    if (!parent) return;
+    while (span.firstChild) parent.insertBefore(span.firstChild, span);
+    parent.removeChild(span);
+    parent.normalize();
+  });
+}
+
+function scrollToMatch(idx) {
+  const editor = $('notes-editor');
+  if (!editor || idx < 0 || idx >= _findBarMatches.length) return;
+  var el = editor.querySelector('.find-highlight[data-find-idx="' + idx + '"]');
+  if (el) el.scrollIntoView({block: 'nearest', behavior: 'smooth'});
+}
+
+function updateFindCount() {
+  var el = $('notes-find-count');
+  if (!el) return;
+  if (!_findBarMatches.length) { el.textContent = ''; return; }
+  el.textContent = (_findBarIndex + 1) + '/' + _findBarMatches.length;
+}
+
+function findBarNext() {
+  if (!_findBarMatches.length) return;
+  clearFindHighlights();
+  _findBarIndex = (_findBarIndex + 1) % _findBarMatches.length;
+  applyFindHighlights();
+  scrollToMatch(_findBarIndex);
+  updateFindCount();
+}
+
+function findBarPrev() {
+  if (!_findBarMatches.length) return;
+  clearFindHighlights();
+  _findBarIndex = (_findBarIndex - 1 + _findBarMatches.length) % _findBarMatches.length;
+  applyFindHighlights();
+  scrollToMatch(_findBarIndex);
+  updateFindCount();
+}
+
+function findBarReplace() {
+  if (_findBarIndex < 0 || _findBarIndex >= _findBarMatches.length) return;
+  var m = _findBarMatches[_findBarIndex];
+  var replaceInput = $('notes-replace-input');
+  if (!replaceInput) return;
+  var replacement = replaceInput.value;
+
+  clearFindHighlights();
+  var range = document.createRange();
+  range.setStart(m.node, m.start);
+  range.setEnd(m.node, m.end);
+  range.deleteContents();
+  range.insertNode(document.createTextNode(replacement));
+  m.node = range.startContainer;
+
+  _findBarMatches.splice(_findBarIndex, 1);
+  _findBarIndex = Math.min(_findBarIndex, _findBarMatches.length - 1);
+  if (_findBarMatches.length) {
+    applyFindHighlights();
+    scrollToMatch(_findBarIndex);
+  }
+  updateFindCount();
+  markNotesDirty();
+}
+
+function findBarReplaceAll() {
+  var replaceInput = $('notes-replace-input');
+  if (!replaceInput) return;
+  var replacement = replaceInput.value;
+  if (!_findBarMatches.length) return;
+
+  clearFindHighlights();
+  var editor = $('notes-editor');
+  if (!editor) return;
+  var query = $('notes-find-input').value;
+  if (!query) return;
+  var flags = $('notes-find-case').checked ? 'g' : 'gi';
+  var regex = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), flags);
+
+  var total = 0;
+  var walker = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT, null, false);
+  var node;
+  while (node = walker.nextNode()) {
+    if (!node.textContent) continue;
     if (regex.test(node.textContent)) {
-      node.textContent = node.textContent.replace(regex, replace);
+      node.textContent = node.textContent.replace(regex, replacement);
+      total++;
     }
   }
+
+  _findBarMatches = [];
+  _findBarIndex = -1;
+  updateFindCount();
   markNotesDirty();
+  showNotification('Replaced ' + total + ' occurrence' + (total !== 1 ? 's' : ''), 2000, 'success');
 }
 
 function notesInsertTable() {
@@ -581,7 +735,7 @@ function notesFontImportFile(file) {
   if (!file) return;
   const ext = file.name.split('.').pop().toLowerCase();
   if (!['ttf', 'otf', 'woff', 'woff2'].includes(ext)) {
-    alert('Unsupported font format. Use .ttf, .otf, .woff, or .woff2');
+    showNotification('Unsupported font format. Use .ttf, .otf, .woff, or .woff2', 4000, 'error');
     return;
   }
   const reader = new FileReader();
@@ -598,11 +752,11 @@ function notesFontImportFile(file) {
         addFontFace(file.name);
         notesFontManager();
       } else {
-        alert('Failed to import font: ' + (data.error || 'unknown error'));
+        showNotification('Failed to import font: ' + (data.error || 'unknown error'));
       }
     })
     .catch(function(err) {
-      alert('Error: ' + err.message);
+      showNotification('Error: ' + err.message);
     });
   };
   reader.readAsDataURL(file);
@@ -673,13 +827,13 @@ function notesTempSave() {
   .then(function(r) { return r.json(); })
   .then(function(data) {
     if (data.success) {
-      alert('Template "' + name.trim() + '" saved!');
+      showNotification('Template "' + name.trim() + '" saved!', 2000, 'success');
     } else {
-      alert('Failed to save template: ' + (data.error || 'unknown error'));
+      showNotification('Failed to save template: ' + (data.error || 'unknown error'));
     }
   })
   .catch(function(err) {
-    alert('Error: ' + err.message);
+    showNotification('Error: ' + err.message);
   });
 }
 
@@ -739,10 +893,10 @@ function loadTemplateContent(name) {
         editor.innerHTML = data.content;
         markNotesDirty();
       } else {
-        alert('Failed to load template.');
+        showNotification('Failed to load template.', 3000, 'error');
       }
     })
-    .catch(function() { alert('Failed to load template.'); });
+    .catch(function() { showNotification('Failed to load template.', 3000, 'error'); });
 }
 
 function notesInsertBlockquote() {
@@ -755,10 +909,10 @@ function notesInsertCode() {
   editor.focus();
   const sel = window.getSelection();
   if (sel.rangeCount && !sel.isCollapsed) {
-    const html = '<pre style="background:var(--bg-light);border:1px solid var(--border);border-radius:4px;padding:8px 12px;font-family:monospace;font-size:13px;overflow-x:auto;margin:8px 0"><code>' + escapeHtml(sel.toString()) + '</code></pre>';
+    const html = '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;font-family:monospace;font-size:13px;overflow-x:auto;margin:8px 0"><code>' + escapeHtml(sel.toString()) + '</code></pre>';
     document.execCommand('insertHTML', false, html);
   } else {
-    const html = '<pre style="background:var(--bg-light);border:1px solid var(--border);border-radius:4px;padding:8px 12px;font-family:monospace;font-size:13px;overflow-x:auto;margin:8px 0"><code>code</code></pre>';
+    const html = '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;font-family:monospace;font-size:13px;overflow-x:auto;margin:8px 0"><code>code</code></pre>';
     document.execCommand('insertHTML', false, html);
   }
   markNotesDirty();
@@ -969,7 +1123,7 @@ function initNotes() {
     if (isCtrl && e.key === 'z') { e.preventDefault(); execCmd('undo'); return; }
     if (isCtrl && e.key === 'y') { e.preventDefault(); execCmd('redo'); return; }
     if (isCtrl && e.key === 'k') { e.preventDefault(); insertLink(); return; }
-    if (isCtrl && e.key === 'f') { e.preventDefault(); notesFindReplace(); return; }
+    if (isCtrl && e.key === 'f') { e.preventDefault(); toggleFindBar(); return; }
 
     if (e.key === 'Tab') {
       e.preventDefault();
@@ -1032,7 +1186,7 @@ function initNotes() {
       } else if (['txt','md','pdf'].includes(ext)) {
         notesOpenFile(file);
       } else {
-        alert('Unsupported file type.');
+        showNotification('Unsupported file type.', 3000, 'error');
       }
     } else if (e.dataTransfer.types.indexOf('text/html') !== -1 || e.dataTransfer.types.indexOf('text/plain') !== -1) {
       const html = e.dataTransfer.getData('text/html') || e.dataTransfer.getData('text/plain');

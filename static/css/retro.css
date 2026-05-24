@@ -272,6 +272,7 @@ body::before {
 .gpa-row:hover { background: rgba(79,195,247,0.04); }
 .bib-item:hover { border-color: var(--cyan) !important; }
 .pt-element { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+.find-highlight { background: var(--amber); color: #1a1a2e; border-radius: 2px; }
 .pt-element:hover { transform: scale(1.15); box-shadow: 0 0 12px rgba(79,195,247,0.3); z-index: 10; position: relative; }
 .vocab-word:hover { border-color: var(--cyan) !important; background: rgba(79,195,247,0.08) !important; }
 /* Q&A area */
@@ -443,9 +444,9 @@ a:hover { color: var(--fg-bright); }
 .pt-cat-btn { font-size: 9px; padding: 3px 10px; border: 1px solid var(--border); border-radius: 3px; background: transparent; color: var(--fg-dim); cursor: pointer; }
 .pt-cat-btn:hover { border-color: var(--cyan); color: var(--cyan); }
 .pt-cat-btn.active { background: rgba(79,195,247,0.1); border-color: var(--cyan); color: var(--cyan); }
-.pt-detail-panel { display: flex; gap: 14px; margin-top: 10px; padding: 12px; background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; display: none; }
+.pt-detail-panel { display: none; gap: 14px; margin-top: 10px; padding: 12px; background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; }
 .pt-detail-panel.visible { display: flex; }
-.pt-detail-icon { width: 56px; height: 56px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+.pt-detail-icon { width: 56px; height: 56px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; box-shadow: 0 0 10px rgba(79,195,247,0.15); }
 .pt-detail-icon .pt-di-symbol { font-size: 26px; }
 .pt-detail-icon .pt-di-number { font-size: 9px; }
 .pt-detail-info { flex: 1; font-size: 11px; line-height: 1.7; }
@@ -457,7 +458,6 @@ a:hover { color: var(--fg-bright); }
 .pt-quiz-bar { margin-bottom:6px }
 .pt-element.quiz-flash { animation: quizFlash 0.5s ease 3; }
 @keyframes quizFlash { 0%,100% { box-shadow: 0 0 0 transparent; } 50% { box-shadow: 0 0 20px rgba(255,183,77,0.8); } }
-.pt-detail-icon { box-shadow: 0 0 10px rgba(79,195,247,0.15); }
 
 /* Dictionary styles */
 .dict-word { display:inline-block;padding:3px 8px;margin:2px;border:1px solid var(--border);border-radius:3px;font-size:10px;cursor:pointer }

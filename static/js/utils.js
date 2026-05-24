@@ -62,14 +62,19 @@ function log(msg) {
   if (sb) sb.textContent = msg;
 }
 
-function showNotification(msg, duration) {
+function showNotification(msg, duration, type) {
+  type = type || 'info';
   duration = duration || 4000;
   var existing = $('nex-notification');
   if (existing) existing.remove();
+  var borderColor = 'var(--cyan)';
+  var bgColor = 'rgba(79,195,247,0.08)';
+  if (type === 'error') { borderColor = 'var(--amber)'; bgColor = 'rgba(255,183,77,0.08)'; duration = 6000; }
+  if (type === 'success') { borderColor = 'var(--teal)'; bgColor = 'rgba(38,198,218,0.08)'; duration = 3000; }
   var el = document.createElement('div');
   el.id = 'nex-notification';
   el.textContent = msg;
-  el.style.cssText = 'position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--cyan);color:var(--fg);padding:10px 24px;border-radius:6px;font-size:12px;z-index:9999;box-shadow:0 0 20px rgba(79,195,247,0.15);animation:fadeIn 0.3s ease;max-width:80vw;text-align:center';
+  el.style.cssText = 'position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:' + bgColor + ';border:1px solid ' + borderColor + ';color:var(--fg);padding:10px 24px;border-radius:6px;font-size:12px;z-index:9999;box-shadow:0 0 20px rgba(79,195,247,0.15);animation:fadeIn 0.3s ease;max-width:80vw;text-align:center';
   document.body.appendChild(el);
   setTimeout(function() {
     el.style.opacity = '0';
