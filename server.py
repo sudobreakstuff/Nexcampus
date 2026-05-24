@@ -311,6 +311,7 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
             '/api/bibliography/save': self.api_bibliography_save,
             '/api/bibliography/load': self.api_bibliography_load,
             '/api/code/run': self.api_code_run,
+            '/api/update/install': self.api_update_install,
         }
         handler = handlers.get(path)
         if handler:
@@ -371,6 +372,73 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
             return r > c
         except:
             return False
+
+    # --- Code Lab API ---
+
+    def api_update_install(self, data=None):
+        """Download and install update binary. Runs restart script and exits."""
+        BINARY_NAME = 'NexCampus-windows.exe' if PLATFORM == 'windows' else 'NexCampus-linux'
+        try:
+            req = urllib.request.Request(
+                'https://api.github.com/repos/sudobreakstuff/Nexcampus/releases/latest',
+                headers={'User-Agent': 'NexCampus/2.0', 'Accept': 'application/vnd.github.v3+json'}
+            )
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                release = json.loads(resp.read())
+            download_url = ''
+            for asset in release.get('assets', []):
+                if asset['name'] == BINARY_NAME:
+                    download_url = asset['browser_download_url']
+                    break
+            if not download_url:
+                self.send_json({'error': 'No binary found in latest release', 'success': False})
+                return
+
+            can_self = os.access(EXE_DIR, os.W_OK)
+            install_dir = EXE_DIR if can_self else Path.home() / '.nexcampus'
+            install_dir.mkdir(parents=True, exist_ok=True)
+            new_path = install_dir / (BINARY_NAME + '.new')
+            target_path = install_dir / BINARY_NAME
+
+            self.send_json({'status': 'downloading', 'progress': 0, 'success': True})
+
+            import subprocess as sp
+            sp.run(['curl', '-sSL', '-o', str(new_path), download_url], timeout=600, check=True)
+            if not new_path.exists() or new_path.stat().st_size < 10000000:
+                self.send_json({'error': 'Download failed', 'success': False})
+                return
+
+            new_path.chmod(0o755)
+
+            if can_self and PLATFORM == 'linux':
+                restart_script = install_dir / 'restart.sh'
+                restart_script.write_text(
+                    '#!/bin/bash\n'
+                    f'sleep 1\n'
+                    f'mv -f "{new_path}" "{target_path}"\n'
+                    f'chmod +x "{target_path}"\n'
+                    f'nohup "{target_path}" > /dev/null 2>&1 &\n'
+                    f'rm -f "{restart_script}"\n'
+                )
+                restart_script.chmod(0o755)
+                sp.Popen(['bash', str(restart_script)], start_new_session=True)
+                self.send_json({'status': 'installed', 'success': True})
+                time.sleep(0.5)
+                os._exit(0)
+            elif can_self:
+                # Windows or other: just replace and show message
+                new_path.replace(target_path)
+                self.send_json({'status': 'installed', 'success': True, 'message': 'Restart to apply update.'})
+            else:
+                self.send_json({
+                    'status': 'downloaded', 'success': True,
+                    'message': 'Downloaded to ' + str(new_path) + '. Run: mv ' + str(new_path) + ' ' + str(target_path) + ' && ' + str(target_path)
+                })
+        except Exception as e:
+            try:
+                self.send_json({'error': 'Update failed: ' + str(e), 'success': False})
+            except:
+                pass
 
     # --- Code Lab API ---
 

@@ -121,9 +121,28 @@ async function checkForUpdates() {
 }
 
 function downloadUpdate() {
-  if (_updateData && _updateData.download_url) {
-    window.open(_updateData.download_url, '_blank');
-  }
+  var dlBtn = $('btn-download-update');
+  var status = $('update-status');
+  if (dlBtn) dlBtn.disabled = true;
+  if (dlBtn) dlBtn.textContent = 'Installing...';
+  if (status) status.textContent = 'Downloading update...';
+  fetch('/api/update/install', {method: 'POST'})
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.success) {
+        if (status) status.textContent = 'Update installed! Restarting...';
+        // App restarts automatically from the server side
+      } else {
+        if (status) status.textContent = 'Update failed: ' + (data.error || 'unknown');
+        if (dlBtn) dlBtn.disabled = false;
+        if (dlBtn) dlBtn.textContent = 'Download Update';
+      }
+    })
+    .catch(function(e) {
+      if (status) status.textContent = 'Update failed: ' + e.message;
+      if (dlBtn) dlBtn.disabled = false;
+      if (dlBtn) dlBtn.textContent = 'Download Update';
+    });
 }
 
 function initTheme() {
