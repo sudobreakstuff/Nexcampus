@@ -451,11 +451,11 @@
               <div class="tool-inline" id="solar-inline" style="position:relative">
                 <div class="tool-section-title" style="margin-bottom:4px">
                   Interactive Solar System
-                  <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Click on any planet to learn more!</span>
+                  <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Scroll to zoom · Drag to pan · Click any planet · Double-click to reset</span>
                 </div>
                 <div style="display:flex;gap:16px;flex-wrap:wrap">
                   <div style="flex:1;min-width:480px">
-                    <canvas id="solar-canvas" width="800" height="500" style="width:100%;height:auto;background:#000;border-radius:8px;border:1px solid var(--border);cursor:pointer"></canvas>
+                    <canvas id="solar-canvas" width="800" height="500" style="width:100%;height:auto;background:#000;border-radius:8px;border:1px solid var(--border);cursor:grab"></canvas>
                     <div style="display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap">
                       <label style="font-size:10px;color:var(--fg-dim)">Speed:
                         <select id="solar-speed" onchange="solarSetSpeed(this.value)" style="font-size:10px;padding:2px 6px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px">
@@ -467,12 +467,17 @@
                         </select>
                       </label>
                       <button onclick="solarTogglePause()" id="solar-pause-btn" style="font-size:10px;padding:4px 12px">Pause</button>
+                      <span style="font-size:10px;color:var(--fg-dim)">Zoom: <span id="solar-zoom-info">100%</span></span>
+                      <button onclick="SOLAR.zoom=Math.min(8,SOLAR.zoom*1.5);solarDraw()" title="Zoom in" style="font-size:10px;padding:2px 8px">+</button>
+                      <button onclick="SOLAR.zoom=Math.max(0.15,SOLAR.zoom/1.5);solarDraw()" title="Zoom out" style="font-size:10px;padding:2px 8px">−</button>
+                      <button onclick="solarResetView();solarDraw()" title="Reset view" style="font-size:10px;padding:2px 8px">Reset</button>
+                      <button onclick="solarCycleFact()" title="Next fact" style="font-size:10px;padding:2px 8px">Next Fact</button>
                       <span id="solar-fact" class="update-result" style="font-size:10px;color:var(--teal);flex:1;text-align:right"></span>
                     </div>
                   </div>
-                  <div id="solar-info" style="width:220px;min-width:220px;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;font-size:11px;line-height:1.6">
+                  <div id="solar-info" style="width:260px;min-width:220px;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;font-size:11px;line-height:1.6">
                     <div style="font-size:10px;color:var(--fg-dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Planet Info</div>
-                    <div id="solar-info-content" style="color:var(--fg-dim)">Click on a planet above to see its details!</div>
+                    <div id="solar-info-content" style="color:var(--fg-dim)">Click any planet to see its details</div>
                   </div>
                 </div>
               </div>

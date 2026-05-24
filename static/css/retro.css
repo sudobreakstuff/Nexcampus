@@ -467,6 +467,11 @@ a:hover { color: var(--fg-bright); }
 .dict-alpha-btn:hover { border-color:var(--cyan);color:var(--cyan) }
 .dict-alpha-btn.active { background:rgba(79,195,247,0.1);border-color:var(--cyan);color:var(--cyan) }
 
+/* Solar System */
+.solar-tab { font-size:9px;padding:3px 8px;cursor:pointer;border:1px solid var(--border);border-radius:3px;color:var(--fg-dim);background:transparent }
+.solar-tab:hover { border-color:var(--cyan);color:var(--cyan) }
+.solar-tab.active { background:rgba(79,195,247,0.1);border-color:var(--cyan);color:var(--cyan) }
+
 /* Text Tools */
 /* nb-tool-content uses nbSlideIn animation above */
 
