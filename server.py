@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import http.server, json, sys, os, threading, socket, urllib.request, base64, re, glob, random, signal
+import http.server, json, sys, os, threading, socket, urllib.request, base64, re, glob, random, signal, time
 from pathlib import Path
 from io import BytesIO
 
@@ -1259,7 +1259,7 @@ def _kill_stale():
                 try:
                     os.kill(old, signal.SIGTERM)
                     time.sleep(0.3)
-                except (ProcessLookupError, PermissionError):
+                except:
                     pass
         pid_file.write_text(str(os.getpid()))
     except:
