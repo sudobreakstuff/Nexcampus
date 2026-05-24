@@ -1587,6 +1587,10 @@ TOOL_INIT.solar = function() {
   initSolarSystem();
 };
 
+TOOL_INIT.mindmap = function() {
+  initMindMap();
+};
+
 var SOLAR_PLANETS = [
   { name:'Mercury', color:'#b5b5b5', orbit:50, size:5.5, speed:4.15, angle:0,
     type:'Terrestrial',
@@ -1834,6 +1838,21 @@ function solarDraw() {
   // Hot center
   ctx.fillStyle = '#fffef8'; ctx.beginPath(); ctx.arc(cx, cy, 14*pulse, 0, Math.PI*2); ctx.fill();
 
+  // Lens flare
+  if (z > 0.3) {
+    var lf = ctx.createRadialGradient(cx - 60, cy - 40, 0, cx - 60, cy - 40, 80);
+    lf.addColorStop(0, 'rgba(255,255,255,0.12)');
+    lf.addColorStop(0.3, 'rgba(255,200,100,0.04)');
+    lf.addColorStop(1, 'rgba(255,100,0,0)');
+    ctx.fillStyle = lf; ctx.beginPath(); ctx.arc(cx - 60, cy - 40, 80, 0, Math.PI*2); ctx.fill();
+    
+    // Secondary small flare
+    var lf2 = ctx.createRadialGradient(cx + 70, cy + 50, 0, cx + 70, cy + 50, 30);
+    lf2.addColorStop(0, 'rgba(255,255,255,0.06)');
+    lf2.addColorStop(1, 'rgba(255,100,0,0)');
+    ctx.fillStyle = lf2; ctx.beginPath(); ctx.arc(cx + 70, cy + 50, 30, 0, Math.PI*2); ctx.fill();
+  }
+
   var allBodies = SOLAR.planets.concat(SOLAR.dwarfs);
   allBodies.forEach(function(p) {
     var x = cx + Math.cos(p.angle) * p.orbit, y = cy + Math.sin(p.angle) * p.orbit;
@@ -1880,11 +1899,7 @@ function solarDraw() {
 
     var ps = p.size;
     ctx.shadowColor = 'rgba(0,0,0,0.3)'; ctx.shadowBlur = ps * 0.5;
-    var pg = ctx.createRadialGradient(x - ps*0.3, y - ps*0.3, 0, x, y, ps);
-    pg.addColorStop(0, lightenColor(p.color, 60));
-    pg.addColorStop(0.5, lightenColor(p.color, 15));
-    pg.addColorStop(1, p.color);
-    ctx.fillStyle = pg; ctx.beginPath(); ctx.arc(x, y, ps, 0, Math.PI*2); ctx.fill();
+    planetDraw(ctx, x, y, ps, p.color);
     ctx.shadowBlur = 0;
 
     if (p.name === 'Jupiter') {
@@ -2114,6 +2129,51 @@ function lightenColor(hex, amt) {
   return '#' + [Math.min(255,r+amt),Math.min(255,g+amt),Math.min(255,b+amt)].map(function(c){return c.toString(16).padStart(2,'0');}).join('');
 }
 
+function planetTexture(color, size) {
+  var key = 'pt_' + color + '_' + Math.round(size);
+  if (!SOLAR._texCache) SOLAR._texCache = {};
+  if (SOLAR._texCache[key]) return SOLAR._texCache[key];
+  var off = document.createElement('canvas');
+  var s = Math.ceil(size * 4);
+  off.width = s; off.height = s;
+  var octx = off.getContext('2d');
+  // Base gradient
+  var g = octx.createRadialGradient(s*0.3, s*0.3, 0, s/2, s/2, s/2);
+  g.addColorStop(0, lightenColor(color, 70));
+  g.addColorStop(0.4, lightenColor(color, 20));
+  g.addColorStop(0.8, color);
+  g.addColorStop(1, lightenColor(color, -40));
+  octx.fillStyle = g;
+  octx.fillRect(0, 0, s, s);
+  // Noise bands
+  for (var i = 0; i < 80; i++) {
+    var bandY = Math.random() * s;
+    var bandH = 1 + Math.random() * 3;
+    var alpha = 0.03 + Math.random() * 0.08;
+    octx.fillStyle = 'rgba(255,255,255,' + alpha + ')';
+    octx.fillRect(0, bandY, s, bandH);
+  }
+  SOLAR._texCache[key] = off;
+  return off;
+}
+
+function planetDraw(ctx, x, y, size, color) {
+  var tex = planetTexture(color, size);
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(x, y, size, 0, Math.PI*2);
+  ctx.clip();
+  ctx.drawImage(tex, x - size, y - size, size * 2, size * 2);
+  ctx.restore();
+  // Atmosphere ring
+  var atmo = ctx.createRadialGradient(x - size*0.3, y - size*0.3, size*0.1, x, y, size*1.05);
+  atmo.addColorStop(0, 'rgba(255,255,255,0.05)');
+  atmo.addColorStop(0.7, 'rgba(255,255,255,0.02)');
+  atmo.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = atmo;
+  ctx.beginPath(); ctx.arc(x, y, size*1.05, 0, Math.PI*2); ctx.fill();
+}
+
 function solarCycleFact() {
   SOLAR.factIdx = (SOLAR.factIdx + 1) % SOLAR_FACTS.length;
   var fe = document.getElementById('solar-fact');
@@ -2315,5 +2375,166 @@ function doneOcr(data, status, output, btn, fileInput, label) {
     output.value = text;
   }
   output.style.display = '';
+}
+
+// ==== Mind Map ====
+var MM = { canvas:null, ctx:null, nodes:[], selected:null, dragging:null, dragOffX:0, dragOffY:0, nextId:1 };
+
+function initMindMap() {
+  if (MM.canvas) return;
+  MM.canvas = $('mindmap-canvas');
+  if (!MM.canvas) return;
+  MM.ctx = MM.canvas.getContext('2d');
+  var c = MM.canvas;
+  c.addEventListener('mousedown', mmMouseDown);
+  c.addEventListener('mousemove', mmMouseMove);
+  c.addEventListener('mouseup', mmMouseUp);
+  c.addEventListener('dblclick', mmDblClick);
+  // Start with a center node
+  if (MM.nodes.length === 0) {
+    MM.nodes.push({ id: MM.nextId++, label: 'Main Idea', x: 400, y: 250, color: '#4fc3f7', parent: null });
+  }
+  mmDraw();
+}
+
+function mmDraw() {
+  var ctx = MM.ctx, c = MM.canvas;
+  c.width = c.width;
+  ctx.fillStyle = 'var(--bg)';
+  ctx.fillRect(0, 0, c.width, c.height);
+  // Draw connections
+  MM.nodes.forEach(function(n) {
+    if (n.parent !== null) {
+      var parent = MM.nodes.find(function(p) { return p.id === n.parent; });
+      if (parent) {
+        ctx.strokeStyle = 'var(--border)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(parent.x, parent.y);
+        ctx.lineTo(n.x, n.y);
+        ctx.stroke();
+      }
+    }
+  });
+  // Draw nodes
+  MM.nodes.forEach(function(n) {
+    var r = 30;
+    ctx.fillStyle = n.color || '#4fc3f7';
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, r, 0, Math.PI*2);
+    ctx.fill();
+    if (MM.selected === n.id) {
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    }
+    ctx.fillStyle = '#000';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    var label = n.label.length > 12 ? n.label.slice(0, 10) + '..' : n.label;
+    ctx.fillText(label, n.x, n.y);
+  });
+}
+
+function mmMouseDown(e) {
+  var rect = MM.canvas.getBoundingClientRect();
+  var mx = (e.clientX - rect.left) * 800 / rect.width;
+  var my = (e.clientY - rect.top) * 500 / rect.height;
+  var hit = false;
+  for (var i = MM.nodes.length - 1; i >= 0; i--) {
+    var n = MM.nodes[i];
+    var dx = mx - n.x, dy = my - n.y;
+    if (dx*dx + dy*dy < 900) {
+      MM.dragging = n.id;
+      MM.dragOffX = n.x - mx;
+      MM.dragOffY = n.y - my;
+      MM.selected = n.id;
+      hit = true;
+      break;
+    }
+  }
+  if (!hit) MM.selected = null;
+  mmDraw();
+}
+
+function mmMouseMove(e) {
+  if (!MM.dragging) return;
+  var rect = MM.canvas.getBoundingClientRect();
+  var mx = (e.clientX - rect.left) * 800 / rect.width;
+  var my = (e.clientY - rect.top) * 500 / rect.height;
+  var node = MM.nodes.find(function(n) { return n.id === MM.dragging; });
+  if (node) { node.x = mx + MM.dragOffX; node.y = my + MM.dragOffY; }
+  mmDraw();
+}
+
+function mmMouseUp() {
+  MM.dragging = null;
+}
+
+function mmDblClick(e) {
+  var rect = MM.canvas.getBoundingClientRect();
+  var mx = (e.clientX - rect.left) * 800 / rect.width;
+  var my = (e.clientY - rect.top) * 500 / rect.height;
+  var hit = null;
+  for (var i = MM.nodes.length - 1; i >= 0; i--) {
+    var n = MM.nodes[i];
+    var dx = mx - n.x, dy = my - n.y;
+    if (dx*dx + dy*dy < 900) { hit = n; break; }
+  }
+  if (hit) {
+    var val = prompt('Edit label:', hit.label);
+    if (val !== null && val.trim()) hit.label = val.trim();
+  } else {
+    var label = prompt('New node label:', '');
+    if (label && label.trim()) {
+      var colors = ['#4fc3f7','#ff8a65','#81c784','#f06292','#ba68c8','#ffd54f','#4dd0e1'];
+      var color = colors[Math.floor(Math.random() * colors.length)];
+      MM.nodes.push({ id: MM.nextId++, label: label.trim(), x: mx, y: my, color: color, parent: MM.selected || 1 });
+    }
+  }
+  mmDraw();
+  var status = $('mindmap-status');
+  if (status) status.textContent = MM.nodes.length + ' nodes';
+}
+
+function mindmapAddNode() {
+  var label = prompt('Node label:', '');
+  if (!label || !label.trim()) return;
+  var cx = 400, cy = 250;
+  if (MM.selected) {
+    var sel = MM.nodes.find(function(n) { return n.id === MM.selected; });
+    if (sel) { cx = sel.x + 80; cy = sel.y; }
+  }
+  var colors = ['#4fc3f7','#ff8a65','#81c784','#f06292','#ba68c8','#ffd54f'];
+  var color = colors[Math.floor(Math.random() * colors.length)];
+  MM.nodes.push({ id: MM.nextId++, label: label.trim(), x: cx, y: cy, color: color, parent: MM.selected || 1 });
+  mmDraw();
+  var status = $('mindmap-status');
+  if (status) status.textContent = MM.nodes.length + ' nodes';
+}
+
+function mindmapDeleteSelected() {
+  if (!MM.selected) return;
+  MM.nodes = MM.nodes.filter(function(n) { return n.id !== MM.selected; });
+  MM.selected = null;
+  mmDraw();
+}
+
+function mindmapClear() {
+  if (!confirm('Clear all nodes?')) return;
+  MM.nodes = [];
+  MM.selected = null;
+  MM.nextId = 1;
+  MM.nodes.push({ id: MM.nextId++, label: 'Main Idea', x: 400, y: 250, color: '#4fc3f7', parent: null });
+  mmDraw();
+}
+
+function mindmapExport() {
+  var link = document.createElement('a');
+  link.download = 'mindmap.png';
+  link.href = MM.canvas.toDataURL();
+  link.click();
+  showNotification('Mind map exported!', 2000, 'success');
 }
 

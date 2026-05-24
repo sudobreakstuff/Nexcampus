@@ -93,3 +93,19 @@ html[data-theme="purple"] {
   --glow-cyan: rgba(192, 132, 252, 0.1);
   --accent: var(--cyan);
 }
+
+/* ====== Neon Tokyo — cyberpunk neon, electric blue + magenta ====== */
+html[data-theme="tokyo"] {
+  --bg: #06060d;
+  --bg2: #111122;
+  --fg: #e0e0ff;
+  --fg-dim: #5a5a8a;
+  --fg-bright: #ffffff;
+  --cyan: #00f0ff;
+  --teal: #ff00ff;
+  --amber: #ffaa00;
+  --pink: #ff4488;
+  --border: #1a1a3a;
+  --glow-cyan: rgba(0, 240, 255, 0.12);
+  --accent: var(--cyan);
+}

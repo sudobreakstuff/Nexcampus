@@ -1,16 +1,18 @@
 {
-  "version": "2.3.5",
-  "name": "NexCampus v2.3.5",
+  "version": "2.3.6",
+  "name": "NexCampus v2.3.6",
   "update_url": "",
   "changelog": [
-    "Code Lab projects now work out of the box — all input() replaced with hardcoded examples",
-    "JavaScript runs directly in the browser — no Node.js required",
-    "Solar System overhaul — 900 stars with color tints, vignette, dashed orbits, multi-layer sun, nebula clouds",
-    "Midnight Purple theme added",
-    "Search bar — find any tool instantly from the sidebar (press Esc to clear)",
-    "Self-update fully automatic — installs to ~/.nexcampus/, updates desktop entry, restarts seamlessly",
-    "HiDPI canvas rendering — crisp on all displays",
-    "Desktop shortcut auto-created on Linux and Windows",
-    "Better code runner error messages"
+    "Code Lab side-by-side layout — editor and output now side by side, no scrolling",
+    "Auto-graded coding challenges — 8 Python challenges with test cases and instant scoring",
+    "Interactive mind map tool — canvas-based, drag nodes, edit labels, export PNG",
+    "Procedural planet textures with atmospheric glow + lens flare for Solar System",
+    "Neon Tokyo theme — cyberpunk electric blue + magenta",
+    "Midnight Purple theme — deep violet with neon accents",
+    "Sidebar search — find any tool instantly, press Esc to clear",
+    "All 11 code lab projects fixed — no more input() errors",
+    "Solar System: 900 stars, vignette, dashed orbits, multi-layer sun, nebula clouds",
+    "JavaScript runs in browser — no Node.js needed",
+    "Seamless self-update — no sudo, no terminal"
   ]
 }
