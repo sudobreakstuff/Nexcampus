@@ -188,3 +188,90 @@ function setTheme(name, silent) {
     b.classList.toggle('active', b.getAttribute('data-theme-btn') === name);
   });
 }
+
+// Weekly content check — runs once per session
+var _contentChecked = false;
+function checkWeeklyContent() {
+  if (_contentChecked) return;
+  _contentChecked = true;
+  var lastCheck = localStorage.getItem('nexcampus-content-check');
+  var now = Date.now();
+  // Check at most once per day
+  if (lastCheck && now - parseInt(lastCheck) < 86400000) return;
+
+  fetch('/api/content/check')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.has_new_content) {
+        var count = (data.new_guides || 0) + (data.new_projects || 0) + (data.new_challenges || 0) + (data.new_themes || 0);
+        var msg = '📦 Weekly update ' + data.weekly_batch + ' available! ' + count + ' new items. Click to apply.';
+        showNotification(msg, 10000, 'info');
+        localStorage.setItem('nexcampus-content-update', JSON.stringify(data));
+        localStorage.setItem('nexcampus-content-check', String(now));
+      }
+    })
+    .catch(function() {});
+}
+
+function applyWeeklyContent() {
+  var saved = localStorage.getItem('nexcampus-content-update');
+  if (!saved) return;
+  var data = JSON.parse(saved);
+  if (!data.content) return;
+
+  fetch('/api/content/apply', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({content: data.content})
+  })
+    .then(function(r) { return r.json(); })
+    .then(function(resp) {
+      if (resp.success) {
+        showNotification('✅ Weekly content applied! (' + resp.batch + ')', 5000, 'success');
+        localStorage.removeItem('nexcampus-content-update');
+        // Reload content into memory
+        if (resp.guides && resp.guides.length > 0) {
+          resp.guides.forEach(function(g) { CODEGUIDES.push(g); });
+          if (typeof initCodeLab === 'function') initCodeLab();
+        }
+        if (resp.challenges && resp.challenges.length > 0) {
+          resp.challenges.forEach(function(c) { CODECHALLENGES.push(c); });
+        }
+        if (resp.projects && resp.projects.length > 0) {
+          resp.projects.forEach(function(p) { CODEPROJECTS.push(p); });
+        }
+        if (resp.themes && resp.themes.length > 0) {
+          resp.themes.forEach(function(t) {
+            var style = document.createElement('style');
+            style.textContent = t.css;
+            document.head.appendChild(style);
+            // Add theme button to about page
+            var btnContainer = document.querySelector('[data-theme-btn="tokyo"]');
+            if (btnContainer && btnContainer.parentNode) {
+              var btn = document.createElement('button');
+              btn.className = 'theme-btn';
+              btn.setAttribute('data-theme-btn', t.id);
+              btn.setAttribute('onclick', "setTheme('" + t.id + "')");
+              btn.style.cssText = t.button_style || '';
+              btn.textContent = t.name;
+              btnContainer.parentNode.appendChild(btn);
+            }
+          });
+        }
+      }
+    })
+    .catch(function() {});
+}
+
+// Run content check on startup
+setTimeout(function() {
+  checkWeeklyContent();
+  // If there's a pending update, apply it
+  var saved = localStorage.getItem('nexcampus-content-update');
+  if (saved) {
+    var data = JSON.parse(saved);
+    if (data.has_new_content) {
+      showNotification('📦 Weekly update available! Restart or wait for auto-apply.', 8000, 'info');
+    }
+  }
+}, 3000);

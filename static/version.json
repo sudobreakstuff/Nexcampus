@@ -1,18 +1,17 @@
 {
-  "version": "2.3.6",
-  "name": "NexCampus v2.3.6",
+  "version": "2.3.7",
+  "name": "NexCampus v2.3.7",
   "update_url": "",
   "changelog": [
-    "Code Lab side-by-side layout — editor and output now side by side, no scrolling",
-    "Auto-graded coding challenges — 8 Python challenges with test cases and instant scoring",
-    "Interactive mind map tool — canvas-based, drag nodes, edit labels, export PNG",
-    "Procedural planet textures with atmospheric glow + lens flare for Solar System",
+    "Weekly content delivery system — new guides, challenges, projects, and themes pushed weekly without reinstalling",
+    "Side-by-side Code Lab layout — editor and output side by side",
+    "8 auto-graded Python challenges with instant pass/fail scoring",
+    "Interactive mind map tool — canvas-based, drag nodes, export PNG",
+    "Procedural planet textures + atmospheric glow + lens flare for Solar System",
     "Neon Tokyo theme — cyberpunk electric blue + magenta",
     "Midnight Purple theme — deep violet with neon accents",
-    "Sidebar search — find any tool instantly, press Esc to clear",
-    "All 11 code lab projects fixed — no more input() errors",
-    "Solar System: 900 stars, vignette, dashed orbits, multi-layer sun, nebula clouds",
+    "Sidebar search — find any tool instantly",
     "JavaScript runs in browser — no Node.js needed",
-    "Seamless self-update — no sudo, no terminal"
+    "Seamless self-update — one click, fully automatic"
   ]
 }

@@ -2,7 +2,7 @@
 
 **Every student deserves free tools to learn, build, and create — no internet required.**
 
-NexCampus is a fully offline desktop toolkit for students: rich notes, study lab with 16+ tools, text processing, OCR, interactive solar system, and a complete code learning environment with a built-in code runner. No signup, no ads, no data collection.
+NexCampus is a fully offline desktop toolkit for students: rich notes, study lab with 17+ tools, mind maps, text processing, OCR, interactive solar system, and a complete code learning environment with a built-in code runner and auto-graded challenges. Weekly content updates deliver new guides, projects, and challenges without reinstalling. No signup, no ads, no data collection.
 
 Built with Python, vanilla JS, and pywebview.
 

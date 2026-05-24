@@ -237,6 +237,9 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
         if self.path.startswith('/api/update/status'):
             self.api_update_status()
             return
+        if self.path.startswith('/api/content/check'):
+            self.api_content_check()
+            return
         if self.path == '/api/notebook/documents':
             self.api_notebook_list()
             return
@@ -353,6 +356,8 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
             '/api/bibliography/load': self.api_bibliography_load,
             '/api/code/run': self.api_code_run,
             '/api/update/install': self.api_update_install,
+            '/api/content/apply': self.api_content_apply,
+            '/api/content/apply-remote': self.api_content_apply_from_remote,
         }
         handler = handlers.get(path)
         if handler:
@@ -527,6 +532,100 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
         with _update_lock:
             s = dict(_update_status)
         self.send_json(s)
+
+    def api_content_check(self):
+        """Check for new weekly content from the repo. Returns latest content manifest."""
+        try:
+            local_content = {}
+            content_path = STATIC_DIR / 'content.json'
+            if content_path.exists():
+                with open(content_path) as f:
+                    local_content = json.load(f)
+
+            # Fetch latest content from GitHub
+            req = urllib.request.Request(
+                'https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/static/content.json',
+                headers={'User-Agent': 'NexCampus/2.0'}
+            )
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                remote_content = json.loads(resp.read())
+
+            local_ver = local_content.get('content_version', 0)
+            remote_ver = remote_content.get('content_version', 0)
+            has_new = remote_ver > local_ver
+
+            self.send_json({
+                'success': True,
+                'has_new_content': has_new,
+                'local_version': local_ver,
+                'remote_version': remote_ver,
+                'weekly_batch': remote_content.get('weekly_batch', 0),
+                'new_guides': len(remote_content.get('guides', [])),
+                'new_projects': len(remote_content.get('projects', [])),
+                'new_challenges': len(remote_content.get('challenges', [])),
+                'new_themes': len(remote_content.get('themes', [])),
+                'new_tools': len(remote_content.get('tools', [])),
+                'content': remote_content if has_new else None
+            })
+        except Exception as e:
+            self.send_json({'error': str(e), 'success': False, 'has_new_content': False})
+            return
+
+    def api_content_apply(self, data):
+        """Save remote content manifest locally and return merged data."""
+        global DICTIONARY, DICTIONARY_LOADED
+        try:
+            content_data = data.get('content')
+            if not content_data:
+                self.send_json({'error': 'No content provided', 'success': False})
+                return
+
+            # Save the content manifest locally
+            content_path = STATIC_DIR / 'content.json'
+            with open(content_path, 'w') as f:
+                json.dump(content_data, f, indent=2)
+
+            # Return a combined payload for the client
+            new_guides = content_data.get('guides', [])
+            new_projects = content_data.get('projects', [])
+            new_challenges = content_data.get('challenges', [])
+            new_themes = content_data.get('themes', [])
+            new_tools = content_data.get('tools', [])
+
+            self.send_json({
+                'success': True,
+                'version': content_data.get('content_version', 0),
+                'batch': content_data.get('weekly_batch', 0),
+                'guides': new_guides,
+                'projects': new_projects,
+                'challenges': new_challenges,
+                'themes': new_themes,
+                'tools': new_tools
+            })
+        except Exception as e:
+            self.send_json({'error': str(e), 'success': False})
+
+    def api_content_apply_from_remote(self, data=None):
+        """Download latest content from GitHub and apply it."""
+        try:
+            req = urllib.request.Request(
+                'https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/static/content.json',
+                headers={'User-Agent': 'NexCampus/2.0'}
+            )
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                content_data = json.loads(resp.read())
+
+            content_path = STATIC_DIR / 'content.json'
+            with open(content_path, 'w') as f:
+                json.dump(content_data, f, indent=2)
+
+            self.send_json({
+                'success': True,
+                'version': content_data.get('content_version', 0),
+                'batch': content_data.get('weekly_batch', 0)
+            })
+        except Exception as e:
+            self.send_json({'error': str(e), 'success': False})
 
     # --- Code Lab API ---
 
