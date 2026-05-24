@@ -717,7 +717,10 @@ function clRunCode() {
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({code: code, language: lang})
   })
-  .then(function(r) { return r.json(); })
+  .then(function(r) {
+    if (!r.ok) throw new Error('Server error: ' + r.status + ' (try reinstalling)');
+    return r.json();
+  })
   .then(function(data) {
     var html = '';
     if (data.error) {

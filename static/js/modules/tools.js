@@ -1658,17 +1658,27 @@ var SOLAR_FACTS = [
   "The solar system's boundary (heliopause) is about 18 billion km from the Sun."
 ];
 
-var SOLAR = { canvas:null, ctx:null, paused:false, speed:1, animId:null, selected:null, lastTime:0, planets:[], dwarfs:[], factIdx:0, w:800, h:500, zoom:1, panX:0, panY:0, isDragging:false, dragStartX:0, dragStartY:0, panStartX:0, panStartY:0, clicked:false, infoTab:'overview' };
+var SOLAR = { canvas:null, ctx:null, paused:false, speed:1, animId:null, selected:null, hovered:null, lastTime:0, planets:[], dwarfs:[], factIdx:0, w:800, h:500, zoom:1, panX:0, panY:0, isDragging:false, dragStartX:0, dragStartY:0, panStartX:0, panStartY:0, clicked:false, infoTab:'overview', dpr:1, displayW:800, displayH:500 };
+
+function solarResize() {
+  var c = SOLAR.canvas;
+  if (!c) return;
+  SOLAR.dpr = window.devicePixelRatio || 1;
+  var rect = c.getBoundingClientRect();
+  SOLAR.displayW = rect.width;
+  SOLAR.displayH = rect.height;
+  c.width = Math.round(rect.width * SOLAR.dpr);
+  c.height = Math.round(rect.height * SOLAR.dpr);
+}
 
 function initSolarSystem() {
   if (SOLAR.canvas) return;
   SOLAR.canvas = document.getElementById('solar-canvas');
   if (!SOLAR.canvas) return;
   SOLAR.ctx = SOLAR.canvas.getContext('2d');
-  SOLAR.w = SOLAR.canvas.width = 800;
-  SOLAR.h = SOLAR.canvas.height = 500;
-  SOLAR.planets = SOLAR_PLANETS.map(function(p) { return { name:p.name, color:p.color, orbit:p.orbit, size:p.size, speed:p.speed, angle:p.angle, info:p.info, _x:0, _y:0 }; });
-  SOLAR.dwarfs = SOLAR_DWARFS.map(function(p) { return { name:p.name, color:p.color, orbit:p.orbit, size:p.size, speed:p.speed, angle:p.angle, info:p.info, _x:0, _y:0 }; });
+  solarResize();
+  SOLAR.planets = SOLAR_PLANETS.map(function(p) { return { name:p.name, color:p.color, orbit:p.orbit, size:p.size, speed:p.speed, angle:p.angle, info:p.info, _x:0, _y:0, _trail:[] }; });
+  SOLAR.dwarfs = SOLAR_DWARFS.map(function(p) { return { name:p.name, color:p.color, orbit:p.orbit, size:p.size, speed:p.speed, angle:p.angle, info:p.info, _x:0, _y:0, _trail:[] }; });
   var c = SOLAR.canvas;
   c.addEventListener('wheel', solarWheel, {passive:false});
   c.addEventListener('mousedown', solarMouseDown);
@@ -1676,6 +1686,7 @@ function initSolarSystem() {
   c.addEventListener('mouseup', solarMouseUp);
   c.addEventListener('mouseleave', solarMouseUp);
   c.addEventListener('dblclick', solarResetView);
+  window.addEventListener('resize', function() { solarResize(); solarDraw(); });
   SOLAR.factIdx = Math.floor(Math.random() * SOLAR_FACTS.length);
   var factEl = document.getElementById('solar-fact');
   if (factEl) factEl.textContent = '💡 ' + SOLAR_FACTS[SOLAR.factIdx];
@@ -1695,9 +1706,11 @@ function solarLoop(time) {
 }
 
 function solarDraw() {
-  var ctx = SOLAR.ctx, w = SOLAR.w, h = SOLAR.h, cx = w/2, cy = h/2;
+  var ctx = SOLAR.ctx, dpr = SOLAR.dpr;
+  var w = SOLAR.w, h = SOLAR.h, cx = w/2, cy = h/2;
   var z = SOLAR.zoom, px = SOLAR.panX, py = SOLAR.panY;
   ctx.save();
+  ctx.scale(dpr, dpr);
   ctx.fillStyle = '#05080f'; ctx.fillRect(0, 0, w, h);
   ctx.translate(cx + px, cy + py);
   ctx.scale(z, z);
@@ -1767,6 +1780,18 @@ function solarDraw() {
   allBodies.forEach(function(p) {
     var x = cx + Math.cos(p.angle) * p.orbit, y = cy + Math.sin(p.angle) * p.orbit;
     p._x = x; p._y = y;
+
+    if (z > 0.3 && p.orbit > 40) {
+      ctx.save();
+      ctx.strokeStyle = p.color + '15'; ctx.lineWidth = p.size * 0.3;
+      ctx.shadowColor = p.color; ctx.shadowBlur = 6;
+      ctx.beginPath();
+      var trailAngle = 0.15;
+      ctx.arc(cx, cy, p.orbit, p.angle - trailAngle * 2, p.angle - trailAngle * 1.2);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+      ctx.restore();
+    }
 
     if (p.name === 'Saturn' && z > 0.15) {
       ctx.save();
@@ -1839,6 +1864,11 @@ function solarDraw() {
       ctx.shadowColor = '#4fc3f7'; ctx.shadowBlur = 20 / z;
       ctx.beginPath(); ctx.arc(x, y, ps + 4, 0, Math.PI*2); ctx.stroke();
       ctx.shadowBlur = 0;
+    } else if (SOLAR.hovered === p.name) {
+      ctx.strokeStyle = p.color + '80'; ctx.lineWidth = 1.5 / z;
+      ctx.shadowColor = p.color; ctx.shadowBlur = 12 / z;
+      ctx.beginPath(); ctx.arc(x, y, ps + 3, 0, Math.PI*2); ctx.stroke();
+      ctx.shadowBlur = 0;
     } else if (z > 0.15) {
       ctx.strokeStyle = p.color + '40'; ctx.lineWidth = 1 / z;
       ctx.beginPath(); ctx.arc(x, y, ps + 1.5, 0, Math.PI*2); ctx.stroke();
@@ -1899,12 +1929,22 @@ function solarMouseMove(e) {
   }
 
   var allBodies = SOLAR.planets.concat(SOLAR.dwarfs);
-  var hover = false;
+  var hover = null;
   allBodies.forEach(function(p) {
     var dx2 = worldX - p._x, dy2 = worldY - p._y;
-    if (dx2*dx2 + dy2*dy2 < (p.size+6)*(p.size+6)) hover = true;
+    if (dx2*dx2 + dy2*dy2 < (p.size+6)*(p.size+6)) hover = p;
   });
   SOLAR.canvas.style.cursor = hover ? 'pointer' : 'default';
+  if (hover && SOLAR.hovered !== hover.name) {
+    SOLAR.hovered = hover.name;
+    if (!SOLAR.selected) solarShowInfoFor(hover);
+  } else if (!hover) {
+    SOLAR.hovered = null;
+    if (!SOLAR.selected) {
+      var content = document.getElementById('solar-info-content');
+      if (content) content.innerHTML = '<div style="color:var(--fg-dim);font-size:11px">Click any planet to see its details</div>';
+    }
+  }
 }
 
 function solarMouseUp(e) {
@@ -1946,10 +1986,12 @@ function solarShowInfo() {
     el.innerHTML = '<div style="font-size:10px;color:var(--fg-dim);padding:20px 0;text-align:center">Click any planet to see its details</div>';
     return;
   }
-  var allBodies = SOLAR.planets.concat(SOLAR.dwarfs);
-  var p = null;
-  allBodies.forEach(function(pp) { if (pp.name === SOLAR.selected) p = pp; });
-  if (!p) return;
+  solarShowInfoFor(solarFindBody(SOLAR.selected));
+}
+
+function solarShowInfoFor(p) {
+  var el = document.getElementById('solar-info-content');
+  if (!el || !p) return;
   var i = p.info;
 
   function row(label, val) {
@@ -1995,6 +2037,13 @@ function solarShowInfo() {
     html += '<div style="margin-top:8px;font-size:10px;line-height:1.5;padding:8px;background:rgba(79,195,247,0.06);border-left:2px solid ' + p.color + ';border-radius:3px;color:var(--teal)">' + i.fact + '</div>';
   }
   el.innerHTML = html;
+}
+
+function solarFindBody(name) {
+  var allBodies = SOLAR.planets.concat(SOLAR.dwarfs);
+  var p = null;
+  allBodies.forEach(function(pp) { if (pp.name === name) p = pp; });
+  return p;
 }
 
 function solarSetTab(t) {
