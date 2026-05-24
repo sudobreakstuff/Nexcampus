@@ -310,6 +310,7 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
             '/api/ocr': self.api_ocr,
             '/api/bibliography/save': self.api_bibliography_save,
             '/api/bibliography/load': self.api_bibliography_load,
+            '/api/code/run': self.api_code_run,
         }
         handler = handlers.get(path)
         if handler:
@@ -370,6 +371,61 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
             return r > c
         except:
             return False
+
+    # --- Code Lab API ---
+
+    def api_code_run(self, data):
+        code = data.get('code', '').strip()
+        language = data.get('language', 'python')
+        if not code:
+            self.send_json({'error': 'No code provided', 'success': False})
+            return
+        import subprocess, tempfile, textwrap
+        result = {'stdout': '', 'stderr': '', 'exit_code': -1, 'success': True}
+        try:
+            if language == 'python':
+                with tempfile.TemporaryDirectory() as tmp:
+                    fpath = os.path.join(tmp, 'script.py')
+                    with open(fpath, 'w') as f:
+                        f.write(code)
+                    p = subprocess.run(
+                        [sys.executable, fpath],
+                        capture_output=True, timeout=8, text=True,
+                        cwd=tmp
+                    )
+                    result['stdout'] = p.stdout[-10000:]
+                    result['stderr'] = p.stderr[-10000:]
+                    result['exit_code'] = p.returncode
+            elif language == 'javascript':
+                try:
+                    p = subprocess.run(
+                        ['node', '-e', code],
+                        capture_output=True, timeout=8, text=True
+                    )
+                    result['stdout'] = p.stdout[-10000:]
+                    result['stderr'] = p.stderr[-10000:]
+                    result['exit_code'] = p.returncode
+                except FileNotFoundError:
+                    result['stderr'] = 'Node.js is not installed on this system.'
+                    result['exit_code'] = -1
+            elif language == 'bash':
+                p = subprocess.run(
+                    ['bash', '-c', code],
+                    capture_output=True, timeout=8, text=True
+                )
+                result['stdout'] = p.stdout[-10000:]
+                result['stderr'] = p.stderr[-10000:]
+                result['exit_code'] = p.returncode
+            else:
+                result['stderr'] = 'Unsupported language: ' + language
+                result['exit_code'] = -1
+        except subprocess.TimeoutExpired:
+            result['stderr'] = 'Execution timed out (8s limit)'
+            result['exit_code'] = -1
+        except Exception as e:
+            result['stderr'] = str(e)
+            result['exit_code'] = -1
+        self.send_json(result)
 
     # --- Notebook API ---
 

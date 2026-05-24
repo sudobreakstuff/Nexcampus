@@ -25,6 +25,7 @@
     <nav id="nav">
       <button class="nav-btn active" data-tab="home">HOME</button>
       <button class="nav-btn" data-tab="notebook">STUDY LAB</button>
+      <button class="nav-btn" data-tab="codelab" style="color:var(--amber)">CODE LAB</button>
       <button class="nav-btn" data-tab="texttools">TEXT TOOLS</button>
       <button class="nav-btn" data-tab="about">ABOUT</button>
     </nav>
@@ -487,6 +488,71 @@
         </div>
       </div>
 
+      <!-- CODE LAB -->
+      <div class="tab-pane" id="tab-codelab">
+        <div class="cl-layout">
+          <div class="cl-sidebar">
+            <div class="cl-sidebar-tabs">
+              <button class="cl-sb-btn active" onclick="clSwitchTab('guides')">Guides</button>
+              <button class="cl-sb-btn" onclick="clSwitchTab('dictionary')">Dictionary</button>
+              <button class="cl-sb-btn" onclick="clSwitchTab('projects')">Projects</button>
+            </div>
+            <div id="cl-guides" class="cl-sidebar-content">
+              <div id="cl-guides-list"></div>
+              <div id="cl-guide-view" style="display:none">
+                <div style="padding:8px 0">
+                  <button class="nt-btn" onclick="clBackToGuides()" style="font-size:10px">← Back</button>
+                </div>
+                <div id="cl-guide-content" class="cl-guide-content"></div>
+              </div>
+            </div>
+            <div id="cl-dictionary" class="cl-sidebar-content" style="display:none">
+              <input type="text" id="cl-dict-search" placeholder="Search programming terms..." oninput="clSearchDict()" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:6px 8px;color:var(--fg);font-size:11px;outline:none;margin-bottom:6px;box-sizing:border-box">
+              <div id="cl-dict-results" class="cl-dict-results"></div>
+            </div>
+            <div id="cl-projects" class="cl-sidebar-content" style="display:none">
+              <div id="cl-projects-list"></div>
+              <div id="cl-project-view" style="display:none">
+                <div style="padding:8px 0">
+                  <button class="nt-btn" onclick="clBackToProjects()" style="font-size:10px">← Back</button>
+                  <button class="nt-btn" onclick="clLoadToEditor()" style="font-size:10px;margin-left:4px">Load Code</button>
+                </div>
+                <div id="cl-project-description"></div>
+                <div id="cl-project-content" class="cl-guide-content"></div>
+              </div>
+            </div>
+          </div>
+          <div class="cl-main">
+            <div class="cl-toolbar">
+              <select id="cl-lang-select" onchange="clSetLanguage(this.value)" style="font-size:10px;padding:3px 8px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px">
+                <option value="python">Python</option>
+                <option value="javascript">JavaScript</option>
+                <option value="bash">Bash</option>
+              </select>
+              <button class="nt-btn" onclick="clRunCode()" id="cl-run-btn" style="font-size:10px;color:var(--teal)">▶ Run</button>
+              <button class="nt-btn" onclick="clClearOutput()" style="font-size:10px">Clear</button>
+              <button class="nt-btn" onclick="clCopyCode()" style="font-size:10px">Copy</button>
+              <button class="nt-btn" onclick="clFormatCode()" style="font-size:10px">Format</button>
+              <span style="font-size:9px;color:var(--fg-dim);margin-left:auto" id="cl-lang-label">Python</span>
+            </div>
+            <div class="cl-editor-wrap">
+              <div class="cl-gutter" id="cl-gutter">1</div>
+              <textarea id="cl-code-input" class="cl-editor" spellcheck="false" placeholder="Write your code here...">print("Hello, NexCampus!")</textarea>
+            </div>
+            <div class="cl-snippets">
+              <button class="nt-btn" onclick="clInsertSnippet('function')" style="font-size:9px;padding:2px 6px">def</button>
+              <button class="nt-btn" onclick="clInsertSnippet('class')" style="font-size:9px;padding:2px 6px">class</button>
+              <button class="nt-btn" onclick="clInsertSnippet('loop')" style="font-size:9px;padding:2px 6px">for</button>
+              <button class="nt-btn" onclick="clInsertSnippet('if')" style="font-size:9px;padding:2px 6px">if</button>
+              <button class="nt-btn" onclick="clInsertSnippet('try')" style="font-size:9px;padding:2px 6px">try</button>
+              <button class="nt-btn" onclick="clInsertSnippet('listcomp')" style="font-size:9px;padding:2px 6px">list[]</button>
+              <button class="nt-btn" onclick="clInsertSnippet('fstring')" style="font-size:9px;padding:2px 6px">f""</button>
+            </div>
+            <div id="cl-output" class="cl-output"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- TEXT TOOLS -->
       <div class="tab-pane" id="tab-texttools">
         <div style="padding:16px;width:100%;box-sizing:border-box">
@@ -775,7 +841,8 @@
 <script src="js/modules/notebook.js"></script>
 <script src="js/modules/notes.js"></script>
 <script src="js/modules/tools.js"></script>
-<script src="js/tesseract/tesseract.min.js"></script>
+  <script src="js/modules/codelab.js"></script>
+  <script src="js/tesseract/tesseract.min.js"></script>
 <script src="js/app.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

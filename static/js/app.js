@@ -55,8 +55,8 @@ function switchTab(tab) {
   qsa('.tab-pane').forEach(p => p.classList.remove('active'));
   const pane = $(`tab-${tab}`);
   if (pane) pane.classList.add('active');
-  // Reset notebook sidebar and tool if switching to/from notebook
   if (tab === 'notebook') switchNbTool(currentNbTool);
+  if (tab === 'codelab' && typeof initCodeLab === 'function') initCodeLab();
   log(`Switched to ${tab}`);
 }
 
