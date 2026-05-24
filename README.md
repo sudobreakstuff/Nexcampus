@@ -32,6 +32,22 @@ powershell -c "irm https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/ma
 
 > Both builds include bundled Tesseract 5 for offline OCR.
 
+### Uninstall
+
+**Linux:**
+```bash
+curl -sS https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/uninstall.sh | bash
+```
+
+Removes `/opt/nexcampus`, desktop entry, user data (`~/.local/share/nexcampus`), and stale processes.
+
+**Windows — run in PowerShell:**
+```powershell
+powershell -c "irm https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/uninstall.ps1 | iex"
+```
+
+Removes app files, desktop shortcut, Start Menu entry, and user data (`%APPDATA%\NexCampus`).
+
 ## Build from source
 
 ```bash
