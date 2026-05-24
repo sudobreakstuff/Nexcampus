@@ -489,15 +489,17 @@ var CL_SNIPPETS = {
 
 function initCodeLab() {
   var editor = $('cl-code-input');
-  if (editor) {
-    editor.placeholder = '# Write your code here...\n# Select a language and click Run';
-  }
+  if (!editor) { console.log('cl-code-input not found for code lab init'); return; }
+  editor.placeholder = '# Write your code here...\n# Select a language and click Run';
   currentClLang = 'python';
   var langSelect = $('cl-lang-select');
   if (langSelect) langSelect.value = 'python';
   clRenderGuides();
   clSearchDict();
   clRenderProjects();
+  clInitChallenges();
+  window._clChallengesInit = true;
+  showNotification('Code Lab ready. Select a guide or write code and press Run.', 3000, 'success');
 }
 
 function clSwitchTab(tab) {

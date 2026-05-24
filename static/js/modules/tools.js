@@ -2381,20 +2381,21 @@ function doneOcr(data, status, output, btn, fileInput, label) {
 var MM = { canvas:null, ctx:null, nodes:[], selected:null, dragging:null, dragOffX:0, dragOffY:0, nextId:1 };
 
 function initMindMap() {
-  if (MM.canvas) return;
+  if (MM.canvas) { mmDraw(); return; }
   MM.canvas = $('mindmap-canvas');
-  if (!MM.canvas) return;
+  if (!MM.canvas) { console.log('mindmap canvas not found'); return; }
   MM.ctx = MM.canvas.getContext('2d');
   var c = MM.canvas;
+  c.style.background = 'var(--bg2)';
   c.addEventListener('mousedown', mmMouseDown);
   c.addEventListener('mousemove', mmMouseMove);
   c.addEventListener('mouseup', mmMouseUp);
   c.addEventListener('dblclick', mmDblClick);
-  // Start with a center node
   if (MM.nodes.length === 0) {
     MM.nodes.push({ id: MM.nextId++, label: 'Main Idea', x: 400, y: 250, color: '#4fc3f7', parent: null });
   }
   mmDraw();
+  showNotification('Mind Map ready! Double-click to add nodes.', 3000, 'success');
 }
 
 function mmDraw() {
