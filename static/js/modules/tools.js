@@ -2383,10 +2383,9 @@ var MM = { canvas:null, ctx:null, nodes:[], selected:null, dragging:null, dragOf
 function initMindMap() {
   if (MM.canvas) { mmDraw(); return; }
   MM.canvas = $('mindmap-canvas');
-  if (!MM.canvas) { console.log('mindmap canvas not found'); return; }
+  if (!MM.canvas) return;
   MM.ctx = MM.canvas.getContext('2d');
   var c = MM.canvas;
-  c.style.background = 'var(--bg2)';
   c.addEventListener('mousedown', mmMouseDown);
   c.addEventListener('mousemove', mmMouseMove);
   c.addEventListener('mouseup', mmMouseUp);
@@ -2395,25 +2394,21 @@ function initMindMap() {
     MM.nodes.push({ id: MM.nextId++, label: 'Main Idea', x: 400, y: 250, color: '#4fc3f7', parent: null });
   }
   mmDraw();
-  showNotification('Mind Map ready! Double-click to add nodes.', 3000, 'success');
 }
 
 function mmDraw() {
   var ctx = MM.ctx, c = MM.canvas;
   if (!ctx || !c) return;
-  var style = getComputedStyle(document.documentElement);
-  var bg = style.getPropertyValue('--bg').trim() || '#0a0e14';
-  var border = style.getPropertyValue('--border').trim() || '#1e2a3a';
-  ctx.clearRect(0, 0, c.width, c.height);
-  ctx.fillStyle = bg;
+  c.width = c.width; // clear canvas
+  ctx.fillStyle = '#0a0e14';
   ctx.fillRect(0, 0, c.width, c.height);
-  // Draw connections
+  // Draw connection lines
+  ctx.strokeStyle = '#2a3a4a';
+  ctx.lineWidth = 2;
   MM.nodes.forEach(function(n) {
     if (n.parent !== null) {
       var parent = MM.nodes.find(function(p) { return p.id === n.parent; });
       if (parent) {
-        ctx.strokeStyle = border;
-        ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(parent.x, parent.y);
         ctx.lineTo(n.x, n.y);

@@ -489,7 +489,7 @@ var CL_SNIPPETS = {
 
 function initCodeLab() {
   var editor = $('cl-code-input');
-  if (!editor) { console.log('cl-code-input not found for code lab init'); return; }
+  if (!editor) return;
   editor.placeholder = '# Write your code here...\n# Select a language and click Run';
   currentClLang = 'python';
   var langSelect = $('cl-lang-select');
@@ -499,24 +499,24 @@ function initCodeLab() {
   clRenderProjects();
   clInitChallenges();
   window._clChallengesInit = true;
-  showNotification('Code Lab ready. Select a guide or write code and press Run.', 3000, 'success');
 }
 
 function clSwitchTab(tab) {
   currentClTab = tab;
-  var tabs = ['guides', 'dictionary', 'projects', 'challenges'];
-  tabs.forEach(function(t) {
-    var content = $('cl-' + t);
-    if (content) content.style.display = 'none';
+  // Hide all content panels
+  ['guides','dictionary','projects','challenges'].forEach(function(t) {
+    var c = $('cl-' + t);
+    if (c) c.style.display = 'none';
   });
-  qsa('.cl-sb-btn').forEach(function(btn) { btn.classList.remove('active'); });
-  var activeContent = $('cl-' + tab);
-  if (activeContent) activeContent.style.display = 'block';
-  // Highlight the active tab button
-  qsa('.cl-sb-btn').forEach(function(btn) {
-    var onclick = btn.getAttribute('onclick') || '';
-    if (onclick.indexOf("'" + tab + "'") !== -1) btn.classList.add('active');
+  // Show the selected one
+  var active = $('cl-' + tab);
+  if (active) active.style.display = 'block';
+  // Toggle button active states
+  qsa('.cl-sb-btn').forEach(function(b) {
+    var ontxt = b.getAttribute('onclick') || '';
+    b.classList.toggle('active', ontxt.indexOf("'" + tab + "'") !== -1);
   });
+  // Lazy-init challenges
   if (tab === 'challenges' && !window._clChallengesInit) {
     clInitChallenges();
     window._clChallengesInit = true;

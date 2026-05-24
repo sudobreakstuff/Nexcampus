@@ -1,17 +1,12 @@
 {
-  "version": "2.4.0",
-  "name": "NexCampus v2.4.0",
+  "version": "2.4.1",
+  "name": "NexCampus v2.4.1",
   "update_url": "",
   "changelog": [
-    "CSS fix — only Code Lab tab uses flex layout, all other tabs restored to block",
-    "Code Lab now verifies DOM readiness and shows confirmation when loaded",
-    "Mind map canvas has visible cyan border + distinct background",
-    "Mind map shows ready notification on load with instructions",
-    "Global search — type + Enter to navigate to any tool",
-    "Weekly content delivery — auto-receives new guides/challenges/themes weekly",
-    "8 auto-graded Python challenges with instant pass/fail scoring",
-    "Side-by-side Code Lab editor + output",
-    "Procedural planet textures, lens flare, 900 stars for Solar System",
-    "8 themes, self-update, sidebar search"
+    "Code Lab tab switching fixed \u2014 uses toggle for active state",
+    "Mind map rendering uses hardcoded colors (no more CSS var issues)",
+    "Removed notification calls from init functions to prevent execution errors",
+    "Canvas clear using width reset for reliable redraw",
+    "Side-by-side editor + output, 8 challenges, global search, self-update"
   ]
 }
