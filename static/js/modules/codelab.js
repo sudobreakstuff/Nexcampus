@@ -936,8 +936,16 @@ function clShowSolution() {
   var btn = document.getElementById('cl-soln-btn');
   if (code) code.style.display = 'block';
   if (btn) btn.style.display = 'none';
-  var editor = $('cl-code-input');
-  if (editor && code) editor.value = code.textContent;
+    var editor = $('cl-code-input');
+    if (editor && code) editor.value = code.textContent;
+}
+
+function clBackToGuides() {
+  var viewEl = $('cl-guide-view');
+  var listEl = $('cl-guides-list');
+  if (viewEl) viewEl.style.display = 'none';
+  if (listEl) listEl.style.display = 'block';
+  window._clGuide = null;
 }
 
 function clRenderGuides() {

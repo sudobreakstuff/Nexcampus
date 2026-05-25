@@ -1,11 +1,8 @@
 {
-  "version": "2.7.0",
-  "name": "NexCampus v2.7.0",
+  "version": "2.7.1",
+  "name": "NexCampus v2.7.1",
   "update_url": "",
   "changelog": [
-    "Step-by-step guided walkthroughs (Next/Back navigation, Try It prompts, Show Solution)",
-    "Progressive hints for challenges (3 levels: gentle \u2192 direct \u2192 pseudocode)",
-    "Python Basics guide now fully interactive with 4 steps",
-    "All 10 challenges now have progressive hints"
+    "Fixed Back to All Guides button in step-by-step view"
   ]
 }
