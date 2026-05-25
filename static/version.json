@@ -1,11 +1,8 @@
 {
-  "version": "2.8.2",
-  "name": "NexCampus v2.8.2",
+  "version": "2.8.3",
+  "name": "NexCampus v2.8.3",
   "update_url": "",
   "changelog": [
-    "Graphing Calculator \u2014 plot functions like sin(x), x^2, log(x), scroll to zoom, drag to pan, export PNG",
-    "Formula Reference \u2014 30 searchable math/physics/chemistry/stats formulas (offline)",
-    "Challenge descriptions fixed (now render as rich HTML)",
-    "Step-by-step guided walkthroughs with Try It prompts"
+    "Safely removed challenges, graph calculator, and formula reference"
   ]
 }

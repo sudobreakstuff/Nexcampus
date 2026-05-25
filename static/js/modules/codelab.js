@@ -688,181 +688,11 @@ var CODEPROJECTS = [
   }
 ];
 
-var CODECHALLENGES = [
-  {
-    id:'sum-two',
-    title:'Mission 1: The Adder',
-    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Create a function that adds two numbers together.<br><br><b>📖 Background:</b> Functions are the building blocks of programming. They take inputs (called parameters), do something with them, and return a result. Think of a function like a vending machine: you put money in (input), it processes, and gives you a snack (output).<br><br><b>🧠 What You\'ll Learn:</b> Function definition with <code>def</code>, parameters, return values, and basic arithmetic.</div>',
-    template:'def add(a, b):\n    # a and b are your two numbers\n    # Return their sum\n    pass\n\n# After you finish, the grader will test your function\n# with different inputs like add(2, 3) and add(-1, 1)',
-    tests:[['add(2, 3)', '5'],['add(-1, 1)', '0'],['add(0, 0)', '0'],['add(100, 200)', '300']],
-    hints:['You just need to return the result of adding the two parameters.',"Use the + operator: return a + b","Replace 'pass' with: return a + b"]
-  },
-  {
-    id:'is-even',
-    title:'Mission 2: Even Stevens',
-    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Write a function that checks if a number is even.<br><br><b>📖 Background:</b> An even number is divisible by 2 with no remainder. The modulo operator (%) gives you the remainder after division. For example, 7 % 2 = 1 (7 divided by 2 leaves remainder 1). If the remainder is 0, the number is even!<br><br><b>🧠 Key Concept:</b> <code>n % 2 == 0</code> is True for even numbers. This is a Boolean expression — it evaluates to True or False. Your function should return this Boolean value.</div>',
-    template:'def is_even(n):\n    # n is any integer\n    # Return True if n is even, False otherwise\n    # Hint: Use the modulo operator %\n    pass',
-    tests:[['is_even(4)', 'True'],['is_even(7)', 'False'],['is_even(0)', 'True'],['is_even(1)', 'False']],
-    hints:['An even number is divisible by 2 with no remainder.','Use the modulo operator: n % 2 gives you the remainder.','Return n % 2 == 0 — this will be True for even numbers.']
-  },
-  {
-    id:'factorial',
-    title:'Mission 3: Factorial Factory',
-    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Calculate n! (n factorial).<br><br><b>📖 Background:</b> Factorial is a fundamental math concept used in probability, combinatorics, and algorithms. n! = n × (n-1) × (n-2) × ... × 1. For example, 5! = 5×4×3×2×1 = 120. Special case: 0! = 1 (by definition).<br><br><b>🧠 Key Concept:</b> Use a loop that multiplies numbers together. Start with result = 1, then multiply by 1, 2, 3, ..., n.</div>',
-    template:'def factorial(n):\n    # n is a non-negative integer\n    # Return n! (n factorial)\n    # Remember: 0! = 1\n    pass',
-    tests:[['factorial(0)', '1'],['factorial(1)', '1'],['factorial(5)', '120'],['factorial(3)', '6']],
-    hints:['n! means multiply all numbers from 1 to n. 5! = 5×4×3×2×1 = 120.','Start with result = 1, then loop from 1 to n, multiplying each time.','result = 1\nfor i in range(1, n+1):\n    result *= i\nreturn result']
-  },
-  {
-    id:'max-of-three',
-    title:'Mission 4: The Decider',
-    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Find the largest of three numbers.<br><br><b>📖 Background:</b> Comparison logic is essential in programming. Every time an app sorts a list, picks the best score, or finds the shortest route — it\'s comparing values. You\'ll use <code>if/elif</code> statements (conditional branching) to make decisions.<br><br><b>🧠 Key Concept:</b> Python\'s built-in <code>max()</code> function can do this instantly. But building it yourself teaches you how comparison logic works under the hood.</div>',
-    template:'def max_of_three(a, b, c):\n    # a, b, c are three numbers\n    # Return whichever is largest\n    # Approach 1: Use if/elif comparisons\n    # Approach 2: Use Python\'s max() function\n    pass',
-    tests:[['max_of_three(1,2,3)', '3'],['max_of_three(5,3,4)', '5'],['max_of_three(-1,-2,-3)', '-1'],['max_of_three(7,7,1)', '7']],
-    hints:['Compare a with b: find the larger. Then compare that with c.','Use nested if statements or Python\'s max()','return max(a, b, c) — simple and clean!']
-  },
-  {
-    id:'palindrome',
-    title:'Mission 5: Mirror Words',
-    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Check if a word reads the same backward as forward.<br><br><b>📖 Background:</b> Palindromes are words or phrases that are identical when reversed. "racecar", "madam", and "a" are palindromes. "hello" is not. This is a classic interview question that tests your string manipulation skills.<br><br><b>🧠 Key Concept:</b> Python has a powerful slicing feature: <code>s[::-1]</code> reverses any string. The slice <code>[start:stop:step]</code> with step=-1 goes backwards!</div>',
-    template:'def is_palindrome(s):\n    # s is any string\n    # Return True if s reads the same forward and backward\n    # Hint: Try reversing the string first\n    pass',
-    tests:[['is_palindrome("racecar")', 'True'],['is_palindrome("hello")', 'False'],['is_palindrome("a")', 'True'],['is_palindrome("madam")', 'True']],
-    hints:['A palindrome reads the same backward and forward. "racecar" reversed is still "racecar".','To reverse a string: s[::-1] — the ::-1 means step backwards.','return s == s[::-1]']
-  },
-  {
-    id:'fizzbuzz',
-    title:'Mission 6: The FizzBuzz Interview',
-    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Implement the classic FizzBuzz test.<br><br><b>📖 Background:</b> FizzBuzz is THE most famous coding interview question. It filters out candidates who can\'t write basic logic. The rules: if a number is divisible by 3, say "Fizz". If divisible by 5, say "Buzz". If divisible by both, say "FizzBuzz". Otherwise, just say the number.<br><br><b>🧠 Key Concept:</b> Check the MOST specific condition first (divisible by both = divisible by 15). Then check less specific conditions. This is called "ordering your conditions."</div>',
-    template:'def fizzbuzz(n):\n    # n is a positive integer\n    # Return "Fizz" if divisible by 3\n    # Return "Buzz" if divisible by 5\n    # Return "FizzBuzz" if divisible by both\n    # Otherwise return n as a string\n    # IMPORTANT: Check divisible by 15 FIRST\n    pass',
-    tests:[['fizzbuzz(3)', 'Fizz'],['fizzbuzz(5)', 'Buzz'],['fizzbuzz(15)', 'FizzBuzz'],['fizzbuzz(7)', '7']],
-    hints:['Check the most specific case first: divisible by both 3 AND 5 means divisible by 15.','Use modulo: if n % 15 == 0 return "FizzBuzz", elif n % 3 == 0 return "Fizz", elif n % 5 == 0 return "Buzz".','Convert n to string for the else: return str(n)']
-  },
-  {
-    id:'count-vowels',
-    title:'Mission 7: Vowel Counter',
-    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Count how many vowels are in a string.<br><br><b>📖 Background:</b> Text analysis is everywhere — search engines, spell checkers, autocomplete. Counting characters is the first step. Vowels (a, e, i, o, u) are the most common letters in English. Your function should be case-insensitive (treat \'A\' and \'a\' the same).<br><br><b>🧠 Key Concept:</b> Convert to lowercase first (<code>s.lower()</code>), then loop through each character checking if it\'s in a set of vowels.</div>',
-    template:'def count_vowels(s):\n    # s is any string (may contain uppercase)\n    # Count and return the number of vowels (a, e, i, o, u)\n    # Make it case-insensitive!\n    pass',
-    tests:[['count_vowels("hello")', '2'],['count_vowels("AEIOU")', '5'],['count_vowels("sky")', '0'],['count_vowels("Python")', '1']],
-    hints:['Convert to lowercase first: s = s.lower()','Check each character: if c in "aeiou": count += 1','return sum(1 for c in s.lower() if c in "aeiou")']
-  },
-  {
-    id:'fibonacci',
-    title:'Mission 8: The Golden Sequence',
-    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Generate the first n Fibonacci numbers.<br><br><b>📖 Background:</b> The Fibonacci sequence appears everywhere in nature — flower petals, pinecones, spiral galaxies. Each number is the sum of the previous two: 0, 1, 1, 2, 3, 5, 8, 13, 21... It starts with 0 and 1. This sequence is used in algorithms, trading strategies, and even art.<br><br><b>🧠 Key Concept:</b> Build the list step by step. Always look at the last two numbers to generate the next one.</div>',
-    template:'def fib_list(n):\n    # n is how many Fibonacci numbers to generate\n    # Return a list of the first n Fibonacci numbers\n    # fib(1) = [0], fib(2) = [0, 1], fib(5) = [0, 1, 1, 2, 3]\n    pass',
-    tests:[['fib_list(1)', '[0]'],['fib_list(2)', '[0, 1]'],['fib_list(5)', '[0, 1, 1, 2, 3]'],['fib_list(7)', '[0, 1, 1, 2, 3, 5, 8]']],
-    hints:['Start the list with [0, 1]. Each new number is the sum of the last two.','Use a loop: while len(result) < n: result.append(result[-1] + result[-2])','Edge case: if n == 1, return [0]; if n == 0, return []']
-  },
-  {
-    id:'reverse-string',
-    title:'Mission 9: String Reverser',
-    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Reverse any string completely.<br><br><b>📖 Background:</b> String reversal is a fundamental operation. It\'s used in DNA sequencing, cryptography, and checksums. Understanding string slicing is a Python superpower — once you know <code>[start:stop:step]</code>, you can extract any part of any sequence.<br><br><b>🧠 Key Concept:</b> A negative step in a slice walks backwards. <code>s[::-1]</code> means "from start to end, step -1" — which reverses the string.</div>',
-    template:'def reverse_string(s):\n    # s is any string\n    # Return s reversed (e.g., "hello" -> "olleh")\n    # Python makes this very easy!\n    pass',
-    tests:[['reverse_string("hello")', 'olleh'],['reverse_string("Python")', 'nohtyP'],['reverse_string("a")', 'a'],['reverse_string("racecar")', 'racecar']],
-    hints:['Python slices can take a step parameter.','s[::-1] means "step by -1" which goes backward.','return s[::-1]']
-  },
-  {
-    id:'temperature',
-    title:'Mission 10: Global Weather',
-    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Convert Celsius to Fahrenheit.<br><br><b>📖 Background:</b> Most of the world uses Celsius, but the US uses Fahrenheit. Temperature conversion is one of the most practical programming tasks. The formula is: F = (C × 9/5) + 32. That\'s it! This teaches you about mathematical operations in Python and function return values.<br><br><b>🧠 Key Concept:</b> Python follows order of operations (multiplication before addition), so C × 9/5 + 32 is calculated correctly without extra parentheses. But adding parentheses makes it clearer: (C * 9/5) + 32.</div>',
-    template:'def c_to_f(c):\n    # c is temperature in Celsius\n    # Convert to Fahrenheit: F = (C × 9/5) + 32\n    # Return the result\n    pass',
-    tests:[['c_to_f(0)', '32.0'],['c_to_f(100)', '212.0'],['c_to_f(-40)', '-40.0'],['c_to_f(37)', '98.6']],
-    hints:['The formula is: multiply by 9, divide by 5, add 32.','return c * 9 / 5 + 32','Test it: water freezes at 0°C = 32°F, boils at 100°C = 212°F']
-  }
-];
 
-function clInitChallenges() {
-  var listEl = document.getElementById('cl-challenges-list');
-  if (!listEl) return;
-  var html = '';
-  CODECHALLENGES.forEach(function(c) {
-    html += '<div style="padding:6px 8px;border-bottom:1px solid var(--border);cursor:pointer" onclick="clLoadChallenge(\'' + c.id + '\')"><div style="font-size:11px;color:var(--fg)">' + escapeHtml(c.title) + '</div></div>';
-  });
-  listEl.innerHTML = html || '<div style="color:var(--fg-dim);font-size:10px;padding:8px">No challenges loaded.</div>';
-}
 
-function clLoadChallenge(id) {
-  var c = null;
-  for (var i = 0; i < CODECHALLENGES.length; i++) { if (CODECHALLENGES[i].id === id) { c = CODECHALLENGES[i]; break; } }
-  if (!c) return;
-  var descEl = document.getElementById('cl-challenge-desc');
-  if (descEl) descEl.innerHTML = '<div style="font-size:12px;color:var(--fg);font-weight:bold;margin-bottom:4px">' + escapeHtml(c.title) + '</div>' + c.desc;
-  var viewEl = document.getElementById('cl-challenge-view');
-  var hintHtml = '';
-  if (c.hints && c.hints.length) {
-    hintHtml = '<div id="cl-hint-box" style="margin-top:8px"><button class="nt-btn" onclick="clShowHint()" id="cl-hint-btn" style="font-size:10px">💡 Need a hint?</button><div id="cl-hint-text" style="display:none;font-size:10px;color:var(--amber);margin-top:6px;padding:8px;background:rgba(255,183,77,0.08);border-left:2px solid var(--amber);border-radius:3px"></div></div>';
-  }
-  if (viewEl) viewEl.innerHTML = '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px;font-size:10px;color:var(--fg);margin:0">' + escapeHtml(c.template) + '</pre>' + hintHtml;
-  var editor = document.getElementById('cl-code-input');
-  if (editor) editor.value = c.template;
-  window._clChallenge = c;
-  window._clHintLevel = 0;
-  var guideEl = document.getElementById('cl-guide-view');
-  var dictEl = document.getElementById('cl-dict-view');
-  var projectEl = document.getElementById('cl-project-view');
-  if (guideEl) guideEl.style.display = 'none';
-  if (dictEl) dictEl.style.display = 'none';
-  if (projectEl) projectEl.style.display = 'none';
-  if (viewEl) viewEl.style.display = 'block';
-  if (descEl) descEl.style.display = 'block';
-  var listEl = document.getElementById('cl-challenges-list');
-  if (listEl) listEl.style.display = 'block';
-}
+// challenges removed
 
-function clShowHint() {
-  var c = window._clChallenge;
-  if (!c || !c.hints) return;
-  var level = window._clHintLevel || 0;
-  var hintText = document.getElementById('cl-hint-text');
-  var hintBtn = document.getElementById('cl-hint-btn');
-  if (level < c.hints.length) {
-    if (hintText) { hintText.style.display = 'block'; hintText.textContent = 'Hint ' + (level+1) + ': ' + c.hints[level]; }
-    window._clHintLevel = (level + 1);
-    if (hintBtn && window._clHintLevel >= c.hints.length) hintBtn.textContent = '💡 No more hints!';
-    else if (hintBtn) hintBtn.textContent = '💡 Need another hint? (' + (c.hints.length - window._clHintLevel) + ' left)';
-  }
-}
 
-function clBackToChallenges() {
-  var viewEl = document.getElementById('cl-challenge-view');
-  var descEl = document.getElementById('cl-challenge-desc');
-  var listEl = document.getElementById('cl-challenges-list');
-  if (viewEl) viewEl.style.display = 'none';
-  if (descEl) descEl.style.display = 'none';
-  if (listEl) listEl.style.display = 'block';
-  window._clChallenge = null;
-}
-
-function clGradeChallenge() {
-  var c = window._clChallenge;
-  if (!c) return;
-  var editor = document.getElementById('cl-code-input');
-  if (!editor) return;
-  var code = editor.value;
-  var tests = c.tests;
-  var testCode = code + '\n\n# test runner\n';
-  for (var i = 0; i < tests.length; i++) {
-    var expr = tests[i][0];
-    var expected = tests[i][1];
-    testCode += 'try:\n    __r = ' + expr + '\n    __e = ' + expected + '\n    __ok = str(__r) == str(__e)\n    print("TEST ' + (i+1) + ': " + ("PASS" if __ok else "FAIL") + " (got " + repr(__r) + ", want " + repr(__e) + ")")\nexcept Exception as __x:\n    print("TEST ' + (i+1) + ': ERROR - " + str(__x))\n';
-  }
-  var output = document.getElementById('cl-output');
-  if (!output) return;
-  output.innerHTML = '<div style="color:var(--fg-dim);font-size:11px">Running tests...</div>';
-  fetch('/api/code/run', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:testCode,language:'python'})})
-  .then(function(r){return r.json();})
-  .then(function(d){
-    var html='';var passed=0;
-    (d.stdout||'').split('\n').forEach(function(line){
-      if(line.indexOf('PASS')!==-1){html+='<div style="color:var(--teal);font-size:11px">'+escapeHtml(line)+'</div>';passed++;}
-      else if(line.indexOf('FAIL')!==-1||line.indexOf('ERROR')!==-1){html+='<div style="color:var(--amber);font-size:11px">'+escapeHtml(line)+'</div>';}
-    });
-    if(d.stderr)html+='<div style="color:var(--amber);font-size:10px">'+escapeHtml(d.stderr)+'</div>';
-    html+='<div style="margin-top:6px;font-size:12px;font-weight:bold;color:'+(passed===tests.length?'var(--teal)':'var(--amber)')+'">Score: '+passed+'/'+tests.length+'</div>';
-    if(passed===tests.length)html+='<div style="color:var(--teal);font-size:11px">All tests passed!</div>';
-    output.innerHTML=html;
-  }).catch(function(e){output.innerHTML='<div style="color:var(--red);font-size:11px">Error: '+escapeHtml(e.message)+'</div>';});
-}
 
 var CL_SNIPPETS = {
   'function': 'def my_function(param):\n    pass\n',
@@ -885,13 +715,12 @@ function initCodeLab() {
   clRenderGuides();
   clSearchDict();
   clRenderProjects();
-  clInitChallenges();
 }
 
 function clSwitchTab(tab) {
   currentClTab = tab;
   // Hide all content panels
-  ['guides','dictionary','projects','challenges'].forEach(function(t) {
+  ['guides','dictionary','projects'].forEach(function(t) {
     var c = $('cl-' + t);
     if (c) c.style.display = 'none';
   });
@@ -903,11 +732,6 @@ function clSwitchTab(tab) {
     var ontxt = b.getAttribute('onclick') || '';
     b.classList.toggle('active', ontxt.indexOf("'" + tab + "'") !== -1);
   });
-  // Lazy-init challenges
-  if (tab === 'challenges' && !window._clChallengesInit) {
-    clInitChallenges();
-    window._clChallengesInit = true;
-  }
 }
 
 function clLoadGuide(id) {
@@ -1137,15 +961,6 @@ function clBackToProjects() {
   if (listEl) listEl.style.display = 'block';
 }
 
-function clInitChallenges() {
-  var listEl = $('cl-challenges-list');
-  if (!listEl) return;
-  var html = '';
-  CODECHALLENGES.forEach(function(c) {
-    html += '<div style="padding:6px 8px;border-bottom:1px solid var(--border);cursor:pointer" onclick="clLoadChallenge(\'' + c.id + '\')"><div style="font-size:11px;color:var(--fg)">' + escapeHtml(c.title) + '</div></div>';
-  });
-  listEl.innerHTML = html || '<div style="color:var(--fg-dim);font-size:10px;padding:8px">No challenges loaded.</div>';
-}
 
 function clBackToChallenges() {
   var viewEl = $('cl-challenge-view');
@@ -1154,7 +969,6 @@ function clBackToChallenges() {
   if (viewEl) viewEl.style.display = 'none';
   if (descEl) descEl.style.display = 'none';
   if (listEl) listEl.style.display = 'block';
-  window._clChallenge = null;
 }
 
 function clLoadToEditor() {
@@ -1420,7 +1234,6 @@ function clSetLanguage(lang) {
   }
 }
 
-var CODECHALLENGES = [
   {
     id:'sum-two',
     title:'Sum Two Numbers',
@@ -1492,78 +1305,6 @@ var CODECHALLENGES = [
   }
 ];
 
-function clLoadChallenge(id) {
-  var c = null;
-  for (var i = 0; i < CODECHALLENGES.length; i++) {
-    if (CODECHALLENGES[i].id === id) { c = CODECHALLENGES[i]; break; }
-  }
-  if (!c) return;
-  var descEl = $('cl-challenge-desc');
-  if (descEl) descEl.innerHTML = '<div style="font-size:12px;color:var(--fg);font-weight:bold;margin-bottom:4px">' + escapeHtml(c.title) + '</div><div style="font-size:10px;color:var(--fg-dim);margin-bottom:8px">' + c.desc + '</div>';
-  var viewEl = $('cl-challenge-view');
-  if (viewEl) viewEl.innerHTML = '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px;font-size:10px;color:var(--fg);margin:0">' + escapeHtml(c.template) + '</pre>';
-  var editor = $('cl-code-input');
-  if (editor) editor.value = c.template;
-  window._clChallenge = c;
-  var guideEl = $('cl-guide-view');
-  var dictEl = $('cl-dict-view');
-  var projectEl = $('cl-project-view');
-  var listEl = $('cl-challenges-list');
-  var challengeView = $('cl-challenge-view');
-  var challengeDesc = $('cl-challenge-desc');
-  if (listEl) listEl.style.display = 'block';
-  if (guideEl) guideEl.style.display = 'none';
-  if (dictEl) dictEl.style.display = 'none';
-  if (projectEl) projectEl.style.display = 'none';
-  if (challengeView) challengeView.style.display = 'block';
-  if (challengeDesc) challengeDesc.style.display = 'block';
-  showNotification('Challenge: ' + c.title, 2000, 'info');
-}
 
-function clGradeChallenge() {
-  var c = window._clChallenge;
-  if (!c) { showNotification('Load a challenge first!', 2000, 'error'); return; }
-  var editor = $('cl-code-input');
-  if (!editor) return;
-  var code = editor.value;
-  var tests = c.tests;
-  var testCode = code + '\n\n# test runner\n';
-  for (var i = 0; i < tests.length; i++) {
-    var expr = tests[i][0];
-    var expected = tests[i][1];
-    testCode += 'try:\n';
-    testCode += '    __r = ' + expr + '\n';
-    testCode += '    __e = ' + expected + '\n';
-    testCode += '    __ok = str(__r) == str(__e)\n';
-    testCode += '    print("TEST ' + (i+1) + ': " + ("PASS" if __ok else "FAIL") + " (got " + repr(__r) + ", want " + repr(__e) + ")")\n';
-    testCode += 'except Exception as __x:\n';
-    testCode += '    print("TEST ' + (i+1) + ': ERROR - " + str(__x))\n';
-  }
-  var output = $('cl-output');
-  if (!output) return;
-  output.innerHTML = '<div style="color:var(--fg-dim);font-size:11px">Running tests...</div>';
-  fetch('/api/code/run', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({code: testCode, language: 'python'})
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(d) {
-    var html = '';
-    var passed = 0;
-    var lines = (d.stdout || '').split('\n');
-    lines.forEach(function(line) {
-      if (line.indexOf('✅') !== -1) { html += '<div style="color:var(--teal);font-size:11px;padding:2px 0">' + escapeHtml(line) + '</div>'; passed++; }
-      else if (line.indexOf('❌') !== -1) { html += '<div style="color:var(--amber);font-size:11px;padding:2px 0">' + escapeHtml(line) + '</div>'; }
-    });
-    if (d.stderr) html += '<div style="color:var(--amber);font-size:10px;margin-top:4px">' + escapeHtml(d.stderr) + '</div>';
-    html += '<div style="margin-top:6px;font-size:12px;font-weight:bold;color:' + (passed === tests.length ? 'var(--teal)' : 'var(--amber)') + '">Score: ' + passed + '/' + tests.length + '</div>';
-    if (passed === tests.length) html += '<div style="color:var(--teal);font-size:11px">🎉 All tests passed!</div>';
-    output.innerHTML = html;
-  })
-  .catch(function(e) {
-    output.innerHTML = '<div style="color:var(--red);font-size:11px">Error: ' + escapeHtml(e.message) + '</div>';
-  });
-}
 
 console.log("codelab.js loaded successfully");
