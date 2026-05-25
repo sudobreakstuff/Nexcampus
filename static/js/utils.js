@@ -56,10 +56,10 @@ async function apiPost(endpoint, data) {
 }
 
 function log(msg) {
-  const ts = new Date().toLocaleTimeString();
-  console.log(`[NexCampus ${ts}] ${msg}`);
-  const sb = $('mem-status');
-  if (sb) sb.textContent = msg;
+  try {
+    const ts = new Date().toLocaleTimeString();
+    console.log(`[NexCampus ${ts}] ${msg}`);
+  } catch(e) {}
 }
 
 function showNotification(msg, duration, type) {

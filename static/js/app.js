@@ -55,9 +55,9 @@ function switchTab(tab) {
   qsa('.tab-pane').forEach(p => { p.classList.remove('active'); p.style.display = 'none'; });
   const pane = $(`tab-${tab}`);
   if (pane) { pane.classList.add('active'); pane.style.display = (tab === 'codelab' ? 'flex' : 'block'); }
-  if (tab === 'notebook') switchNbTool(currentNbTool);
-  if (tab === 'codelab' && typeof initCodeLab === 'function') initCodeLab();
-  log(`Switched to ${tab}`);
+  try { if (tab === 'notebook') switchNbTool(currentNbTool); } catch(e) {}
+  try { if (tab === 'codelab' && typeof initCodeLab === 'function') initCodeLab(); } catch(e) {}
+  log('Switched to ' + tab);
 }
 
 async function loadVersion() {
