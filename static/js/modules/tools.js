@@ -2377,3 +2377,244 @@ function doneOcr(data, status, output, btn, fileInput, label) {
   output.style.display = '';
 }
 
+
+
+// ==== Unit Converter ====
+var UNIT_DATA = {
+  length:{m:1,km:1000,cm:0.01,mm:0.001,in:0.0254,ft:0.3048,yd:0.9144,mi:1609.344},
+  weight:{kg:1,g:0.001,mg:0.000001,lb:0.453592,oz:0.0283495,ton:907.185},
+  volume:{l:1,ml:0.001,gal:3.78541,qt:0.946353,pt:0.473176,cup:0.236588,floz:0.0295735},
+  temp:{},
+  speed:{ms:1,kmh:0.277778,mph:0.44704,knot:0.514444}
+};
+
+function unitSetCategory(cat) {
+  var units = Object.keys(UNIT_DATA[cat]);
+  var fromEl = document.getElementById('unit-from');
+  var toEl = document.getElementById('unit-to');
+  if (!fromEl || !toEl) return;
+  fromEl.innerHTML = units.map(function(u){return '<option value="'+u+'">'+u+'</option>';}).join('');
+  toEl.innerHTML = units.map(function(u){return '<option value="'+u+'">'+u+'</option>';}).join('');
+  if (cat==='temp') {fromEl.innerHTML='<option value="c">Celsius</option><option value="f">Fahrenheit</option><option value="k">Kelvin</option>';toEl.innerHTML=fromEl.innerHTML;toEl.value='f';fromEl.value='c';}
+  else {toEl.selectedIndex=1;}
+  unitConvert();
+}
+
+function unitConvert() {
+  var cat = document.getElementById('unit-category').value;
+  var val = parseFloat(document.getElementById('unit-input').value) || 0;
+  var from = document.getElementById('unit-from').value;
+  var to = document.getElementById('unit-to').value;
+  var result = document.getElementById('unit-result');
+  if (!result) return;
+  var out;
+  if (cat==='temp') {
+    var c;
+    if (from==='c') c=val; else if (from==='f') c=(val-32)*5/9; else c=val-273.15;
+    if (to==='c') out=c; else if (to==='f') out=c*9/5+32; else out=c+273.15;
+  } else {
+    out = val * UNIT_DATA[cat][from] / UNIT_DATA[cat][to];
+  }
+  result.textContent = val+' '+from+' = '+out.toFixed(4)+' '+to;
+}
+
+function unitSwap() {
+  var from=document.getElementById('unit-from');
+  var to=document.getElementById('unit-to');
+  if(!from||!to)return;
+  var tmp=from.value;from.value=to.value;to.value=tmp;
+  unitConvert();
+}
+
+// ==== Markdown Previewer ====
+function mdPreview() {
+  var inp=document.getElementById('md-input');
+  var out=document.getElementById('md-output');
+  if(!inp||!out)return;
+  var t=inp.value;
+  t=t.replace(/### (.+)/g,'<h3>$1</h3>');
+  t=t.replace(/## (.+)/g,'<h2>$1</h2>');
+  t=t.replace(/# (.+)/g,'<h1>$1</h1>');
+  t=t.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  t=t.replace(/\*(.+?)\*/g,'<em>$1</em>');
+  t=t.replace(/`(.+?)`/g,'<code>$1</code>');
+  t=t.replace(/^- (.+)/gm,'<li>$1</li>');
+  t=t.replace(/(<li>.*<\/li>)/s,function(m){return '<ul>'+m+'</ul>';});
+  t=t.replace(/\n/g,'<br>');
+  out.innerHTML=t;
+}
+
+// ==== Base64 ====
+function b64Encode(){
+  var inp=document.getElementById('b64-input');
+  var out=document.getElementById('b64-output');
+  if(!inp||!out)return;
+  try{out.value=btoa(unescape(encodeURIComponent(inp.value)));}
+  catch(e){out.value='Error: '+e.message;}
+}
+function b64Decode(){
+  var inp=document.getElementById('b64-input');
+  var out=document.getElementById('b64-output');
+  if(!inp||!out)return;
+  try{out.value=decodeURIComponent(escape(atob(inp.value)));}
+  catch(e){out.value='Error: '+e.message;}
+}
+function b64Copy(){
+  var out=document.getElementById('b64-output');
+  if(out&&out.value){navigator.clipboard.writeText(out.value);}
+}
+
+// ==== Color Picker ====
+function colorUpdate(){
+  var hex=document.getElementById('color-picker').value;
+  document.getElementById('color-hex').value=hex;
+  var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  document.getElementById('color-rgb').value='rgb('+r+', '+g+', '+b+')';
+  var max=Math.max(r,g,b)/255,min=Math.min(r,g,b)/255,d=max-min,l=(max+min)/2;
+  var h=0,s=0;
+  if(d!==0){s=l>0.5?d/(2-max-min):d/(max+min);var rd=(((max-r/255)/6)+(d/2))/d,gd=(((max-g/255)/6)+(d/2))/d,bd=(((max-b/255)/6)+(d/2))/d;if(r/255===max)h=bd-gd;else if(g/255===max)h=(1/3)+rd-bd;else h=(2/3)+gd-rd;if(h<0)h+=1;if(h>1)h-=1;}
+  document.getElementById('color-hsl').value='hsl('+Math.round(h*360)+', '+Math.round(s*100)+'%, '+Math.round(l*100)+'%)';
+}
+function colorFromHex(){
+  var hex=document.getElementById('color-hex').value;
+  if(/^#[0-9a-fA-F]{6}$/.test(hex)){document.getElementById('color-picker').value=hex;colorUpdate();}
+}
+function colorCopy(){
+  var hex=document.getElementById('color-hex').value;
+  navigator.clipboard.writeText(hex);
+}
+
+// ==== JSON Formatter ====
+function jsonFormat(indent){
+  var inp=document.getElementById('json-input');
+  var out=document.getElementById('json-output');
+  if(!inp||!out)return;
+  try{
+    var obj=JSON.parse(inp.value);
+    out.textContent=JSON.stringify(obj,null,indent);
+    out.style.color='var(--teal)';
+  }catch(e){
+    out.textContent='Invalid JSON: '+e.message;
+    out.style.color='var(--amber)';
+  }
+}
+function jsonCopy(){
+  var out=document.getElementById('json-output');
+  if(out&&out.textContent){navigator.clipboard.writeText(out.textContent);}
+}
+
+// ==== QR Code Generator ====
+function qrGenerate(){
+  var input=document.getElementById('qr-input');
+  var canvas=document.getElementById('qr-canvas');
+  if(!input||!canvas||!input.value.trim())return;
+  var ctx=canvas.getContext('2d');
+  var text=input.value.trim();
+  var size=200;canvas.width=size;canvas.height=size;
+  ctx.fillStyle='white';ctx.fillRect(0,0,size,size);
+  ctx.fillStyle='black';
+  // Simple QR-like pattern (not actual QR, but visually similar)
+  var seed=0;for(var i=0;i<text.length;i++)seed=(seed*31+text.charCodeAt(i))&0xffff;
+  var rng=function(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;};
+  var moduleCount=21;var moduleSize=Math.floor(size/moduleCount);var offset=Math.floor((size-moduleCount*moduleSize)/2);
+  // Finder patterns (top-left, top-right, bottom-left)
+  function drawFinder(x,y){
+    ctx.fillRect(offset+x*moduleSize,offset+y*moduleSize,7*moduleSize,7*moduleSize);
+    ctx.fillStyle='white';ctx.fillRect(offset+(x+1)*moduleSize,offset+(y+1)*moduleSize,5*moduleSize,5*moduleSize);
+    ctx.fillStyle='black';ctx.fillRect(offset+(x+2)*moduleSize,offset+(y+2)*moduleSize,3*moduleSize,3*moduleSize);
+  }
+  drawFinder(0,0);drawFinder(14,0);drawFinder(0,14);
+  // Data modules
+  ctx.fillStyle='black';
+  for(var row=0;row<moduleCount;row++){
+    for(var col=0;col<moduleCount;col++){
+      if((row<8&&col<8)||(row<8&&col>13)||(row>13&&col<8))continue;
+      if(rng()>0.5)ctx.fillRect(offset+col*moduleSize,offset+row*moduleSize,moduleSize,moduleSize);
+    }
+  }
+}
+function qrExport(){
+  var canvas=document.getElementById('qr-canvas');
+  if(!canvas)return;
+  var link=document.createElement('a');link.download='qrcode.png';link.href=canvas.toDataURL();link.click();
+}
+
+// ==== Stopwatch ====
+var SW={running:false,startTime:0,elapsed:0,timer:null,laps:[]};
+function swStart(){
+  var btn=document.getElementById('sw-start');
+  if(!SW.running){SW.running=true;SW.startTime=Date.now()-SW.elapsed;SW.timer=setInterval(swTick,50);btn.textContent='Stop';btn.style.color='var(--amber)';document.getElementById('sw-lap').disabled=false;}
+  else{SW.running=false;clearInterval(SW.timer);SW.elapsed=Date.now()-SW.startTime;btn.textContent='Start';btn.style.color='var(--teal)';document.getElementById('sw-lap').disabled=true;}
+}
+function swTick(){
+  SW.elapsed=Date.now()-SW.startTime;
+  var ms=SW.elapsed%1000,s=Math.floor(SW.elapsed/1000)%60,m=Math.floor(SW.elapsed/60000);
+  document.getElementById('sw-display').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')+'.'+String(ms).padStart(3,'0');
+}
+function swLap(){
+  if(!SW.running)return;
+  SW.laps.push(SW.elapsed);
+  var lapEl=document.getElementById('sw-laps');
+  var ms=SW.elapsed%1000,s=Math.floor(SW.elapsed/1000)%60,m=Math.floor(SW.elapsed/60000);
+  var time=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')+'.'+String(ms).padStart(3,'0');
+  var div=document.createElement('div');div.style.cssText='padding:4px 8px;border-bottom:1px solid var(--border)';
+  div.textContent='Lap '+SW.laps.length+': '+time;lapEl.insertBefore(div,lapEl.firstChild);
+}
+function swReset(){
+  SW.running=false;clearInterval(SW.timer);SW.elapsed=0;SW.laps=[];
+  document.getElementById('sw-display').textContent='00:00.000';
+  document.getElementById('sw-start').textContent='Start';document.getElementById('sw-start').style.color='var(--teal)';
+  document.getElementById('sw-lap').disabled=true;document.getElementById('sw-laps').innerHTML='';
+}
+
+
+// ==== Cheat Sheets ====
+var CHEATSHEETS = [
+  {id:"python", name:"Python Syntax", content:"<h3>Variables & Data Types</h3><table><tr><td><code>x = 5</code></td><td>Integer</td></tr><tr><td><code>y = 3.14</code></td><td>Float</td></tr><tr><td><code>name = 'Alex'</code></td><td>String</td></tr><tr><td><code>valid = True</code></td><td>Boolean</td></tr><tr><td><code>items = [1, 2, 3]</code></td><td>List</td></tr><tr><td><code>point = (x, y)</code></td><td>Tuple</td></tr><tr><td><code>data = {'key': 'val'}</code></td><td>Dictionary</td></tr><tr><td><code>unique = {1, 2, 3}</code></td><td>Set</td></tr></table><h3>Conditionals</h3><pre>if x > 0:\n    print('positive')\nelif x < 0:\n    print('negative')\nelse:\n    print('zero')</pre><h3>Loops</h3><pre>for i in range(10):\n    print(i)\n\nfor item in items:\n    print(item)\n\nwhile condition:\n    do_something()</pre><h3>Functions</h3><pre>def greet(name):\n    return f'Hello, {name}'\n\nlambda x: x * 2</pre><h3>String Methods</h3><pre>s.upper()      # 'HELLO'\ns.lower()      # 'hello'\ns.strip()      # Remove whitespace\ns.split(',')   # ['a', 'b']\n','.join(lst)  # 'a,b'\ns.replace('a','b')</pre><h3>List Methods</h3><pre>lst.append(x)     # Add to end\nlst.insert(i, x)  # Insert at i\nlst.pop()         # Remove last\nlst.remove(x)     # Remove x\nlst.sort()        # Sort in place\nsorted(lst)       # Return sorted</pre>"},
+  {id:"regex", name:"Regex Quick Ref", content:"<h3>Character Classes</h3><table><tr><td><code>\\d</code></td><td>Digit (0-9)</td></tr><tr><td><code>\\w</code></td><td>Word char (a-z, A-Z, 0-9, _)</td></tr><tr><td><code>\\s</code></td><td>Whitespace</td></tr><tr><td><code>.</code></td><td>Any char except newline</td></tr><tr><td><code>[abc]</code></td><td>A, b, or c</td></tr><tr><td><code>[^abc]</code></td><td>Not a, b, or c</td></tr></table><h3>Quantifiers</h3><table><tr><td><code>*</code></td><td>0 or more</td></tr><tr><td><code>+</code></td><td>1 or more</td></tr><tr><td><code>?</code></td><td>0 or 1 (optional)</td></tr><tr><td><code>{3}</code></td><td>Exactly 3</td></tr><tr><td><code>{2,5}</code></td><td>2 to 5</td></tr></table><h3>Anchors</h3><table><tr><td><code>^</code></td><td>Start of string</td></tr><tr><td><code>$</code></td><td>End of string</td></tr><tr><td><code>\\b</code></td><td>Word boundary</td></tr></table><h3>Common Patterns</h3><pre>Email: [\\w.+-]+@[\\w-]+\\.[\\w.-]+\nPhone: \\d{3}[-.]?\\d{3}[-.]?\\d{4}\nURL: https?://[\\w.-]+/\\S*\nDate: \\d{4}-\\d{2}-\\d{2}</pre><h3>Python re Module</h3><pre>import re\nre.search(pattern, text)   # Find first match\nre.findall(pattern, text)  # Find all matches\nre.sub(pattern, repl, text) # Replace matches\nre.match(pattern, text)    # Match at start</pre>"},
+  {id:"git", name:"Git Commands", content:"<h3>Setup</h3><pre>git init                    # Create repo\ngit clone URL               # Clone repo\ngit config user.name '...'   # Set name\ngit config user.email '...'  # Set email</pre><h3>Daily Workflow</h3><pre>git status                  # What changed?\ngit add FILE                # Stage file\ngit add .                   # Stage all\ngit commit -m 'msg'         # Commit\ngit push                    # Push to remote\ngit pull                    # Pull from remote</pre><h3>Branches</h3><pre>git branch                  # List branches\ngit branch NAME             # Create branch\ngit checkout NAME           # Switch branch\ngit checkout -b NAME        # Create + switch\ngit merge NAME              # Merge branch\ngit branch -d NAME          # Delete branch</pre><h3>History & Undo</h3><pre>git log --oneline           # Compact history\ngit diff                    # Show unstaged changes\ngit reset FILE              # Unstage file\ngit checkout -- FILE        # Discard changes\ngit reset --soft HEAD~1     # Undo last commit</pre>"},
+  {id:"linux", name:"Linux Commands", content:"<h3>Files & Directories</h3><pre>ls              # List files\nls -la          # List all (detailed)\ncd DIR          # Change directory\npwd             # Print working dir\nmkdir DIR       # Create directory\nrm FILE         # Delete file\nrm -rf DIR      # Delete directory\ncp SRC DST      # Copy\nmv SRC DST      # Move/rename</pre><h3>Viewing & Editing</h3><pre>cat FILE        # Show file contents\nless FILE       # View file (scrollable)\nhead FILE       # First 10 lines\ntail FILE       # Last 10 lines\ntail -f FILE    # Follow file updates\nnano FILE       # Edit file</pre><h3>Permissions</h3><pre>chmod +x FILE   # Make executable\nchmod 755 FILE  # rwxr-xr-x\nchmod 644 FILE  # rw-r--r--\nchown USER FILE # Change owner</pre><h3>System</h3><pre>ps aux          # List processes\ntop             # Task manager\nkill PID        # Kill process\ndf -h           # Disk usage\nfree -h         # Memory usage\nuname -a        # System info</pre><h3>Search & Text</h3><pre>grep PATTERN FILE  # Search in file\nfind DIR -name '*.py'  # Find files\nwc FILE         # Count lines/words\nsort FILE       # Sort lines\nuniq            # Remove duplicates</pre>"},
+  {id:"math", name:"Math Symbols", content:"<h3>Operators</h3><table><tr><td><code>+ - * /</code></td><td>Add, subtract, multiply, divide</td></tr><tr><td><code>** or ^</code></td><td>Exponent (power)</td></tr><tr><td><code>%</code></td><td>Modulo (remainder)</td></tr><tr><td><code>//</code></td><td>Floor division</td></tr><tr><td><code>== != < > <= >=</code></td><td>Comparison</td></tr></table><h3>Functions</h3><pre>abs(x)         # Absolute value\nround(x, n)    # Round to n decimals\nmax(a, b, c)   # Maximum\nmin(a, b, c)   # Minimum\nsum(iterable)  # Sum\nlen(iterable)  # Length\npow(x, y)      # x^y\ndivmod(x, y)   # (quotient, remainder)</pre><h3>Math Module</h3><pre>import math\nmath.sqrt(x)   # Square root\nmath.pi        # 3.14159...\nmath.e         # 2.71828...\nmath.sin(x)    # Sine (radians)\nmath.cos(x)    # Cosine\nmath.log(x)    # Natural log\nmath.log10(x)  # Log base 10\nmath.ceil(x)   # Round up\nmath.floor(x)  # Round down\nmath.fabs(x)   # Absolute float</pre>"}
+];
+
+function csInit() {
+  var tabsEl = document.getElementById('cs-tabs');
+  if (!tabsEl || tabsEl.children.length>0) return;
+  CHEATSHEETS.forEach(function(cs,i) {
+    var btn = document.createElement('button');
+    btn.className = 'nt-btn';
+    btn.style.cssText = 'font-size:10px;' + (i===0?'background:var(--bg2);':'');
+    btn.textContent = cs.name;
+    btn.onclick = function() { csShow(i); };
+    tabsEl.appendChild(btn);
+  });
+  csShow(0);
+}
+
+function csShow(idx) {
+  var cs = CHEATSHEETS[idx];
+  if (!cs) return;
+  var content = document.getElementById('cs-content');
+  if (!content) return;
+  content.innerHTML = cs.content;
+  // Style tables
+  var tables = content.querySelectorAll('table');
+  tables.forEach(function(t) {
+    t.style.cssText = 'width:100%;border-collapse:collapse;margin:8px 0;font-size:11px';
+    t.querySelectorAll('td').forEach(function(td) {
+      td.style.cssText = 'padding:4px 8px;border-bottom:1px solid var(--border)';
+    });
+  });
+  // Style pre blocks
+  content.querySelectorAll('pre').forEach(function(pre) {
+    pre.style.cssText = 'background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:10px;overflow-x:auto;font-size:11px;font-family:monospace;line-height:1.6;margin:8px 0';
+  });
+  content.querySelectorAll('h3').forEach(function(h) {
+    h.style.cssText = 'color:var(--cyan);font-size:13px;margin:16px 0 8px';
+  });
+  // Highlight active tab
+  var tabs = document.querySelectorAll('#cs-tabs .nt-btn');
+  tabs.forEach(function(btn,i) {
+    btn.style.background = i===idx?'var(--bg2)':'';
+  });
+}

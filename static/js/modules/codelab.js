@@ -285,6 +285,97 @@ var CODEGUIDES = [
       + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Import <code>math</code> and use <code>math.sqrt(144)</code> to calculate a square root</p>'
       + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Use <code>random.choice(["red", "green", "blue"])</code> to pick a random color</p>'
       + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Create a module called <code>helpers.py</code> with a function, then import and use it in another file</p>'
+{
+    id:'recursion',
+    title:'Recursion — Functions That Call Themselves',
+    category:'Intermediate Python',
+    content:
+      '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Recursion is when a function calls itself. It sounds like magic but it is just breaking a problem into smaller versions of itself until you reach a base case. Think of Russian nesting dolls — each doll contains a smaller doll until the tiniest one.</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">The Two Rules of Recursion</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7"><b>1. Base Case:</b> When to stop. Without this, you recurse forever (stack overflow). <b>2. Recursive Case:</b> Call the function with a smaller/simpler input.</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">def countdown(n):\n    if n <= 0:           # Base case: stop!\n        print("Blast off!")\n        return\n    print(n)\n    countdown(n - 1)     # Recursive case: smaller n\n\ncountdown(5)\n# Prints: 5, 4, 3, 2, 1, Blast off!</code></pre>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Classic Example: Factorial</h4>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">def factorial(n):\n    if n <= 1:           # Base case\n        return 1\n    return n * factorial(n - 1)  # Recursive case\n\nprint(factorial(5))  # 120 (5*4*3*2*1)</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ Every recursive call adds to the call stack. Python has a ~1000 depth limit. For very deep recursion, use loops instead or increase the limit with <code>sys.setrecursionlimit()</code>.</p>'
+      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
+      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Write a recursive function to calculate the sum of numbers from 1 to n</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Write a recursive function to reverse a string</p>'
+      + '</div>'
+  },
+  {
+    id:'lambda',
+    title:'Lambda Functions — Tiny Anonymous Functions',
+    category:'Intermediate Python',
+    content:
+      '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">A lambda is a small, anonymous function — defined in one line without a name. Perfect for quick operations you only need once. Think of it as a function without the ceremony:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Regular function\ndef add(x, y):\n    return x + y\n\n# Lambda version\nadd = lambda x, y: x + y\n\nprint(add(3, 5))  # 8</code></pre>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Where Lambdas Shine</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Lambdas are most useful as arguments to functions like <code>sorted()</code>, <code>map()</code>, and <code>filter()</code>:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Sort by second element of each tuple\nstudents = [("Alice", 85), ("Bob", 92), ("Carol", 78)]\nsorted_students = sorted(students, key=lambda s: s[1])\nprint(sorted_students)  # [("Carol",78), ("Alice",85), ("Bob",92)]\n\n# Filter even numbers\nnums = [1, 2, 3, 4, 5, 6]\nevens = list(filter(lambda x: x % 2 == 0, nums))\nprint(evens)  # [2, 4, 6]\n\n# Map: double every number\ndoubled = list(map(lambda x: x * 2, nums))\nprint(doubled)  # [2, 4, 6, 8, 10, 12]</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">💡 <strong>Pro Tip:</strong> If a lambda needs more than one line, use a regular <code>def</code> instead. Lambdas are for short, simple expressions — they sacrifice readability for convenience.</p>'
+      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
+      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Sort a list of strings by their length using a lambda</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Use filter() with a lambda to find all numbers > 50 in a list</p>'
+      + '</div>'
+  },
+  {
+    id:'error-handling',
+    title:'Error Handling — Keep Your Program Alive',
+    category:'Intermediate Python',
+    content:
+      '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Programs crash. Files disappear. Networks fail. Users type nonsense. Robust programs handle these gracefully instead of showing scary tracebacks. Python gives you <code>try/except</code> to catch errors before they kill your program:</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">The try/except Pattern</h4>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">try:\n    num = int(input("Enter a number: "))\n    result = 100 / num\n    print(f"100 divided by {num} = {result}")\nexcept ValueError:\n    print("That was not a valid number!")\nexcept ZeroDivisionError:\n    print("Cannot divide by zero!")\nexcept Exception as e:\n    print(f"Something went wrong: {e}")\nfinally:\n    print("This always runs — cleanup code goes here")</code></pre>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Common Error Types</h4>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">ValueError      — Wrong type of value (e.g., int("hello"))\nTypeError       — Wrong operation on a type (e.g., "a" + 5)\nKeyError        — Dictionary key not found\nIndexError      — List index out of range\nFileNotFoundError — File does not exist\nZeroDivisionError — Division by zero</code></pre>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">The else Clause (Rare but Useful)</h4>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7"><code>else</code> after <code>try</code> runs only if NO exception occurred. <code>finally</code> always runs — perfect for closing files or database connections:</p>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">try:\n    file = open("data.txt")\n    content = file.read()\nexcept FileNotFoundError:\n    print("File not found — starting fresh")\nelse:\n    print("File loaded successfully!")  # No error = success\nfinally:\n    file.close()  # Always close the file</code></pre>'
+      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
+      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Write try/except to safely convert user input to int</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Catch both ValueError and ZeroDivisionError in a calculator program</p>'
+      + '</div>'
+  },
+  {
+    id:'virtualenv',
+    title:'Virtual Environments — Isolate Your Projects',
+    category:'Tools & Workflow',
+    content:
+      '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Ever installed a library for one project that broke another? That is dependency hell. Virtual environments (venvs) solve this by giving each project its own isolated Python environment — like a clean room for every project:</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Creating and Using a venv</h4>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Create a virtual environment\npython -m venv myproject_env\n\n# Activate it (Linux/Mac):\nsource myproject_env/bin/activate\n\n# Activate it (Windows):\nmyproject_env\\Scripts\\activate\n\n# Now install packages — they go into the venv, not globally\npip install requests flask\n\n# When you are done:\ndeactivate</code></pre>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">requirements.txt — Share Your Dependencies</h4>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Export your current environment\spip freeze > requirements.txt\n\n# Anyone can recreate your environment:\npip install -r requirements.txt\n\n# Example requirements.txt:\nrequests==2.28.0\nflask==2.2.0\nnumpy>=1.21.0</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">💡 <strong>Pro Tip:</strong> Always create a venv for new projects. Never install packages globally. Your future self will thank you when nothing is broken.</p>'
+      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
+      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Create a venv called "myproject" and activate it</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Install requests, then freeze to requirements.txt</p>'
+      + '</div>'
+  },
+  {
+    id:'git-basics',
+    title:'Git Basics — Version Control for Everyone',
+    category:'Tools & Workflow',
+    content:
+      '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Git is like a time machine for your code. You can save versions, go back in time, and collaborate without stepping on each other\'s toes. Every professional developer uses Git. Here is your survival guide:</p>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Your First Git Repo</h4>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Initialize a new repository\ngit init\n\n# Check status — what files changed?\ngit status\n\n# Stage files (add to the "shopping cart")\ngit add myfile.py\ngit add .              # Stage everything\n\n# Commit — save a snapshot with a message\ngit commit -m "Initial commit"\n\n# See your history\ngit log --oneline</code></pre>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Branches — Work Without Fear</h4>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Create and switch to a new branch\ngit checkout -b new-feature\n\n# Make changes, commit them...\ngit add .\ngit commit -m "Add new feature"\n\n# Switch back to main\ngit checkout main\n\n# Merge your feature branch in\ngit merge new-feature\n\n# Delete the branch (clean up)\ngit branch -d new-feature</code></pre>'
+      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">GitHub — Share with the World</h4>'
+      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Connect your local repo to GitHub\ngit remote add origin https://github.com/you/repo.git\n\n# Push your code up\ngit push -u origin main\n\n# Pull latest changes from others\ngit pull\n\n# Clone someone else\'s repo\ngit clone https://github.com/them/repo.git</code></pre>'
+      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Never commit secrets!</strong> API keys, passwords, and tokens should go in a <code>.gitignore</code> file or environment variables. Once pushed, they are in the history forever.</p>'
+      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
+      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. git init a folder, add a file, and make your first commit</p>'
+      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Create a branch, make a change, and merge it back to main</p>'
+      + '</div>'
+  }
+];
       + '</div>'
   }
 ];
@@ -384,6 +475,37 @@ var CODEDICT = [
   { term:'Map', definition:'A built-in function that applies a given function to each item of an iterable and returns an iterator of results.' },
   { term:'Filter', definition:'A built-in function that constructs an iterator from elements of an iterable for which a function returns True.' },
   { term:'Reduce', definition:'A functools function that repeatedly applies a function to the elements of a sequence, cumulatively combining them into a single value.' }
+{ term:'Machine Learning', definition:'A field of AI where computers learn from data without being explicitly programmed. Uses algorithms that improve through experience.' },
+  { term:'Neural Network', definition:'A computing system inspired by biological brains. Layers of connected nodes process data, learning patterns through training.' },
+  { term:'Tensor', definition:'A multi-dimensional array used in machine learning. Scalars are 0D, vectors are 1D, matrices are 2D, tensors are 3D+.' },
+  { term:'Gradient Descent', definition:'An optimization algorithm that finds the minimum of a function by iteratively moving in the direction of steepest descent. Used to train ML models.' },
+  { term:'Overfitting', definition:'When a model learns the training data too well, including noise. It performs great on training data but poorly on new data.' },
+  { term:'Underfitting', definition:'When a model is too simple to capture the underlying pattern in data. It performs poorly on both training and test data.' },
+  { term:'Supervised Learning', definition:'ML where the model is trained on labeled data. Each training example has an input and the correct output. Examples: classification, regression.' },
+  { term:'Unsupervised Learning', definition:'ML where the model finds patterns in unlabeled data. No correct answers are given. Examples: clustering, dimensionality reduction.' },
+  { term:'Regression', definition:'Predicting a continuous numeric value from input data. Examples: predicting house prices, stock values, or temperature.' },
+  { term:'Classification', definition:'Categorizing data into discrete classes. Examples: spam detection (spam/not spam), image recognition (cat/dog/bird).' },
+  { term:'Clustering', definition:'Grouping similar data points together without predefined labels. K-means is the most common clustering algorithm.' },
+  { term:'Dataset', definition:'A collection of data used to train or test ML models. Typically split into training set (to learn) and test set (to evaluate).' },
+  { term:'Feature', definition:'An individual measurable property of data used as input to a model. In housing data, features might be: bedrooms, square footage, location.' },
+  { term:'Label', definition:'The output or target variable in supervised learning. What you are trying to predict. In spam detection, the label is spam or not spam.' },
+  { term:'Training', definition:'The process of feeding data to a model so it can learn patterns. The model adjusts its internal parameters to minimize error.' },
+  { term:'Inference', definition:'Using a trained model to make predictions on new, unseen data. The model applies what it learned during training.' },
+  { term:'Hyperparameter', definition:'A configuration setting that is set before training begins. Examples: learning rate, number of layers, batch size. Not learned from data.' },
+  { term:'Epoch', definition:'One complete pass through the entire training dataset. Models typically train for multiple epochs to improve accuracy.' },
+  { term:'Loss Function', definition:'A function that measures how wrong the model's predictions are. The goal of training is to minimize the loss. Common ones: MSE, cross-entropy.' },
+  { term:'Bias', definition:'In ML: the error from overly simplistic assumptions. In data: systematic error that skews results. High bias leads to underfitting.' },
+  { term:'Variance', definition:'The model's sensitivity to small fluctuations in training data. High variance leads to overfitting. The bias-variance tradeoff is key in ML.' },
+  { term:'Regularization', definition:'Techniques to prevent overfitting by adding a penalty for complexity. L1 (Lasso) and L2 (Ridge) are common regularization methods.' },
+  { term:'Cross-Validation', definition:'A technique to evaluate models by splitting data into multiple train/test folds. K-fold cross-validation is the most common approach.' },
+  { term:'Ensemble Learning', definition:'Combining multiple models to produce better predictions than any single model. Random forests and gradient boosting are examples.' },
+  { term:'Tokenization', definition:'Breaking text into smaller units (tokens) like words or subwords. The first step in NLP (Natural Language Processing).' },
+  { term:'Stemming', definition:'Reducing words to their root form by removing suffixes. "Running" becomes "run", "cats" becomes "cat". Cruder than lemmatization.' },
+  { term:'Lemmatization', definition:'Reducing words to their dictionary form (lemma). "Better" becomes "good", "running" becomes "run". Uses vocabulary and morphology.' },
+  { term:'Corpus', definition:'A large collection of text used for NLP training. Wikipedia, news articles, and books are common corpora.' },
+  { term:'Sentiment Analysis', definition:'Determining the emotional tone of text. Classifies text as positive, negative, or neutral. Used for product reviews and social media.' },
+  { term:'Web Scraping', definition:'Automatically extracting data from websites. Uses libraries like BeautifulSoup and Scrapy. Be respectful of robots.txt and rate limits.' }
+];
 ];
 
 var CODEPROJECTS = [
@@ -475,6 +597,47 @@ var CODEPROJECTS = [
     starter:'# Simple Web Page Generator\n\ndef generate_html(title, heading, paragraphs, bg="#f0f4f8", color="#333"):\n    html = f"""<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>{title}</title>\n    <style>\n        body {{ font-family: system-ui, sans-serif;\n               background: {bg}; color: {color};\n               padding: 40px; line-height: 1.7; }}\n        h1 {{ color: {color}; }}\n        p {{ margin-bottom: 16px; }}\n    </style>\n</head>\n<body>\n    <h1>{heading}</h1>\\n"""\n    for p in paragraphs:\n        html += f"    <p>{p}</p>\\n"\n    html += """</body>\\n</html>"""\n    return html\n\n# Change these to create your own page!\ntitle = "My First Webpage"\nheading = "Welcome to PythonWeb"\nparagraphs = [\n    "Python can generate HTML files automatically.",\n    "This page was created by a Python script!",\n    "You can change the title, heading, and text above.",\n]\n\nhtml = generate_html(title, heading, paragraphs)\nprint(html)\nprint(f"\\n({len(html)} characters of HTML generated)")',
     hint:'Try changing the title, heading, and paragraphs. Use double curly braces {{ }} for literal braces in f-strings.'
   }
+{
+    id:'text-rpg',
+    title:'Text RPG Adventure',
+    difficulty:'Intermediate',
+    description:'Build a text-based role-playing game where the player explores rooms, fights monsters, and collects treasure.',
+    starter:'# Text RPG Adventure\nimport random\n\nplayer_hp = 100\nplayer_gold = 0\nrooms = ["dark cave", "ancient temple", "dragon lair", "treasure room", "spooky forest"]\n\nprint("Welcome to the Adventure!")\n# Start your quest — pick a room and see what happens\ncurrent_room = random.choice(rooms)\nprint(f"You enter the {current_room}...")\n# Roll a d20 to determine what happens\nroll = random.randint(1, 20)\nif roll >= 15:\n    gold = random.randint(10, 50)\n    player_gold += gold\n    print(f"Success! You found {gold} gold!")\nelif roll >= 5:\n    damage = random.randint(5, 20)\n    player_hp -= damage\n    print(f"A monster attacks! You lose {damage} HP. HP left: {player_hp}")\nelse:\n    print("The room is empty. You move on.")',
+    hint:'Use random choices for rooms and events. Track player HP and gold. Add a win condition when gold reaches 100.'
+  },
+  {
+    id:'dice-roller',
+    title:'Dice Roller Simulator',
+    difficulty:'Beginner',
+    description:'Create a dice rolling simulator that can roll any number of dice with any number of sides. Show each roll and the total.',
+    starter:'# Dice Roller Simulator\nimport random\n\ndef roll_dice(num_dice=1, sides=6):\n    rolls = []\n    for i in range(num_dice):\n        result = random.randint(1, sides)\n        rolls.append(result)\n    return rolls\n\n# Try different dice!\nprint("Rolling 2d6 (two six-sided dice):")\nresults = roll_dice(2, 6)\nfor i, r in enumerate(results, 1):\n    print(f"  Die {i}: {r}")\nprint(f"  Total: {sum(results)}")\n\nprint("\\nRolling 3d20 (three twenty-sided dice):")\nresults = roll_dice(3, 20)\nfor i, r in enumerate(results, 1):\n    print(f"  Die {i}: {r}")\nprint(f"  Total: {sum(results)}")',
+    hint:'Use random.randint(1, sides) for each die. Let the user specify how many dice and how many sides.'
+  },
+  {
+    id:'csv-analyzer',
+    title:'CSV Data Analyzer',
+    difficulty:'Intermediate',
+    description:'Read a CSV file and compute statistics — average, min, max, and count for numeric columns.',
+    starter:'# CSV Data Analyzer\nimport csv\n\n# Sample data — imagine this is a CSV file\ncsv_data = """name,age,score\nAlice,20,85\nBob,22,92\nCarol,19,78\nDave,21,88\nEve,23,95\n"""\n\n# Read CSV and analyze\nlines = csv_data.strip().split("\\n")\nreader = csv.DictReader(lines)\nages = []\nscores = []\nfor row in reader:\n    ages.append(int(row["age"]))\n    scores.append(int(row["score"]))\n\nprint("Age Analysis:")\nprint(f"  Average: {sum(ages)/len(ages):.1f}")\nprint(f"  Min: {min(ages)}")\nprint(f"  Max: {max(ages)}")\nprint(f"  Count: {len(ages)}")\n\nprint("\\nScore Analysis:")\nprint(f"  Average: {sum(scores)/len(scores):.1f}")\nprint(f"  Min: {min(scores)}")\nprint(f"  Max: {max(scores)}")',
+    hint:'Use csv.DictReader to read CSV data. Convert numeric strings to int/float before analysis. Use sum(), min(), max() for statistics.'
+  },
+  {
+    id:'password-strength',
+    title:'Password Strength Checker',
+    difficulty:'Beginner',
+    description:'Write a program that checks how strong a password is based on length, uppercase, lowercase, digits, and symbols.',
+    starter:'# Password Strength Checker\nimport re\n\ndef check_strength(password):\n    score = 0\n    feedback = []\n    \n    if len(password) >= 8:\n        score += 1\n    else:\n        feedback.append("Make it at least 8 characters")\n    \n    if re.search(r"[A-Z]", password):\n        score += 1\n    else:\n        feedback.append("Add uppercase letters")\n    \n    if re.search(r"[a-z]", password):\n        score += 1\n    else:\n        feedback.append("Add lowercase letters")\n    \n    if re.search(r"[0-9]", password):\n        score += 1\n    else:\n        feedback.append("Add numbers")\n    \n    if re.search(r"[!@#$%^&*()]", password):\n        score += 1\n    else:\n        feedback.append("Add special characters")\n    \n    return score, feedback\n\n# Test passwords\ntest_passwords = ["abc", "Password123", "Str0ng!Pass", "weak"]\nfor pwd in test_passwords:\n    score, fb = check_strength(pwd)\n    strength = ["Very Weak","Weak","Fair","Good","Strong","Very Strong"][score]\n    masked = pwd[0] + "*" * (len(pwd)-2) + pwd[-1] if len(pwd)>2 else "***"\n    print(f"{masked}: {strength} ({score}/5)")\n    for f in fb:\n        print(f"  - {f}")',
+    hint:'Use regex to check for character types. Award points for each criterion met. Show specific feedback on what to improve.'
+  },
+  {
+    id:'text-analyzer',
+    title:'Text Analyzer',
+    difficulty:'Beginner',
+    description:'Analyze any text — count words, sentences, paragraphs, find most common words, and calculate reading time.',
+    starter:'# Text Analyzer\nfrom collections import Counter\n\ntext = """Python is a powerful programming language.\nIt is easy to learn and fun to use.\nMany developers love Python for its simplicity.\nPython can be used for web development, data science, and AI."""\n\n# Count words\nwords = text.split()\nword_count = len(words)\n# Count sentences\nsentences = text.replace("!",".").replace("?",".").split(".")\nsentence_count = len([s for s in sentences if s.strip()])\n# Count paragraphs\nparagraphs = [p for p in text.split("\\n") if p.strip()]\nparagraph_count = len(paragraphs)\n# Reading time (avg 200 words per minute)\nreading_time = word_count / 200\n\nprint(f"Words: {word_count}")\nprint(f"Sentences: {sentence_count}")\nprint(f"Paragraphs: {paragraph_count}")\nprint(f"Reading time: {reading_time:.1f} minutes")\nprint(f"Avg words per sentence: {word_count/sentence_count:.1f}")\n\n# Most common words (excluding short words)\ncommon_words = [w.lower().strip(".,!?") for w in words if len(w) > 3]\ntop_words = Counter(common_words).most_common(5)\nprint("\\nTop 5 words:")\nfor word, count in top_words:\n    print(f"  {word}: {count}")',
+    hint:'Use text.split() for words. Split on periods/exclamation/question marks for sentences. Use collections.Counter for word frequency.'
+  }
+];
 ];
 
 var CL_SNIPPETS = {
