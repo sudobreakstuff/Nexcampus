@@ -1,12 +1,10 @@
 {
-  "version": "2.4.5",
-  "name": "NexCampus v2.4.5",
+  "version": "2.4.6",
+  "name": "NexCampus v2.4.6",
   "update_url": "",
   "changelog": [
-    "Update check now uses raw CDN (no GitHub API rate limiting)",
-    "Mind map fixed \u2014 unclosed quote in OCR preview + spell check onclick",
-    "Desktop entry refreshed on every launch, window icon set via GTK",
-    "All JS files verified brace-balanced and string-balanced",
-    "Code Lab fully working"
+    "Removed non-functional mind map tool",
+    "Update check uses CDN (no rate limits)",
+    "All code lab and study lab tools working"
   ]
 }

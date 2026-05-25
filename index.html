@@ -21,7 +21,7 @@
 <div id="app" style="display:none;">
   <div id="sidebar">
     <div class="sidebar-header">NEXCAMPUS <span class="connection-dot"></span></div>
-    <div class="sidebar-subtitle" id="sidebar-version">v2.4.5</div>
+    <div class="sidebar-subtitle" id="sidebar-version">v2.4.6</div>
     <input type="text" id="sidebar-search" placeholder="Search tools..." style="width:100%;padding:6px 10px;margin:6px 0 2px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:4px;font-size:11px;box-sizing:border-box">
     <nav id="nav">
       <button class="nav-btn active" data-tab="home">HOME</button>
@@ -44,11 +44,11 @@
       <!-- HOME -->
       <div class="tab-pane active section" id="tab-home">
         <div class="greeting">Hey there.</div>
-        <div class="greeting-sub" id="greeting-version">NexCampus v2.4.5</div>
+        <div class="greeting-sub" id="greeting-version">NexCampus v2.4.6</div>
 
         <div class="stat-row">
           <div class="stat-item">
-            <span class="stat-value" id="home-version">v2.4.5</span>
+            <span class="stat-value" id="home-version">v2.4.6</span>
             <span class="stat-label">Version</span>
           </div>
           <div class="stat-item">
@@ -86,7 +86,6 @@
           <button class="nb-tab-btn" data-nb-tool="periodic" onclick="switchNbTool('periodic')">Periodic</button>
           <button class="nb-tab-btn" data-nb-tool="dictionary" onclick="switchNbTool('dictionary')">Dictionary</button>
           <button class="nb-tab-btn" data-nb-tool="solar" onclick="switchNbTool('solar')" style="color:var(--amber)">★ Solar System</button>
-          <button class="nb-tab-btn" data-nb-tool="mindmap" onclick="switchNbTool('mindmap')" style="color:var(--teal)">Mind Map</button>
         </div>
         <div class="nb-grid">
           <div class="nb-side">
@@ -486,22 +485,7 @@
               </div>
             </div>
 
-            <div id="nb-tool-mindmap" class="nb-tool-content" style="display:none">
-              <div class="tool-section-title">Interactive Mind Map <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Double-click to add node · Drag to move · Click to edit</span></div>
-              <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
-                <button class="nt-btn" onclick="try{mindmapAddNode()}catch(e){alert('Add error: '+e.message)}" style="font-size:10px">+ Add Node</button>
-                <button class="nt-btn" onclick="try{mindmapDeleteSelected()}catch(e){alert('Del error: '+e.message)}" style="font-size:10px">Delete Node</button>
-                <button class="nt-btn" onclick="mindmapClear()" style="font-size:10px">Clear All</button>
-                <button class="nt-btn" onclick="mindmapExport()" style="font-size:10px">Export PNG</button>
-                <span id="mindmap-status" style="font-size:10px;color:var(--fg-dim);margin-left:auto"></span>
-              </div>
-              <canvas id="mindmap-canvas" width="800" height="500" style="width:100%;aspect-ratio:8/5;background:var(--bg2);border:2px solid var(--cyan);border-radius:8px;cursor:default"></canvas>
-              <div id="mindmap-edit" style="display:none;position:absolute;z-index:10">
-                <input type="text" id="mindmap-input" style="padding:4px 8px;font-size:11px;background:var(--bg2);border:1px solid var(--cyan);color:var(--fg);border-radius:3px;outline:none;width:200px" placeholder="Node label...">
-              </div>
-            </div>
-
-          </div>
+            
         </div>
       </div>
 
@@ -779,7 +763,7 @@
 
       <!-- ABOUT -->
       <div class="tab-pane section" id="tab-about">
-        <div class="about-header">About NexCampus <span id="about-version">v2.4.5</span></div>
+        <div class="about-header">About NexCampus <span id="about-version">v2.4.6</span></div>
 
         <div class="about-block">
           <div class="about-block-title">Our Mission</div>
@@ -808,7 +792,6 @@
             <li><strong>Periodic Table</strong> — Interactive 118-element grid with search, filters, fun facts, discovery dates, quiz mode</li>
             <li><strong>Dictionary</strong> — 262,851-word Wiktionary-derived offline dictionary with smart suggestions</li>
               <li><strong>Interactive Solar System</strong> — Animated orbits, zoom/pan, 900 stars with nebula clouds, Milky Way, asteroid belt, dwarf planets, Saturn rings, tabbed planet info with 34 fun facts</li>
-              <li><strong>Mind Map</strong> — Interactive canvas mind map, drag nodes, add/edit/delete, export to PNG</li>
           </ul>
 
           <div class="about-block-text" style="margin-bottom:6px;font-weight:bold;color:var(--cyan)">Text Tools</div>
@@ -886,7 +869,7 @@
 </div>
 
   <div id="statusbar">
-    <span id="statusbar-version">NexCampus v2.4.5 · Made by Shahid Singh · NexCore&trade; Systems and Technologies · 2026</span>
+    <span id="statusbar-version">NexCampus v2.4.6 · Made by Shahid Singh · NexCore&trade; Systems and Technologies · 2026</span>
     <span id="mem-status" style="margin-left:auto;font-size:9px;color:var(--fg-dim)"></span>
   </div>
 
