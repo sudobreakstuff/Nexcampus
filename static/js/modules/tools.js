@@ -1618,7 +1618,13 @@ var SOLAR_DWARFS = [
   { name:'Ceres', color:'#8a8a7a', orbit:138, size:3.5, speed:0.21, angle:2.0,
     info:{diameter:'940 km', distSun:'414M km', year:'4.6 years', day:'9.1 hours', moons:'0', type:'Dwarf Planet', gravity:'0.28 m/s²', temp:'-105°C', fact:'Ceres is the largest object in the asteroid belt and the only dwarf planet in the inner solar system. It may have a subsurface ocean!'} },
   { name:'Pluto', color:'#d4c5a9', orbit:295, size:3.5, speed:0.004, angle:4.0,
-    info:{diameter:'2,377 km', distSun:'5.91B km', year:'248 years', day:'6.4 days', moons:'5', type:'Dwarf Planet', gravity:'0.62 m/s²', temp:'-230°C', fact:'Pluto was reclassified as a dwarf planet in 2006. It has a heart-shaped glacier (Sputnik Planitia) and a thin nitrogen atmosphere.'} }
+    info:{diameter:'2,377 km', distSun:'5.91B km', year:'248 years', day:'6.4 days', moons:'5', type:'Dwarf Planet', gravity:'0.62 m/s²', temp:'-230°C', fact:'Pluto was reclassified as a dwarf planet in 2006. It has a heart-shaped glacier (Sputnik Planitia) and a thin nitrogen atmosphere.'} },
+  { name:'Eris', color:'#e8d8c8', orbit:350, size:3, speed:0.002, angle:5.5,
+    info:{diameter:'2,326 km', distSun:'10.12B km', year:'558 years', day:'25.9 hours', moons:'1', type:'Dwarf Planet', gravity:'0.82 m/s²', temp:'-231°C', fact:'Eris is almost the same size as Pluto but 27% more massive. Its discovery in 2005 sparked the debate that reclassified Pluto as a dwarf planet.'} },
+  { name:'Makemake', color:'#b0a090', orbit:330, size:2.8, speed:0.003, angle:3.2,
+    info:{diameter:'1,430 km', distSun:'6.85B km', year:'309 years', day:'22.5 hours', moons:'1', type:'Dwarf Planet', gravity:'0.5 m/s²', temp:'-239°C', fact:'Makemake is named after the creator god of the Rapa Nui people of Easter Island. It is the second brightest Kuiper Belt object after Pluto.'} },
+  { name:'Haumea', color:'#c0b8a0', orbit:320, size:2.5, speed:0.003, angle:6.0,
+    info:{diameter:'1,632 km', distSun:'6.48B km', year:'283 years', day:'3.9 hours', moons:'2', type:'Dwarf Planet', gravity:'0.4 m/s²', temp:'-241°C', fact:'Haumea is shaped like a rugby ball due to its rapid rotation — it spins once every 3.9 hours! It also has a ring system, unique among dwarf planets.'} }
 ];
 
 var SOLAR_FACTS = [
@@ -1658,7 +1664,7 @@ var SOLAR_FACTS = [
   "The solar system's boundary (heliopause) is about 18 billion km from the Sun."
 ];
 
-var SOLAR = { canvas:null, ctx:null, paused:false, speed:1, animId:null, selected:null, hovered:null, lastTime:0, planets:[], dwarfs:[], factIdx:0, w:800, h:500, zoom:1, panX:0, panY:0, isDragging:false, dragStartX:0, dragStartY:0, panStartX:0, panStartY:0, clicked:false, infoTab:'overview', dpr:1 };
+var SOLAR = { canvas:null, ctx:null, paused:false, speed:1, animId:null, selected:null, hovered:null, lastTime:0, planets:[], dwarfs:[], factIdx:0, w:800, h:500, zoom:1, panX:0, panY:0, isDragging:false, dragStartX:0, dragStartY:0, panStartX:0, panStartY:0, clicked:false, infoTab:'overview', dpr:1, tourIdx:0, tourTimer:null };
 
 function solarResize() {
   var c = SOLAR.canvas;
@@ -1716,24 +1722,29 @@ function solarDraw() {
   var t = performance.now() / 1000;
   if (!SOLAR._stars) {
     SOLAR._stars = [];
-    var tints = ['#ffffff','#c8d8ff','#ffe8c8','#ffcccc','#d8ffe8','#ffffcc'];
-    for (var i = 0; i < 600; i++) {
+    var tints = ['#ffffff','#c8d8ff','#ffe8c8','#ffcccc','#d8ffe8','#ffffcc','#ffd0ff','#c0e0ff'];
+    for (var i = 0; i < 800; i++) {
       var angle = Math.random() * 2 * Math.PI;
       var dist = Math.random() * w * 0.9;
-      SOLAR._stars.push({ x:w/2 + Math.cos(angle)*dist, y:h/2 + Math.sin(angle)*dist, r:Math.random()*1.8+0.2, a:Math.random()*0.6+0.1, t:Math.random()*2000, c:tints[Math.floor(Math.random()*tints.length)], twinkle:Math.random()*0.5+0.5 });
+      SOLAR._stars.push({ x:w/2 + Math.cos(angle)*dist, y:h/2 + Math.sin(angle)*dist, r:Math.random()*2.0+0.2, a:Math.random()*0.7+0.1, t:Math.random()*2000, c:tints[Math.floor(Math.random()*tints.length)], twinkle:Math.random()*0.5+0.5 });
     }
     SOLAR._milkyStars = [];
-    for (var i = 0; i < 300; i++) {
+    for (var i = 0; i < 400; i++) {
       var angle = -0.4 + Math.random() * 0.9;
       var dist = Math.random() * w * 0.7 + 30;
       SOLAR._milkyStars.push({ x:w/2 + Math.cos(angle)*dist, y:h/2 + Math.sin(angle * 2.2)*dist*0.18, r:Math.random()*2.5+0.5, a:Math.random()*0.5+0.05, c:'#b8c8ff', twinkle:Math.random()*0.3+0.7 });
     }
     // Background nebula clouds
     SOLAR._nebula = [];
-    for (var i = 0; i < 60; i++) {
+    for (var i = 0; i < 80; i++) {
       var a = Math.random() * 2 * Math.PI;
       var d = 60 + Math.random() * 300;
       SOLAR._nebula.push({ x:w/2 + Math.cos(a)*d, y:h/2 + Math.sin(a)*d, r:15+Math.random()*50, c:'rgba(' + Math.floor(15+Math.random()*25) + ',' + Math.floor(8+Math.random()*18) + ',' + Math.floor(30+Math.random()*60) + ',0.012)' });
+    }
+    // Shooting stars
+    SOLAR._shooting = [];
+    for (var i = 0; i < 5; i++) {
+      SOLAR._shooting.push({ life:Math.random()*3+1, x:Math.random()*w, y:Math.random()*h, vx:(Math.random()-0.5)*40, vy:(Math.random()-0.5)*40, t:Math.random()*10, alive:false });
     }
   }
 
@@ -1770,6 +1781,35 @@ function solarDraw() {
     ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
   });
   ctx.globalAlpha = 1;
+
+  // Shooting stars
+  SOLAR._shooting.forEach(function(sh) {
+    sh.life -= 0.02;
+    if (sh.life <= 0) {
+      sh.alive = false;
+      if (Math.random() < 0.005) {
+        sh.life = Math.random() * 2 + 0.5;
+        sh.x = Math.random() * w;
+        sh.y = Math.random() * h * 0.5;
+        sh.vx = (Math.random() > 0.5 ? 1 : -1) * (30 + Math.random() * 60);
+        sh.vy = (Math.random() > 0.5 ? 1 : -1) * (10 + Math.random() * 30);
+        sh.alive = true;
+      }
+    }
+    if (!sh.alive) return;
+    sh.x += sh.vx * 0.016;
+    sh.y += sh.vy * 0.016;
+    var alpha = Math.min(1, sh.life);
+    var grad = ctx.createLinearGradient(sh.x, sh.y, sh.x - sh.vx * 0.5, sh.y - sh.vy * 0.5);
+    grad.addColorStop(0, 'rgba(255,255,255,' + alpha + ')');
+    grad.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(sh.x, sh.y);
+    ctx.lineTo(sh.x - sh.vx * 0.3, sh.y - sh.vy * 0.3);
+    ctx.stroke();
+  });
 
   // Draw vignette
   ctx.fillStyle = vignette; ctx.fillRect(0, 0, w, h);
@@ -2034,6 +2074,53 @@ function solarMouseUp(e) {
     solarShowInfo();
   }
   SOLAR.clicked = false;
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+  if (!SOLAR.canvas) return;
+  var tab = document.getElementById('tab-notebook');
+  if (!tab || !tab.classList.contains('active')) return;
+  var solPanel = document.getElementById('nb-tool-solar');
+  if (!solPanel || !solPanel.classList.contains('active')) return;
+  var bodies = SOLAR.planets.concat(SOLAR.dwarfs);
+  var idx = -1;
+  if (SOLAR.selected) {
+    for (var i = 0; i < bodies.length; i++) { if (bodies[i].name === SOLAR.selected) { idx = i; break; } }
+  }
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+    e.preventDefault();
+    idx = (idx + 1) % bodies.length;
+    SOLAR.selected = bodies[idx].name;
+    solarShowInfo();
+    solarDraw();
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    idx = idx <= 0 ? bodies.length - 1 : idx - 1;
+    SOLAR.selected = bodies[idx].name;
+    solarShowInfo();
+    solarDraw();
+  }
+});
+
+function solarTour() {
+  if (SOLAR.tourTimer) {
+    clearInterval(SOLAR.tourTimer);
+    SOLAR.tourTimer = null;
+    return false;
+  }
+  var bodies = SOLAR.planets.concat(SOLAR.dwarfs);
+  SOLAR.tourIdx = 0;
+  SOLAR.selected = bodies[0].name;
+  solarShowInfo();
+  solarDraw();
+  SOLAR.tourTimer = setInterval(function() {
+    SOLAR.tourIdx = (SOLAR.tourIdx + 1) % bodies.length;
+    SOLAR.selected = bodies[SOLAR.tourIdx].name;
+    solarShowInfo();
+    solarDraw();
+  }, 2000);
+  return true;
 }
 
 function solarResetView() {

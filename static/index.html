@@ -21,7 +21,7 @@
 <div id="app" style="display:none;">
   <div id="sidebar">
     <div class="sidebar-header">NEXCAMPUS <span class="connection-dot"></span></div>
-    <div class="sidebar-subtitle" id="sidebar-version">v2.12.3</div>
+    <div class="sidebar-subtitle" id="sidebar-version">v2.13.0</div>
     <input type="text" id="sidebar-search" placeholder="Search tools..." style="width:100%;padding:6px 10px;margin:6px 0 2px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:4px;font-size:11px;box-sizing:border-box">
     <nav id="nav">
       <button class="nav-btn active" data-tab="home">HOME</button>
@@ -44,11 +44,11 @@
       <!-- HOME -->
       <div class="tab-pane active section" id="tab-home">
         <div class="greeting">Hey there.</div>
-        <div class="greeting-sub" id="greeting-version">NexCampus v2.12.3</div>
+        <div class="greeting-sub" id="greeting-version">NexCampus v2.13.0</div>
 
         <div class="stat-row">
           <div class="stat-item">
-            <span class="stat-value" id="home-version">v2.12.3</span>
+            <span class="stat-value" id="home-version">v2.13.0</span>
             <span class="stat-label">Version</span>
           </div>
           <div class="stat-item">
@@ -473,6 +473,7 @@
                       <button onclick="SOLAR.zoom=Math.min(8,SOLAR.zoom*1.5);solarDraw()" title="Zoom in" style="font-size:10px;padding:2px 8px">+</button>
                       <button onclick="SOLAR.zoom=Math.max(0.15,SOLAR.zoom/1.5);solarDraw()" title="Zoom out" style="font-size:10px;padding:2px 8px">−</button>
                       <button onclick="solarResetView();solarDraw()" title="Reset view" style="font-size:10px;padding:2px 8px">Reset</button>
+                      <button onclick="var t=solarTour();this.textContent=t?'Stop Tour':'Tour Planets'" title="Auto-navigate through planets" style="font-size:10px;padding:2px 8px;color:var(--teal)">Tour Planets</button>
                       <button onclick="solarCycleFact()" title="Next fact" style="font-size:10px;padding:2px 8px">Next Fact</button>
                       <span id="solar-fact" class="update-result" style="font-size:10px;color:var(--teal);flex:1;text-align:right"></span>
                     </div>
@@ -750,7 +751,7 @@
 
       <!-- ABOUT -->
       <div class="tab-pane section" id="tab-about">
-        <div class="about-header">About NexCampus <span id="about-version">v2.12.3</span></div>
+        <div class="about-header">About NexCampus <span id="about-version">v2.13.0</span></div>
 
         <div class="about-block">
           <div class="about-block-title">Our Mission</div>
@@ -863,7 +864,7 @@
 </div>
 
   <div id="statusbar">
-    <span id="statusbar-version">NexCampus v2.12.3 · Made by Shahid Singh · NexCore&trade; Systems and Technologies · 2026</span>
+    <span id="statusbar-version">NexCampus v2.13.0 · Made by Shahid Singh · NexCore&trade; Systems and Technologies · 2026</span>
     <span id="mem-status" style="margin-left:auto;font-size:9px;color:var(--fg-dim)"></span>
   </div>
 

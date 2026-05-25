@@ -1,18 +1,15 @@
 {
-  "version": "2.12.3",
-  "name": "NexCampus v2.12.3",
+  "version": "2.13.0",
+  "name": "NexCampus v2.13.0",
   "update_url": "",
   "changelog": [
-    "QR code generator using qrcode-generator library (real scannable codes, offline, 20KB)",
-    "4 registry tools: Unit Converter, Base64, JSON Formatter, QR Code Generator",
-    "Sunset Glow theme with warm gradient background",
-    "Tool Registry plugin system (safe tool additions without breaking existing code)",
-    "Challenges removed from Code Lab for stability",
-    "Windows install script updated: Unblock-File added, fallback to v2.12.3",
-    "README rewritten with all current features and tools",
-    "About page updated with plugin tools and correct counts",
-    "Self-update via CDN (no GitHub API rate limits)",
-    "Window icon + desktop entry on Linux",
-    "All JS files verified brace-balanced and string-balanced"
+    "3 new dwarf planets (Eris, Makemake, Haumea)",
+    "20 new solar system facts (54 total)",
+    "Keyboard navigation (arrow keys to cycle planets)",
+    "Tour Mode button \u2014 auto-navigates through all planets",
+    "Shooting stars (occasional streaks across the canvas)",
+    "More stars (800 + 400 Milky Way), 8 color tints",
+    "More nebula clouds (80)",
+    "5 dwarf planets total with full info panels"
   ]
 }
