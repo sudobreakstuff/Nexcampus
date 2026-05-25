@@ -261,7 +261,7 @@
                   <button class="nt-btn" onclick="toggleFindBar()" title="Find and Replace (Ctrl+F)">Find</button>
                 </div>
                 <span class="nt-divider"></span>
-                <div class="nt-group">
+                <div class="n-group">
                   <button class="nt-btn nt-btn-icon" onclick="execCmd('undo')" title="Undo (Ctrl+Z)">↩</button>
                   <button class="nt-btn nt-btn-icon" onclick="execCmd('redo')" title="Redo (Ctrl+Shift+Z)">↪</button>
                 </div>
@@ -1272,39 +1272,15 @@ function qrGFMult(exp,log,a,b) {
   return exp[(log[a]+log[b])%255];
 }
   
-  // Fill data modules
-  for (var r=0;r<size;r++) {
-    for (var c=0;c<size;c++) {
-      if (!reserved(r,c)) modules[r][c] = rng()===1;
-    }
-  }
-  
-  // Draw finder patterns
-  function drawFinder(top, left) {
-    for (var r=0;r<7;r++) {
-      for (var c=0;c<7;c++) {
-        var inner = r>=1 && r<=5 && c>=1 && c<=5;
-        var core = r>=2 && r<=4 && c>=2 && c<=4;
-        modules[top+r][left+c] = core || !inner;
-      }
-    }
-  }
   drawFinder(0,0); drawFinder(0,size-7); drawFinder(size-7,0);
   
   // Timing lines
-  for (var i=8;i<size-8;i++) { modules[6][i]=i%2===0; modules[i][6]=i%2===0; }
   
   // Draw
-  var scale = Math.floor(300/(size+8));
-  var off = Math.floor((300-size*scale)/2);
+  var sc = Math.floor(300/(size+8));
+  var ox = Math.floor((300-size*sc)/2);
   ctx.fillStyle='white'; ctx.fillRect(0,0,300,300);
   ctx.fillStyle='black';
-  for (var r=0;r<size;r++) {
-    for (var c=0;c<size;c++) {
-      if (modules[r][c]) ctx.fillRect(off+c*scale,off+r*scale,scale,scale);
-    }
-  }
-}
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
