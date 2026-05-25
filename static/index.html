@@ -494,9 +494,9 @@
         <div class="cl-layout">
           <div class="cl-sidebar">
             <div class="cl-sidebar-tabs">
-              <button class="cl-sb-btn active" onclick="try{clSwitchTab('guides')}catch(e){alert('Guides error: '+e.message)}">Guides</button>
-              <button class="cl-sb-btn" onclick="try{clSwitchTab('dictionary')}catch(e){alert('Dict error: '+e.message)}">Dictionary</button>
-              <button class="cl-sb-btn" onclick="try{clSwitchTab('projects')}catch(e){alert('Projects error: '+e.message)}">Projects</button>
+              <button class="cl-sb-btn active" onclick="clSwitchTab('guides')">Guides</button>
+              <button class="cl-sb-btn" onclick="clSwitchTab('dictionary')">Dictionary</button>
+              <button class="cl-sb-btn" onclick="clSwitchTab('projects')">Projects</button>
             </div>
             <div id="cl-guides" class="cl-sidebar-content">
               <div id="cl-guides-list"></div>
@@ -522,10 +522,6 @@
                 <div id="cl-project-content" class="cl-guide-content"></div>
               </div>
             </div>
-                            <div id="cl-challenge-desc"></div>
-                <div id="cl-challenge-content" class="cl-guide-content"></div>
-              </div>
-            </div>
           </div>
           <div class="cl-main">
             <div class="cl-toolbar">
@@ -534,19 +530,16 @@
                 <option value="javascript">JavaScript</option>
                 <option value="bash">Bash</option>
               </select>
-              <button class="nt-btn" onclick="try{clRunCode()}catch(e){alert('Run error: '+e.message)}" id="cl-run-btn" style="font-size:10px;color:var(--teal)">▶ Run</button>
-              <button class="nt-btn" onclick="try{clCancelRun()}catch(e){}" id="cl-cancel-btn" style="font-size:10px;display:none;color:var(--amber)">Cancel</button>
+              <button class="nt-btn" onclick="clRunCode()" id="cl-run-btn" style="font-size:10px;color:var(--teal)">▶ Run</button>
+              <button class="nt-btn" onclick="clCancelRun()" id="cl-cancel-btn" style="font-size:10px;display:none;color:var(--amber)">Cancel</button>
               <button class="nt-btn" onclick="clClearOutput()" style="font-size:10px">Clear</button>
               <button class="nt-btn" onclick="clCopyCode()" style="font-size:10px">Copy</button>
               <button class="nt-btn" onclick="clFormatCode()" style="font-size:10px">Format</button>
               <span style="font-size:9px;color:var(--fg-dim);margin-left:auto" id="cl-lang-label">Python</span>
             </div>
-            <div class="cl-workspace">
-              <div class="cl-editor-wrap">
-                <div class="cl-gutter" id="cl-gutter">1</div>
-                <textarea id="cl-code-input" class="cl-editor" spellcheck="false" placeholder="Write your code here...">print("Hello, NexCampus!")</textarea>
-              </div>
-              <div id="cl-output" class="cl-output"></div>
+            <div class="cl-editor-wrap">
+              <div class="cl-gutter" id="cl-gutter">1</div>
+              <textarea id="cl-code-input" class="cl-editor" spellcheck="false" placeholder="Write your code here...">print("Hello, NexCampus!")</textarea>
             </div>
             <div class="cl-snippets">
               <button class="nt-btn" onclick="clInsertSnippet('function')" style="font-size:9px;padding:2px 6px">def</button>
@@ -557,6 +550,7 @@
               <button class="nt-btn" onclick="clInsertSnippet('listcomp')" style="font-size:9px;padding:2px 6px">list[]</button>
               <button class="nt-btn" onclick="clInsertSnippet('fstring')" style="font-size:9px;padding:2px 6px">f""</button>
             </div>
+            <div id="cl-output" class="cl-output"></div>
           </div>
         </div>
       </div>

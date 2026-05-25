@@ -1,6 +1,6 @@
 {
-  "version": "2.9.0",
-  "name": "NexCampus v2.9.0",
+  "version": "2.9.1",
+  "name": "NexCampus v2.9.1",
   "update_url": "",
   "changelog": [
     "Complete reset to stable code \u2014 Code Lab working, all tabs working",
