@@ -1,12 +1,14 @@
 {
-  "version": "2.5.0",
-  "name": "NexCampus v2.5.0",
+  "version": "2.6.0",
+  "name": "NexCampus v2.6.0",
   "update_url": "",
   "changelog": [
-    "Reverted to stable tab-switching code",
-    "Mind map safely removed",
-    "OCR preview quote fixed",
+    "8 new detailed Python guides (Debugging, Data Structures, File I/O, APIs, OOP, Games, Regex, DateTime)",
+    "40 new programming dictionary terms",
+    "10 auto-graded coding challenges with instant scoring",
+    "Removed all diagnostic code",
+    "Clean sidebar buttons",
     "Update check uses CDN",
-    "Uninstall script fixed"
+    "Uninstall/install scripts fixed"
   ]
 }
