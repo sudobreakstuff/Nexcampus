@@ -1565,3 +1565,5 @@ function clGradeChallenge() {
     output.innerHTML = '<div style="color:var(--red);font-size:11px">Error: ' + escapeHtml(e.message) + '</div>';
   });
 }
+
+console.log("codelab.js loaded successfully");

@@ -2540,3 +2540,5 @@ function formulaSearch() {
   out.innerHTML = html || '<div style="color:var(--fg-dim);padding:12px">No formulas found. Try "quadratic", "newton", or "gas".</div>';
 }
 
+
+console.log("tools.js loaded successfully");

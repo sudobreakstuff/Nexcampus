@@ -1,6 +1,6 @@
 {
-  "version": "2.8.1",
-  "name": "NexCampus v2.8.1",
+  "version": "2.8.2",
+  "name": "NexCampus v2.8.2",
   "update_url": "",
   "changelog": [
     "Graphing Calculator \u2014 plot functions like sin(x), x^2, log(x), scroll to zoom, drag to pan, export PNG",
