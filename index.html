@@ -889,11 +889,11 @@ registerTool({
     inp.addEventListener('input', function() { ruConvert(); });
     row.appendChild(inp);
 
-    var from = document.createElement('select');
+var from = document.createElement('select');
     from.id = 'ru-from';
-    from.style.cssText = 'padding:4px 8px;background:#1a2030;border:1px solid var(--border);color:#d4dcec;border-radius:3px;font-size:11px';
+    from.style.cssText = 'padding:4px 8px;background:#1a2030;border:1px solid var(--border);color:#d4dcec;border-radius:3px;font-size:11px;-webkit-appearance:none;appearance:none';
     var units = ['m','km','cm','mm','in','ft','yd','mi'];
-    units.forEach(function(u) { var o = document.createElement('option'); o.value = u; o.textContent = u; from.appendChild(o); });
+    units.forEach(function(u) { var o = document.createElement('option'); o.value = u; o.textContent = u; o.style.cssText='background:#1a2030;color:#d4dcec'; from.appendChild(o); });
     from.addEventListener('change', function() { ruConvert(); });
     row.appendChild(from);
 
@@ -902,8 +902,8 @@ registerTool({
     row.appendChild(lbl);
 
     var to = document.createElement('select');
-    to.id = 'ru-to'; to.style.cssText = 'padding:4px 8px;background:#1a2030;border:1px solid var(--border);color:#d4dcec;border-radius:3px;font-size:11px';
-    units.forEach(function(u) { var o = document.createElement('option'); o.value = u; o.textContent = u; to.appendChild(o); });
+    to.id = 'ru-to'; to.style.cssText = 'padding:4px 8px;background:#1a2030;border:1px solid var(--border);color:#d4dcec;border-radius:3px;font-size:11px;-webkit-appearance:none;appearance:none';
+    units.forEach(function(u) { var o = document.createElement('option'); o.value = u; o.textContent = u; o.style.cssText='background:#1a2030;color:#d4dcec'; to.appendChild(o); });
     to.value = 'ft';
     to.addEventListener('change', function() { ruConvert(); });
     row.appendChild(to);
@@ -914,9 +914,9 @@ registerTool({
     row.appendChild(swap);
 
     var cat = document.createElement('select');
-    cat.id = 'ru-cat'; cat.style.cssText = 'padding:4px 8px;background:#1a2030;border:1px solid var(--border);color:#d4dcec;border-radius:3px;font-size:11px';
+    cat.id = 'ru-cat'; cat.style.cssText = 'padding:4px 8px;background:#1a2030;border:1px solid var(--border);color:#d4dcec;border-radius:3px;font-size:11px;-webkit-appearance:none;appearance:none';
     [{v:'length',n:'Length'},{v:'weight',n:'Weight'},{v:'volume',n:'Volume'},{v:'temp',n:'Temperature'},{v:'speed',n:'Speed'}].forEach(function(x) {
-      var o = document.createElement('option'); o.value = x.v; o.textContent = x.n; cat.appendChild(o);
+      var o = document.createElement('option'); o.value = x.v; o.textContent = x.n; o.style.cssText='background:#1a2030;color:#d4dcec'; cat.appendChild(o);
     });
     cat.addEventListener('change', function() { ruSetCategory(this.value); });
     row.appendChild(cat);
@@ -940,22 +940,29 @@ registerTool({
 });
 
 // Converter logic (global so onclick can find them)
-var RU_UNITS = null;
+var RU_DATA = {
+  length: {m:1,km:1000,cm:0.01,mm:0.001,in:0.0254,ft:0.3048,yd:0.9144,mi:1609.344},
+  weight: {kg:1,g:0.001,mg:0.000001,lb:0.453592,oz:0.0283495,ton:907.185},
+  volume: {l:1,ml:0.001,gal:3.78541,qt:0.946353,pt:0.473176,cup:0.236588,floz:0.0295735},
+  speed: {ms:1,kmh:0.277778,mph:0.44704,knot:0.514444}
+};
 function ruSetCategory(cat) {
-  var data = RU_UNITS || {};
-  if (cat === 'temp') {
-    data = {c:'Celsius',f:'Fahrenheit',k:'Kelvin'};
-    RU_UNITS = data;
-  }
-  var units = cat === 'temp' ? ['c','f','k'] : Object.keys(data);
   var from = document.getElementById('ru-from');
   var to = document.getElementById('ru-to');
   if (!from || !to) return;
   from.innerHTML = ''; to.innerHTML = '';
-  units.forEach(function(u) {
-    var o1 = document.createElement('option'); o1.value = u; o1.textContent = data[u] || u; from.appendChild(o1);
-    var o2 = document.createElement('option'); o2.value = u; o2.textContent = data[u] || u; to.appendChild(o2);
-  });
+  if (cat === 'temp') {
+    [{v:'c',n:'Celsius'},{v:'f',n:'Fahrenheit'},{v:'k',n:'Kelvin'}].forEach(function(x) {
+      var o1 = document.createElement('option'); o1.value = x.v; o1.textContent = x.n; o1.style.cssText='background:#1a2030;color:#d4dcec'; from.appendChild(o1);
+      var o2 = document.createElement('option'); o2.value = x.v; o2.textContent = x.n; o2.style.cssText='background:#1a2030;color:#d4dcec'; to.appendChild(o2);
+    });
+  } else {
+    var units = RU_DATA[cat] || {};
+    Object.keys(units).forEach(function(u) {
+      var o1 = document.createElement('option'); o1.value = u; o1.textContent = u; o1.style.cssText='background:#1a2030;color:#d4dcec'; from.appendChild(o1);
+      var o2 = document.createElement('option'); o2.value = u; o2.textContent = u; o2.style.cssText='background:#1a2030;color:#d4dcec'; to.appendChild(o2);
+    });
+  }
   to.selectedIndex = 1;
   ruConvert();
 }
@@ -978,10 +985,52 @@ function ruConvert() {
     else if (to.value === 'f') out = c * 9 / 5 + 32;
     else out = c + 273.15;
   } else {
-    var data = RU_UNITS || {};
+    var data = RU_DATA[cv] || {};
     out = val * (data[from.value] || 1) / (data[to.value] || 1);
   }
   result.textContent = val + ' ' + from.value + ' = ' + out.toFixed(4) + ' ' + to.value;
+}
+
+// ==== Tool 2: Base64 Encoder/Decoder ====
+registerTool({
+  id: 'base64',
+  name: 'Base64',
+  tab: 'texttools',
+  create: function(c) {
+    var title = document.createElement('div');
+    title.className = 'tool-section-title';
+    title.textContent = 'Base64 Encode / Decode';
+    c.appendChild(title);
+    var inp = document.createElement('textarea');
+    inp.id = 'b64-input'; inp.placeholder = 'Enter text to encode or Base64 to decode...';
+    inp.style.cssText = 'width:100%;height:120px;padding:10px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:4px;font-family:monospace;font-size:12px;resize:vertical;box-sizing:border-box';
+    c.appendChild(inp);
+    var row = document.createElement('div');
+    row.style.cssText = 'margin:8px 0;display:flex;gap:8px';
+    ['Encode','Decode','Copy'].forEach(function(act) {
+      var btn = document.createElement('button');
+      btn.className = 'nt-btn'; btn.textContent = act; btn.style.fontSize = '10px';
+      if (act === 'Encode') { btn.style.color = 'var(--teal)'; btn.onclick = function() { b64Run('encode'); }; }
+      else if (act === 'Decode') { btn.style.color = 'var(--cyan)'; btn.onclick = function() { b64Run('decode'); }; }
+      else { btn.onclick = function() { var o = document.getElementById('b64-output'); if(o&&o.value)navigator.clipboard.writeText(o.value); }; }
+      row.appendChild(btn);
+    });
+    c.appendChild(row);
+    var out = document.createElement('textarea');
+    out.id = 'b64-output'; out.placeholder = 'Result...';
+    out.style.cssText = 'width:100%;height:120px;padding:10px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:4px;font-family:monospace;font-size:12px;resize:vertical;box-sizing:border-box';
+    c.appendChild(out);
+  }
+});
+
+function b64Run(mode) {
+  var inp = document.getElementById('b64-input');
+  var out = document.getElementById('b64-output');
+  if (!inp || !out || !inp.value.trim()) return;
+  try {
+    if (mode === 'encode') out.value = btoa(unescape(encodeURIComponent(inp.value)));
+    else out.value = decodeURIComponent(escape(atob(inp.value)));
+  } catch(e) { out.value = 'Error: ' + e.message; }
 }
 </script>
 <script>
