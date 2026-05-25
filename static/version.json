@@ -1,8 +1,9 @@
 {
-  "version": "2.7.2",
-  "name": "NexCampus v2.7.2",
+  "version": "2.7.3",
+  "name": "NexCampus v2.7.3",
   "update_url": "",
   "changelog": [
-    "Challenges now like TryHackMe \u2014 detailed objectives, backgrounds, key concepts, and richer templates"
+    "Fixed challenge descriptions rendering as raw HTML (escapeHtml bug)",
+    "TryHackMe-style missions with objectives, background, and key concepts"
   ]
 }

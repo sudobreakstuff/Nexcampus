@@ -786,7 +786,7 @@ function clLoadChallenge(id) {
   for (var i = 0; i < CODECHALLENGES.length; i++) { if (CODECHALLENGES[i].id === id) { c = CODECHALLENGES[i]; break; } }
   if (!c) return;
   var descEl = document.getElementById('cl-challenge-desc');
-  if (descEl) descEl.innerHTML = '<div style="font-size:12px;color:var(--fg);font-weight:bold;margin-bottom:4px">' + escapeHtml(c.title) + '</div><div style="font-size:10px;color:var(--fg-dim);margin-bottom:8px">' + c.desc + '</div>';
+  if (descEl) descEl.innerHTML = '<div style="font-size:12px;color:var(--fg);font-weight:bold;margin-bottom:4px">' + escapeHtml(c.title) + '</div>' + c.desc;
   var viewEl = document.getElementById('cl-challenge-view');
   var hintHtml = '';
   if (c.hints && c.hints.length) {
