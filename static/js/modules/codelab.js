@@ -9,12 +9,6 @@ var CODEGUIDES = [
     id:'python-intro',
     title:'Python Basics',
     category:'Python',
-    steps: [
-      {title:'Welcome to Python!',text:'Hey there! Python is a programming language that reads almost like English. It\'s used for websites, AI, rocket science — but right now, we\'re starting simple: writing code that actually runs. Don\'t just read — type every example in the code editor on the right. Change things. Break things. That\'s how you learn.',code:'print("Hello, World!")',try:'Change the message to include your name: print("Hello, Alex!")',solution:'print("Hello, Alex!")'},
-      {title:'Leave Yourself Notes',text:'Use # to write comments. Comments are notes Python ignores — they\'re for humans (including future you). Good programmers comment their code so they remember what it does months later.',code:'# This is a comment — Python ignores this line\nprint("Hello!")  # Comments can go after code too',try:'Add a comment above your Hello World explaining what it does',solution:'# Print a greeting\nprint("Hello, Alex!")'},
-      {title:'Python is a Calculator',text:'Python does math faster than any calculator. Try addition (+), subtraction (-), multiplication (*), division (/), floor division (//), modulus (%), and exponents (**).',code:'print(2 + 3)    # 5\nprint(10 - 4)   # 6\nprint(3 * 7)    # 21\nprint(15 / 4)   # 3.75\nprint(15 // 4)  # 3 (floor)\nprint(15 % 4)   # 3 (remainder)\nprint(2 ** 3)   # 8 (power)',try:'Calculate how many seconds are in a day: 24 * 60 * 60. Print the result.',solution:'seconds = 24 * 60 * 60\nprint("Seconds in a day:", seconds)'},
-      {title:'Need Help?',text:'Stuck? Python has built-in help. Type help(print) to see what print() can do. You can also try dir(str) to list all methods for strings. Python\'s documentation is always one command away.',code:'help(print)\n# Try: dir(str)',try:'Use help(print) to see what the print function can do. Find one parameter you didn\'t know about!',solution:'help(print)  # Shows all the things print() can do'}
-    ],
     content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Welcome to Python! Let\\\'s Write Some Code!</h3>'
       + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Hey there! Welcome to Python — a programming language that reads almost like English. Created by Guido van Rossum in 1991, Python is designed to be <em>fun</em> to write and easy to read. It\\\'s used for everything from websites to AI to rocket science. But right now, we\\\'re going to start simple: writing code that actually runs.</p>'
       + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Here\\\'s the deal: don\\\'t just read this guide. Type the examples in the code runner below. Change them. Break them. That\\\'s how you actually learn. Ready? Let\\\'s go!</p>'
@@ -292,172 +286,6 @@ var CODEGUIDES = [
       + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Use <code>random.choice(["red", "green", "blue"])</code> to pick a random color</p>'
       + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Create a module called <code>helpers.py</code> with a function, then import and use it in another file</p>'
       + '</div>'
-  },
-  {
-    id:'debugging',
-    title:'Debugging 101 — Become a Code Detective',
-    category:'Python Fundamentals',
-    content:
-      '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Let\\\'s be real — you\\\'ll spend more time fixing bugs than writing code. That\\\'s normal! Debugging isn\\\'t failure; it\\\'s part of the process. The best developers are the ones who debug fastest. Here\\\'s your toolkit:</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">1. Read the Error Message (Seriously)</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Python error messages are surprisingly helpful. The last line tells you the error TYPE. The line above tells you WHERE. Read bottom-up:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">Traceback (most recent call last):\n  File "main.py", line 42, in calculate_score\n    return total / count\nZeroDivisionError: division by zero</code></pre>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">The <code>ZeroDivisionError</code> on line 42 of <code>main.py</code>, inside <code>calculate_score</code>. The variable <code>count</code> was zero. Mystery solved!</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">2. print() Is Your Best Friend</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Sprinkle <code>print()</code> statements to see variable values. Use descriptive labels so you know which print is which:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">print(f"DEBUG: count = {count}, total = {total}")\nprint(f"DEBUG: About to divide...")</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">3. Rubber Duck Debugging</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Explain your code line by line to a rubber duck (or a friend, or your cat). You\\\'ll spot the bug mid-sentence. This works shockingly well.</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">4. Binary Search Your Bug</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Comment out half your code. If the bug disappears, it\\\'s in the commented half. If not, it\\\'s in the uncommented half. Repeat until you find it.</p>'
-      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Common mistake:</strong> Staring at code hoping the bug reveals itself. Bugs don\\\'t respond to intimidation. Use tools!</p>'
-      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
-      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">Fix this buggy code: <code>numbers = [1, 2, 3]; for i in range(4): print(numbers[i])</code></p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">Add print() statements to find out why this function returns wrong values</p>'
-      + '</div>'
-  },
-  {
-    id:'data-structures',
-    title:'Mastering Lists, Dicts & Sets',
-    category:'Python Fundamentals',
-    content:
-      '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Python gives you superpowers through its built-in data structures. Choosing the right one makes your code faster AND cleaner. Let\\\'s explore:</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Lists — The Swiss Army Knife</h4>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">fruits = ["apple", "banana", "cherry"]\nfruits.append("dragonfruit")     # Add to end\nfruits.insert(1, "blueberry")    # Insert at position\npopped = fruits.pop()            # Remove from end\nfruits.sort()                    # Alphabetical\n# List comprehension — Python\\\'s superpower:\nsquares = [x**2 for x in range(10)]  # [0,1,4,9,16,25...]\nevens = [x for x in range(20) if x % 2 == 0]</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Dictionaries — Key-Value Pairs</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Dictionaries are lightning-fast lookups. Behind the scenes, they use hash tables — giving O(1) access time. Think of them as labeled drawers:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">student = {"name": "Alex", "age": 19, "grades": [85, 90, 78]}\nprint(student["name"])             # Alex\nstudent["major"] = "Computer Science"  # Add new key\n# Iterate like a pro:\nfor key, value in student.items():\n    print(f"{key}: {value}")\n# Dictionary comprehension:\nsquares = {x: x**2 for x in range(5)}  # {0:0, 1:1, 2:4, ...}</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Sets — Unique Items Only</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Sets automatically remove duplicates and support math operations like union, intersection, and difference. Great for "find unique items" or "what\\\'s in common?":</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">tags = {"python", "coding", "python"}  # {"python", "coding"} — dup gone!\na = {1, 2, 3, 4}\nb = {3, 4, 5, 6}\nprint(a | b)  # Union: {1,2,3,4,5,6}\nprint(a & b)  # Intersection: {3,4}\nprint(a - b)  # Difference: {1,2}</code></pre>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">💡 <strong>Pro Tip:</strong> Use <code>list</code> for ordered data, <code>dict</code> for key-value lookups, <code>set</code> for uniqueness and set math, and <code>tuple</code> for immutable data that shouldn\\\'t change.</p>'
-      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
-      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Create a list of 5 numbers, then create a new list with each number squared</p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Build a dictionary mapping 3 countries to their capitals</p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Use a set to find unique words in the sentence: "the cat and the dog and the bird"</p>'
-      + '</div>'
-  },
-  {
-    id:'file-io',
-    title:'Read & Write Files Like a Pro',
-    category:'Intermediate Python',
-    content:
-      '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Reading and writing files is how your programs interact with the real world — saving data, loading configs, processing logs. Python makes it almost too easy:</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Writing Files</h4>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Write mode creates/replaces the file\nwith open("journal.txt", "w") as f:\n    f.write("Day 1: Learned Python file I/O!\\n")\n    f.write("Day 2: Built something cool\\n")\n\n# Append mode adds to the end\nwith open("journal.txt", "a") as f:\n    f.write("Day 3: Still going strong!\\n")</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Reading Files</h4>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Read entire file at once\nwith open("journal.txt", "r") as f:\n    content = f.read()\n\n# Read line by line (memory efficient)\nwith open("journal.txt", "r") as f:\n    for line in f:\n        print(line.strip())\n\n# Read all lines into a list\nwith open("journal.txt", "r") as f:\n    lines = f.readlines()  # ["Day 1...", "Day 2..."]</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">The Magic of with</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7"><code>with open(...) as f:</code> automatically closes the file when you\\\'re done — even if an error occurs. It\\\'s called a context manager. NEVER open a file without <code>with</code>.</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Working with JSON</h4>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">import json\n\ndata = {"name": "Alex", "scores": [88, 92, 79]}\n# Write JSON to file\nwith open("data.json", "w") as f:\n    json.dump(data, f, indent=2)\n# Read JSON from file\nwith open("data.json", "r") as f:\n    loaded = json.load(f)\nprint(loaded["name"])  # Alex</code></pre>'
-      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Watch out:</strong> <code>"w"</code> mode DELETES the file first. Use <code>"a"</code> to append, or check if the file exists before opening with <code>"w"</code>.</p>'
-      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
-      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Write your name and favorite color to a file called <code>about_me.txt</code></p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Read it back and print each line with line numbers</p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Create a JSON file with 3 friends\\\' info, then load and display it</p>'
-      + '</div>'
-  },
-  {
-    id:'api-basics',
-    title:'Talk to the Internet — APIs & Requests',
-    category:'Intermediate Python',
-    content:
-      '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">APIs are how programs talk to other programs over the internet. Every time you check the weather on your phone, it calls an API. Python makes this dead simple:</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Your First API Call</h4>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Install: pip install requests\nimport requests\n\nresponse = requests.get("https://api.github.com")\nprint(response.status_code)  # 200 = success!\nprint(response.headers["Content-Type"])  # application/json\ndata = response.json()\nprint(f"GitHub API says: {data[\\\'current_user_url\\\']}")</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">GET, POST, PUT, DELETE — CRUD for the Web</h4>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># GET — read data\nresp = requests.get("https://jsonplaceholder.typicode.com/posts/1")\npost = resp.json()\nprint(post["title"])\n\n# POST — create data\nnew_post = {"title": "Hello", "body": "World", "userId": 1}\nresp = requests.post("https://jsonplaceholder.typicode.com/posts", json=new_post)\nprint(resp.status_code)  # 201 Created!</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Handling Errors Gracefully</h4>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">try:\n    resp = requests.get("https://api.example.com/data", timeout=5)\n    resp.raise_for_status()  # Raises error for 4xx/5xx codes\n    data = resp.json()\nexcept requests.exceptions.Timeout:\n    print("Request timed out — server is slow")\nexcept requests.exceptions.RequestException as e:\n    print(f"Something went wrong: {e}")</code></pre>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">💡 <strong>Pro Tip:</strong> Always use <code>timeout</code> parameters. Without it, a hanging server can freeze your program forever. Also, <code>raise_for_status()</code> is your friend — it turns HTTP errors into exceptions you can catch.</p>'
-      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
-      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Make a GET request to <code>https://jsonplaceholder.typicode.com/users</code> and print all usernames</p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. POST a new post to the same API and check the response</p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Add error handling with try/except for a deliberately wrong URL</p>'
-      + '</div>'
-  },
-  {
-    id:'oop-classes',
-    title:'Classes & Objects — Build Your Own Types',
-    category:'Intermediate Python',
-    content:
-      '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">You\\\'ve been using objects all along — strings, lists, dicts are all objects. Now it\\\'s time to build your own. Classes are blueprints; objects are the actual things you build from them:</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Your First Class</h4>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">class Superhero:\n    """A class representing a superhero."""\n    \n    def __init__(self, name, power, health=100):\n        self.name = name\n        self.power = power\n        self.health = health\n        self.level = 1\n    \n    def use_power(self):\n        print(f"{self.name} uses {self.power}! 💥")\n        self.level += 1\n    \n    def take_damage(self, amount):\n        self.health -= amount\n        if self.health <= 0:\n            print(f"{self.name} is defeated! 💀")\n        else:\n            print(f"{self.name} has {self.health} HP left")\n\n# Create heroes!\nspidey = Superhero("Spider-Man", "web slinging")\nironman = Superhero("Iron Man", "repulsor blasts", health=150)\nspidey.use_power()    # Spider-Man uses web slinging! 💥\nironman.take_damage(30)  # Iron Man has 120 HP left</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Inheritance — Reuse & Extend</h4>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">class FlyingHero(Superhero):\n    """A superhero who can fly."""\n    \n    def __init__(self, name, power, speed, health=100):\n        super().__init__(name, power, health)\n        self.speed = speed\n    \n    def fly(self):\n        print(f"{self.name} zooms through the sky at {self.speed}mph! ✈️")\n\nthor = FlyingHero("Thor", "lightning", speed=500)\nthor.fly()         # Thor zooms through the sky at 500mph! ✈️\nthor.use_power()   # Thor uses lightning! 💥 (inherited!)</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Special Methods (Dunder Methods)</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7"><code>__str__</code>, <code>__repr__</code>, <code>__eq__</code>, <code>__add__</code> — these double-underscore methods make your objects behave like Python built-ins:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">class Point:\n    def __init__(self, x, y):\n        self.x, self.y = x, y\n    def __str__(self):\n        return f"({self.x}, {self.y})"\n    def __add__(self, other):\n        return Point(self.x + other.x, self.y + other.y)\n\np1 = Point(1, 2)\np2 = Point(3, 4)\nprint(p1)       # (1, 2) — not <__main__.Point object at 0x...>\np3 = p1 + p2    # Uses __add__\nprint(p3)       # (4, 6)</code></pre>'
-      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
-      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Create a <code>Pet</code> class with name, species, and a <code>feed()</code> method</p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Create a <code>BankAccount</code> class with deposit and withdraw methods</p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Add <code>__str__</code> to your BankAccount to display the balance nicely</p>'
-      + '</div>'
-  },
-  {
-    id:'game-loops',
-    title:'Build a Game with While Loops',
-    category:'Fun Projects',
-    content:
-      '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Games are just loops! Every game — from Pong to Fortnite — runs on a game loop: check input, update state, draw screen, repeat. Here\\\'s how to build one:</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">The Game Loop Pattern</h4>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">import random\n\n# Game state\nplayer_hp = 100\nmonster_hp = 50\nround_num = 1\n\nprint("⚔️  BATTLE BEGIN! ⚔️")\n\nwhile player_hp > 0 and monster_hp > 0:\n    print(f"\\n--- Round {round_num} ---")\n    \n    # Player\\\'s turn\n    print(f"Your HP: {player_hp} | Monster HP: {monster_hp}")\n    action = input("Attack (1) or Heal (2)? ")\n    \n    if action == "1":\n        damage = random.randint(10, 25)\n        monster_hp -= damage\n        print(f"You deal {damage} damage!")\n    elif action == "2":\n        heal = random.randint(8, 15)\n        player_hp += heal\n        print(f"You heal {heal} HP!")\n    \n    # Monster\\\'s turn (if alive)\n    if monster_hp > 0:\n        mdamage = random.randint(5, 20)\n        player_hp -= mdamage\n        print(f"Monster hits you for {mdamage} damage!")\n    \n    round_num += 1\n\nif player_hp > 0:\n    print("\\n🎉 You defeated the monster!")\nelse:\n    print("\\n💀 The monster defeated you...")</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">State Machines — Beyond Simple Loops</h4>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">Real games use state machines. Each "screen" is a state — menu, playing, paused, game over. Your loop checks the current state and runs different code:</p>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">state = "menu"\n\nwhile state != "quit":\n    if state == "menu":\n        print("\\n1. Start Game  2. Quit")\n        choice = input("> ")\n        if choice == "1": state = "playing"\n        elif choice == "2": state = "quit"\n    \n    elif state == "playing":\n        # ... game code ...\n        print("Playing... press q to quit")\n        if input("> ") == "q": state = "menu"</code></pre>'
-      + '<p style="margin:0 0 8px;color:var(--fg);font-size:11px;line-height:1.7">💡 <strong>Pro Tip:</strong> Split your game into functions: <code>handle_input()</code>, <code>update_state()</code>, and <code>render()</code>. This makes your code cleaner and easier to debug.</p>'
-      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
-      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Expand the battle game — add a magic attack and a shield option</p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Add random critical hits (10% chance of double damage)</p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Create a simple inventory system as a list that changes during gameplay</p>'
-      + '</div>'
-  },
-  {
-    id:'regex',
-    title:'Regex — Pattern Matching Magic',
-    category:'Intermediate Python',
-    content:
-      '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Regular expressions (regex) are like Ctrl+F on steroids. They find patterns in text — emails, phone numbers, dates, you name it. They look scary at first, but once you learn the basics, they\\\'re incredibly powerful:</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">The Essential Patterns</h4>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">import re\n\ntext = "Contact me at alex@email.com or call 555-1234"\n\n# \\d = any digit, \\w = any word char, + = one or more\n# @ = literal @ symbol\n# \\. = literal dot (need to escape it)\nemails = re.findall(r\\\'[\\w.+-]+@[\\w-]+\\.[\\w.-]+\\\', text)\nprint(emails)  # [\\\'alex@email.com\\\']\n\n# Find all numbers\nphones = re.findall(r\\\'\\d{3}-\\d{4}\\\', text)\nprint(phones)  # [\\\'555-1234\\\']</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Your Regex Cheat Sheet</h4>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">\\d      digit (0-9)\n\\w      word character (a-z, A-Z, 0-9, _)\n\\s      whitespace (space, tab, newline)\n.       any character except newline\n*       0 or more\n+       1 or more\n?       0 or 1 (makes it optional)\n{3}     exactly 3\n{2,5}   2 to 5 times\n^       start of string\n$       end of string\n[abc]   any of a, b, or c\n[^abc]  NOT a, b, or c\n(abc)   capture group</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Real-World Regex Examples</h4>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Extract all hashtags from a tweet\ntweet = "Loving #python and #coding! #100DaysOfCode"\nhashtags = re.findall(r\\\'#\\w+\\\', tweet)\nprint(hashtags)  # [\\\'#python\\\', \\\'#coding\\\', \\\'#100DaysOfCode\\\']\n\n# Validate a date format (YYYY-MM-DD)\ndate = "2026-05-24"\nif re.match(r\\\'\\d{4}-\\d{2}-\\d{2}\\\', date):\n    print("Valid date format")\n\n# Replace all numbers with [REDACTED]\nsecret = "My PIN is 1234 and SSN is 567-89-0123"\nclean = re.sub(r\\\'\\d+\\\', "[REDACTED]", secret)\nprint(clean)  # My PIN is [REDACTED] and SSN is [REDACTED]-[REDACTED]-[REDACTED]</code></pre>'
-      + '<p style="margin:0 0 8px;color:var(--orange);font-size:11px;line-height:1.7">⚠️ <strong>Watch out:</strong> Regex is greedy by default — <code>.*</code> matches as MUCH as possible. Use <code>.*?</code> to match as LITTLE as possible (lazy matching).</p>'
-      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
-      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Write a regex to extract all capital letters from a string</p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Find all words that are exactly 5 letters long in a sentence</p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Write a regex that validates whether a string is a valid email address</p>'
-      + '</div>'
-  },
-  {
-    id:'datetime',
-    title:'Dates & Times — Taming the Clock',
-    category:'Intermediate Python',
-    content:
-      '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Working with dates is notoriously tricky — time zones, leap years, DST. Python\\\'s <code>datetime</code> module handles it all. Let\\\'s master it:</p>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Creating and Formatting Dates</h4>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)">from datetime import datetime, timedelta, date\n\n# Get current date and time\nnow = datetime.now()\nprint(now)  # 2026-05-24 15:30:45.123456\n\n# Create a specific date\nbirthday = datetime(2005, 8, 15, 14, 30)\nprint(birthday.strftime("%B %d, %Y"))  # August 15, 2005\n\n# Format codes:\n# %Y = year (4 digits), %m = month (01-12), %d = day\n# %H = hour (24h), %M = minute, %S = second\n# %A = weekday name, %B = month name</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Time Travel with timedelta</h4>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Add/subtract time\none_week = timedelta(weeks=1)\nnext_week = now + one_week\nyesterday = now - timedelta(days=1)\n\n# Calculate difference\nnew_year = datetime(2027, 1, 1)\ndays_left = new_year - now\nprint(f"{days_left.days} days until 2027!")\n\n# Age calculator\nbirth = date(2000, 6, 15)\ntoday = date.today()\nage = today.year - birth.year\nif today.month < birth.month or (today.month == birth.month and today.day < birth.day):\n    age -= 1\nprint(f"You are {age} years old")</code></pre>'
-      + '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">Parsing Dates from Strings</h4>'
-      + '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px;overflow-x:auto"><code style="font-size:11px;color:var(--fg)"># Parse a date string\nfrom datetime import datetime\ndate_str = "24/05/2026 15:30"\nparsed = datetime.strptime(date_str, "%d/%m/%Y %H:%M")\nprint(parsed.strftime("%A, %B %d"))  # Sunday, May 24\n\n# Handle different formats\nformats = ["%Y-%m-%d", "%d/%m/%Y", "%B %d, %Y"]\nfor fmt in formats:\n    try:\n        result = datetime.strptime(date_str, fmt)\n        print(f"Parsed with {fmt}: {result}")\n        break\n    except ValueError:\n        continue</code></pre>'
-      + '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;margin:0 0 10px">'
-      + '<p style="margin:0 0 5px;color:var(--fg);font-size:11px;line-height:1.7">🎯 <strong>Your Turn!</strong></p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">1. Print today\\\'s date in the format "Sunday, May 24, 2026"</p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">2. Calculate how many days until your next birthday</p>'
-      + '<p style="margin:0 0 3px;color:var(--fg);font-size:11px;line-height:1.7">3. Build a countdown timer that shows days, hours, and minutes until a future date</p>'
-      + '</div>'
   }
 ];
 
@@ -555,46 +383,7 @@ var CODEDICT = [
   { term:'Zip', definition:'A built-in function that aggregates elements from multiple iterables into tuples. Stops at the shortest iterable.' },
   { term:'Map', definition:'A built-in function that applies a given function to each item of an iterable and returns an iterator of results.' },
   { term:'Filter', definition:'A built-in function that constructs an iterator from elements of an iterable for which a function returns True.' },
-  { term:'Recursion', definition:'A technique where a function calls itself to solve a problem by breaking it into smaller versions. Every recursive function needs a base case to stop.' },
-  { term:'API', definition:'Application Programming Interface — a set of rules allowing programs to talk to each other. Web APIs use HTTP requests to send and receive data (usually JSON).' },
-  { term:'JSON', definition:'JavaScript Object Notation — a lightweight data format that is easy for humans to read and write and easy for machines to parse and generate.' },
-  { term:'CSV', definition:'Comma-Separated Values — a simple file format for storing tabular data. Each line is a row, commas separate columns. Excel spreadsheets can be exported as CSV.' },
-  { term:'Git', definition:'A distributed version control system that tracks changes in code. Developers use Git to collaborate, backup work, and manage different versions of a project.' },
-  { term:'Repository', definition:'A storage location for code, typically hosted on GitHub or GitLab. Contains all files, commit history, and branches for a project.' },
-  { term:'Commit', definition:'A snapshot of changes in a Git repository. Each commit has a unique hash, a message describing the changes, and metadata about who made it and when.' },
-  { term:'Branch', definition:'A parallel version of a repository. Developers create branches to work on features without affecting the main codebase. Branches can be merged back later.' },
-  { term:'Merge Conflict', definition:'Occurs when Git cannot automatically combine two branches. Developers must manually resolve conflicting changes before completing the merge.' },
-  { term:'CLI', definition:'Command Line Interface — a text-based way to interact with a computer. You type commands and get text output. More powerful than GUIs for many tasks.' },
-  { term:'IDE', definition:'Integrated Development Environment — software that combines code editor, debugger, and build tools. Examples: VS Code, PyCharm, IntelliJ.' },
-  { term:'Syntax Error', definition:'A mistake in the grammar of your code. The computer cannot understand the instruction. Python points to the line with the error and sometimes the exact character.' },
-  { term:'Runtime Error', definition:'An error that occurs while the program is running, not during parsing. Examples: division by zero, accessing an out-of-bounds list index, or calling a method on None.' },
-  { term:'Logic Error', definition:'The hardest bug — your code runs without errors but produces wrong results. No error message helps you. You must trace through your logic to find the mistake.' },
-  { term:'Refactoring', definition:'Restructuring existing code without changing its external behavior. Improves readability, reduces complexity, or makes the code easier to extend.' },
-  { term:'DRY', definition:'Don\'t Repeat Yourself — a programming principle. If you find yourself copying and pasting code, create a function instead. Less duplication = fewer bugs.' },
-  { term:'Algorithm', definition:'A step-by-step procedure for solving a problem. Like a recipe — follow the steps in order, and you get the result. Sorting, searching, and pathfinding are common algorithms.' },
-  { term:'Big O Notation', definition:'A way to describe how fast an algorithm runs as the input size grows. O(1) is constant time, O(n) is linear, O(n²) is quadratic. Helps predict performance.' },
-  { term:'Data Structure', definition:'A way to organize and store data so it can be accessed efficiently. Lists, dictionaries, trees, graphs, and hash tables are all data structures.' },
-  { term:'Stack', definition:'A LIFO (Last In, First Out) data structure. Like a stack of plates — you can only add or remove from the top. Used for undo/redo and function calls.' },
-  { term:'Queue', definition:'A FIFO (First In, First Out) data structure. Like a line at a store — the first person in line is served first. Used for task scheduling and print spooling.' },
-  { term:'Binary Search', definition:'An efficient O(log n) search algorithm that works on sorted data. Repeatedly divides the search range in half. Much faster than linear search for large datasets.' },
-  { term:'Hash Table', definition:'A data structure that maps keys to values using a hash function. Provides O(1) average lookup time. Python dictionaries are hash tables.' },
-  { term:'Mutable', definition:'An object that can be changed after creation. Lists and dictionaries are mutable in Python. Be careful — modifying a mutable object affects all references to it.' },
-  { term:'Immutable', definition:'An object that cannot be changed after creation. Strings, integers, and tuples are immutable in Python. Operations on them create new objects instead.' },
-  { term:'Lambda', definition:'A small anonymous function defined with the lambda keyword. Useful for short operations passed as arguments: sorted(items, key=lambda x: x.age).' },
-  { term:'Decorator', definition:'A function that modifies another function\'s behavior. Written with @decorator_name above a function. Used for logging, timing, access control, and caching.' },
-  { term:'Generator', definition:'A function that yields values one at a time instead of returning them all at once. Uses yield instead of return. Memory efficient for large sequences.' },
-  { term:'Virtualenv', definition:'A tool for creating isolated Python environments. Each environment has its own packages and Python version. Essential for managing project dependencies.' },
-  { term:'Pip', definition:'The package installer for Python. Use pip install package_name to download and install libraries from the Python Package Index (PyPI).' },
-  { term:'Flask', definition:'A lightweight Python web framework. Easy to learn and perfect for small to medium web applications. Uses decorators to define URL routes.' },
-  { term:'Django', definition:'A full-featured Python web framework. Includes ORM, admin panel, authentication, and templating. Follows the "batteries included" philosophy.' },
-  { term:'SQL', definition:'Structured Query Language — used to communicate with databases. SELECT reads data, INSERT adds it, UPDATE changes it, DELETE removes it.' },
-  { term:'ORM', definition:'Object-Relational Mapping — a technique that lets you interact with databases using Python objects instead of writing raw SQL queries.' },
-  { term:'CSS', definition:'Cascading Style Sheets — controls the visual appearance of HTML documents. Defines colors, fonts, layouts, animations, and responsive designs.' },
-  { term:'HTML', definition:'HyperText Markup Language — the skeleton of every web page. Uses tags like <p>, <div>, <img> to structure content.' },
-  { term:'DOM', definition:'Document Object Model — a tree representation of an HTML document. JavaScript can manipulate the DOM to dynamically change page content.' },
-  { term:'Async', definition:'Asynchronous programming allows tasks to run without blocking the main thread. Uses async/await keywords. Essential for handling many network requests at once.' },
-  { term:'Threading', definition:'Running multiple operations concurrently within a single process. Python threads share memory but are limited by the GIL. Good for I/O-bound tasks.' },
-  { term:'Multiprocessing', definition:'Running multiple Python processes in parallel. Each process has its own memory and Python interpreter. Best for CPU-bound tasks.' }
+  { term:'Reduce', definition:'A functools function that repeatedly applies a function to the elements of a sequence, cumulatively combining them into a single value.' }
 ];
 
 var CODEPROJECTS = [
@@ -688,12 +477,6 @@ var CODEPROJECTS = [
   }
 ];
 
-
-
-// challenges removed
-
-
-
 var CL_SNIPPETS = {
   'function': 'def my_function(param):\n    pass\n',
   'class': 'class MyClass:\n    def __init__(self):\n        pass\n',
@@ -706,16 +489,15 @@ var CL_SNIPPETS = {
 
 function initCodeLab() {
   var editor = $('cl-code-input');
-  if (editor) {
-    editor.placeholder = '# Write your code here...\n# Select a language and click Run';
-  }
+  if (!editor) return;
+  editor.placeholder = '# Write your code here...\n# Select a language and click Run';
   currentClLang = 'python';
   var langSelect = $('cl-lang-select');
   if (langSelect) langSelect.value = 'python';
   clRenderGuides();
   clSearchDict();
   clRenderProjects();
-}
+    }
 
 function clSwitchTab(tab) {
   currentClTab = tab;
@@ -732,106 +514,38 @@ function clSwitchTab(tab) {
     var ontxt = b.getAttribute('onclick') || '';
     b.classList.toggle('active', ontxt.indexOf("'" + tab + "'") !== -1);
   });
-}
+  // Lazy-init challenges
+  }
 
 function clLoadGuide(id) {
   var guide = null;
   for (var i = 0; i < CODEGUIDES.length; i++) {
-    if (CODEGUIDES[i].id === id) { guide = CODEGUIDES[i]; break; }
+    if (CODEGUIDES[i].id === id) {
+      guide = CODEGUIDES[i];
+      break;
+    }
   }
   if (!guide) return;
 
-  window._clGuide = guide;
-  window._clGuideStep = 0;
+  var contentEl = $('cl-guide-content');
+  if (contentEl) contentEl.innerHTML = '<h2 style="color:var(--cyan);margin:0 0 12px;font-size:15px">' + escapeHtml(guide.title) + '</h2>'
+    + '<div style="font-size:10px;color:var(--teal);margin-bottom:12px">' + escapeHtml(guide.category) + '</div>'
+    + guide.content;
 
   var viewEl = $('cl-guide-view');
   var listEl = $('cl-guides-list');
   if (viewEl) viewEl.style.display = 'block';
   if (listEl) listEl.style.display = 'none';
 
-  if (guide.steps && guide.steps.length) {
-    clRenderGuideStep();
-  } else {
-    var contentEl = $('cl-guide-content');
-    if (contentEl) contentEl.innerHTML = '<h2 style="color:var(--cyan);margin:0 0 12px;font-size:15px">' + escapeHtml(guide.title) + '</h2>'
-      + '<div style="font-size:10px;color:var(--teal);margin-bottom:12px">' + escapeHtml(guide.category) + '</div>'
-      + guide.content;
-    var editor = $('cl-code-input');
-    if (editor) editor.value = '# ' + guide.title + '\n# Write your code here\n';
-    // Back only button
-    var navArea = document.getElementById('cl-guide-nav');
-    if (navArea) navArea.innerHTML = '';
-  }
-}
-
-function clRenderGuideStep() {
-  var guide = window._clGuide;
-  var step = window._clGuideStep || 0;
-  var s = guide.steps[step];
-  if (!s) return;
-
-  var title = guide.title;
   var editor = $('cl-code-input');
-  if (editor) editor.value = s.code || '# Write your code here\n';
-
-  var html = '';
-  html += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">';
-  html += '<h2 style="color:var(--cyan);margin:0;font-size:15px;flex:1">' + escapeHtml(title) + '</h2>';
-  html += '<span style="font-size:11px;color:var(--fg-dim);white-space:nowrap">Step ' + (step+1) + ' of ' + guide.steps.length + '</span>';
-  html += '</div>';
-  html += '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">' + escapeHtml(s.title) + '</h4>';
-  html += '<p style="color:var(--fg);font-size:11px;line-height:1.7;margin:0 0 12px">' + s.text + '</p>';
-
-  if (s.try) {
-    html += '<div style="background:rgba(79,195,247,0.08);border:1px solid var(--cyan);border-radius:4px;padding:10px;margin:8px 0">';
-    html += '<p style="margin:0 0 6px;font-size:11px;color:var(--cyan);font-weight:bold">🎯 Try It!</p>';
-    html += '<p style="margin:0 0 8px;font-size:11px;color:var(--fg)">' + s.try + '</p>';
-    if (s.solution) {
-      html += '<button class="nt-btn" onclick="clShowSolution()" id="cl-soln-btn" style="font-size:10px">💡 Show Solution</button>';
-      html += '<pre id="cl-soln-code" style="display:none;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px;margin:8px 0 0;font-size:10px;color:var(--teal);overflow-x:auto">' + escapeHtml(s.solution) + '</pre>';
-    }
-    html += '</div>';
-  }
-
-  var contentEl = $('cl-guide-content');
-  if (contentEl) contentEl.innerHTML = html;
-
-  // Navigation
-  var nav = document.getElementById('cl-guide-nav');
-  if (nav) {
-    var navHtml = '';
-    navHtml += '<button class="nt-btn" onclick="clBackToGuides()" style="font-size:10px;margin-right:8px">← All Guides</button>';
-    if (step > 0) {
-      navHtml += '<button class="nt-btn" onclick="clGuidePrev()" style="font-size:10px">← Back</button>';
-    }
-    if (step < guide.steps.length - 1) {
-      navHtml += '<button class="nt-btn" onclick="clGuideNext()" style="font-size:10px;color:var(--teal);margin-left:4px">Next →</button>';
+  if (editor) {
+    var codeMatch = guide.content.match(/<pre><code[^>]*>([\s\S]*?)<\/code><\/pre>/i);
+    if (codeMatch) {
+      editor.value = escapeHtml(codeMatch[1]);
     } else {
-      navHtml += '<span style="font-size:11px;color:var(--teal);margin-left:8px">✅ Complete! Try the challenges.</span>';
+      editor.value = '# ' + guide.title + '\n# Write your code here\n';
     }
-    nav.innerHTML = navHtml;
   }
-}
-
-function clGuideNext() {
-  var guide = window._clGuide;
-  if (!guide || !guide.steps) return;
-  window._clGuideStep = Math.min(guide.steps.length - 1, (window._clGuideStep || 0) + 1);
-  clRenderGuideStep();
-}
-
-function clGuidePrev() {
-  window._clGuideStep = Math.max(0, (window._clGuideStep || 0) - 1);
-  clRenderGuideStep();
-}
-
-function clShowSolution() {
-  var code = document.getElementById('cl-soln-code');
-  var btn = document.getElementById('cl-soln-btn');
-  if (code) code.style.display = 'block';
-  if (btn) btn.style.display = 'none';
-    var editor = $('cl-code-input');
-    if (editor && code) editor.value = code.textContent;
 }
 
 function clBackToGuides() {
@@ -839,7 +553,6 @@ function clBackToGuides() {
   var listEl = $('cl-guides-list');
   if (viewEl) viewEl.style.display = 'none';
   if (listEl) listEl.style.display = 'block';
-  window._clGuide = null;
 }
 
 function clRenderGuides() {
@@ -962,14 +675,8 @@ function clBackToProjects() {
 }
 
 
-function clBackToChallenges() {
-  var viewEl = $('cl-challenge-view');
-  var descEl = $('cl-challenge-desc');
-  var listEl = $('cl-challenges-list');
-  if (viewEl) viewEl.style.display = 'none';
-  if (descEl) descEl.style.display = 'none';
-  if (listEl) listEl.style.display = 'block';
-}
+
+
 
 function clLoadToEditor() {
   var editor = $('cl-code-input');
@@ -1233,78 +940,3 @@ function clSetLanguage(lang) {
     langLabel.textContent = labels[lang] || lang;
   }
 }
-
-  {
-    id:'sum-two',
-    title:'Sum Two Numbers',
-    desc:'Write a function <code>add(a, b)</code> that returns the sum of two numbers.',
-    template:'def add(a, b):\n    # Your code here\n    pass',
-    tests:[
-      ['add(2, 3)', '5'],
-      ['add(-1, 1)', '0'],
-      ['add(0, 0)', '0'],
-      ['add(100, 200)', '300']
-    ],
-    hint:'Return a + b'
-  },
-  {
-    id:'is-even',
-    title:'Is Even?',
-    desc:'Write a function <code>is_even(n)</code> that returns <code>True</code> if n is even.',
-    template:'def is_even(n):\n    # Your code here\n    pass',
-    tests:[['is_even(4)', 'True'], ['is_even(7)', 'False'], ['is_even(0)', 'True'], ['is_even(1)', 'False']],
-    hint:'Use the modulo operator %'
-  },
-  {
-    id:'factorial',
-    title:'Factorial',
-    desc:'Write a function <code>factorial(n)</code> that returns n! (n factorial). n! = n × (n-1) × ... × 1.',
-    template:'def factorial(n):\n    # Your code here\n    pass',
-    tests:[['factorial(1)', '1'], ['factorial(5)', '120'], ['factorial(0)', '1'], ['factorial(3)', '6']],
-    hint:'Use a loop or recursion. 0! = 1'
-  },
-  {
-    id:'count-vowels',
-    title:'Count Vowels',
-    desc:'Write a function <code>count_vowels(s)</code> that returns the number of vowels in a string.',
-    template:'def count_vowels(s):\n    # Your code here\n    pass',
-    tests:[['count_vowels("hello")', '2'], ['count_vowels("sky")', '0'], ['count_vowels("AEIOU")', '5'], ['count_vowels("python")', '1']],
-    hint:'Convert to lowercase, check each character'
-  },
-  {
-    id:'max-of-three',
-    title:'Max of Three',
-    desc:'Write a function <code>max_of_three(a, b, c)</code> that returns the largest of three numbers.',
-    template:'def max_of_three(a, b, c):\n    # Your code here\n    pass',
-    tests:[['max_of_three(1, 2, 3)', '3'], ['max_of_three(5, 3, 4)', '5'], ['max_of_three(-1, -2, -3)', '-1'], ['max_of_three(7, 7, 1)', '7']],
-    hint:'Use if/elif or max()'
-  },
-  {
-    id:'palindrome',
-    title:'Palindrome Check',
-    desc:'Write a function <code>is_palindrome(s)</code> that returns <code>True</code> if s reads the same forwards and backwards.',
-    template:'def is_palindrome(s):\n    # Your code here\n    pass',
-    tests:[['is_palindrome("racecar")', 'True'], ['is_palindrome("hello")', 'False'], ['is_palindrome("madam")', 'True'], ['is_palindrome("a")', 'True']],
-    hint:'Compare s with s[::-1] (reversed string)'
-  },
-  {
-    id:'fizzbuzz',
-    title:'FizzBuzz',
-    desc:'Write <code>fizzbuzz(n)</code>. Return "Fizz" if divisible by 3, "Buzz" if by 5, "FizzBuzz" if both, else n as string.',
-    template:'def fizzbuzz(n):\n    # Your code here\n    pass',
-    tests:[['fizzbuzz(3)', 'Fizz'], ['fizzbuzz(5)', 'Buzz'], ['fizzbuzz(15)', 'FizzBuzz'], ['fizzbuzz(7)', '7']],
-    hint:'Check divisible by 15 first, then 3, then 5'
-  },
-  {
-    id:'fibonacci',
-    title:'Fibonacci List',
-    desc:'Write <code>fib_list(n)</code> that returns the first n Fibonacci numbers as a list.',
-    template:'def fib_list(n):\n    # Your code here\n    pass',
-    tests:[['fib_list(1)', '[0]'], ['fib_list(5)', '[0, 1, 1, 2, 3]'], ['fib_list(2)', '[0, 1]'], ['fib_list(7)', '[0, 1, 1, 2, 3, 5, 8]']],
-    hint:'Start with [0, 1], keep adding sum of last two'
-  }
-];
-
-
-
-console.log("codelab.js loaded successfully");
