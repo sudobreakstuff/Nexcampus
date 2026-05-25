@@ -88,9 +88,9 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', function() {
     setTimeout(initToolRegistry, 500);
     setTimeout(function() {
-      // When any built-in text tool is clicked, hide registry tools
+      var registryIds = TOOL_REGISTRY.map(function(t){ return t.id; });
       document.querySelectorAll('#tab-texttools .nb-tab-btn').forEach(function(btn) {
-        if (!btn._registered) {
+        if (!btn._registered && registryIds.indexOf(btn.getAttribute('data-tt-tool')) === -1) {
           btn._registered = true;
           btn.addEventListener('click', function() {
             TOOL_REGISTRY.forEach(function(t) {
@@ -104,8 +104,9 @@ if (document.readyState === 'loading') {
 } else {
   setTimeout(initToolRegistry, 500);
   setTimeout(function() {
+    var registryIds = TOOL_REGISTRY.map(function(t){ return t.id; });
     document.querySelectorAll('#tab-texttools .nb-tab-btn').forEach(function(btn) {
-      if (!btn._registered) {
+      if (!btn._registered && registryIds.indexOf(btn.getAttribute('data-tt-tool')) === -1) {
         btn._registered = true;
         btn.addEventListener('click', function() {
           TOOL_REGISTRY.forEach(function(t) {
