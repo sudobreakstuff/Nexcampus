@@ -56,10 +56,10 @@ async function apiPost(endpoint, data) {
 }
 
 function log(msg) {
-  try {
-    const ts = new Date().toLocaleTimeString();
-    console.log(`[NexCampus ${ts}] ${msg}`);
-  } catch(e) {}
+  const ts = new Date().toLocaleTimeString();
+  console.log(`[NexCampus ${ts}] ${msg}`);
+  const sb = $('mem-status');
+  if (sb) sb.textContent = msg;
 }
 
 function showNotification(msg, duration, type) {
@@ -139,19 +139,8 @@ document.addEventListener('DOMContentLoaded', function() {
           else if (best.tab === 'texttools') setTimeout(function() { switchTtTool(best.tool); }, 100);
         }
         this.blur();
-      showNotification('Navigated to: ' + best.label, 1500, 'info');
+        showNotification('Navigated to: ' + best.label, 1500, 'info');
+      }
     }
-  }
-});
-});// Delegate click handler for spell suggestions (outside DOMContentLoaded)
-document.addEventListener('click', function(e) {
-  var el = e.target.closest('.spell-sugg');
-  if (!el) return;
-  var word = el.getAttribute('data-word');
-  var fix = el.getAttribute('data-fix');
-  var input = document.getElementById('tt-spell-input');
-  if (word && fix && input && typeof ttSpell === 'function') {
-    input.value = input.value.replace(new RegExp('\\\\b' + word.replace(/[.*+?^${}()|[\]\\\\]/g, '\\\\$&') + '\\\\b', 'gi'), fix);
-    ttSpell();
-  }
+  });
 });

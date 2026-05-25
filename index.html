@@ -21,7 +21,7 @@
 <div id="app" style="display:none;">
   <div id="sidebar">
     <div class="sidebar-header">NEXCAMPUS <span class="connection-dot"></span></div>
-    <div class="sidebar-subtitle" id="sidebar-version">v2.4.9</div>
+    <div class="sidebar-subtitle" id="sidebar-version">v2.4.3</div>
     <input type="text" id="sidebar-search" placeholder="Search tools..." style="width:100%;padding:6px 10px;margin:6px 0 2px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:4px;font-size:11px;box-sizing:border-box">
     <nav id="nav">
       <button class="nav-btn active" data-tab="home">HOME</button>
@@ -44,11 +44,11 @@
       <!-- HOME -->
       <div class="tab-pane active section" id="tab-home">
         <div class="greeting">Hey there.</div>
-        <div class="greeting-sub" id="greeting-version">NexCampus v2.4.9</div>
+        <div class="greeting-sub" id="greeting-version">NexCampus v2.4.3</div>
 
         <div class="stat-row">
           <div class="stat-item">
-            <span class="stat-value" id="home-version">v2.4.9</span>
+            <span class="stat-value" id="home-version">v2.4.3</span>
             <span class="stat-label">Version</span>
           </div>
           <div class="stat-item">
@@ -86,6 +86,7 @@
           <button class="nb-tab-btn" data-nb-tool="periodic" onclick="switchNbTool('periodic')">Periodic</button>
           <button class="nb-tab-btn" data-nb-tool="dictionary" onclick="switchNbTool('dictionary')">Dictionary</button>
           <button class="nb-tab-btn" data-nb-tool="solar" onclick="switchNbTool('solar')" style="color:var(--amber)">★ Solar System</button>
+          <button class="nb-tab-btn" data-nb-tool="mindmap" onclick="switchNbTool('mindmap')" style="color:var(--teal)">Mind Map</button>
         </div>
         <div class="nb-grid">
           <div class="nb-side">
@@ -485,7 +486,22 @@
               </div>
             </div>
 
-            
+            <div id="nb-tool-mindmap" class="nb-tool-content" style="display:none">
+              <div class="tool-section-title">Interactive Mind Map <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Double-click to add node · Drag to move · Click to edit</span></div>
+              <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+                <button class="nt-btn" onclick="try{mindmapAddNode()}catch(e){alert('Add error: '+e.message)}" style="font-size:10px">+ Add Node</button>
+                <button class="nt-btn" onclick="try{mindmapDeleteSelected()}catch(e){alert('Del error: '+e.message)}" style="font-size:10px">Delete Node</button>
+                <button class="nt-btn" onclick="mindmapClear()" style="font-size:10px">Clear All</button>
+                <button class="nt-btn" onclick="mindmapExport()" style="font-size:10px">Export PNG</button>
+                <span id="mindmap-status" style="font-size:10px;color:var(--fg-dim);margin-left:auto"></span>
+              </div>
+              <canvas id="mindmap-canvas" width="800" height="500" style="width:100%;aspect-ratio:8/5;background:var(--bg2);border:2px solid var(--cyan);border-radius:8px;cursor:default"></canvas>
+              <div id="mindmap-edit" style="display:none;position:absolute;z-index:10">
+                <input type="text" id="mindmap-input" style="padding:4px 8px;font-size:11px;background:var(--bg2);border:1px solid var(--cyan);color:var(--fg);border-radius:3px;outline:none;width:200px" placeholder="Node label...">
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
 
@@ -494,10 +510,10 @@
         <div class="cl-layout">
           <div class="cl-sidebar">
             <div class="cl-sidebar-tabs">
-              <button class="cl-sb-btn active" onclick="clSwitchTab('guides')">Guides</button>
-              <button class="cl-sb-btn" onclick="clSwitchTab('dictionary')">Dictionary</button>
-              <button class="cl-sb-btn" onclick="clSwitchTab('projects')">Projects</button>
-              <button class="cl-sb-btn" onclick="clSwitchTab('challenges')" style="color:var(--amber)">★ Challenges</button>
+              <button class="cl-sb-btn active" onclick="try{clSwitchTab('guides')}catch(e){alert('Guides error: '+e.message)}">Guides</button>
+              <button class="cl-sb-btn" onclick="try{clSwitchTab('dictionary')}catch(e){alert('Dict error: '+e.message)}">Dictionary</button>
+              <button class="cl-sb-btn" onclick="try{clSwitchTab('projects')}catch(e){alert('Projects error: '+e.message)}">Projects</button>
+              <button class="cl-sb-btn" onclick="try{clSwitchTab('challenges')}catch(e){alert('Challenges error: '+e.message)}" style="color:var(--amber)">★ Challenges</button>
             </div>
             <div id="cl-guides" class="cl-sidebar-content">
               <div id="cl-guides-list"></div>
@@ -543,8 +559,8 @@
                 <option value="javascript">JavaScript</option>
                 <option value="bash">Bash</option>
               </select>
-              <button class="nt-btn" onclick="clRunCode()" id="cl-run-btn" style="font-size:10px;color:var(--teal)">▶ Run</button>
-              <button class="nt-btn" onclick="clCancelRun()" id="cl-cancel-btn" style="font-size:10px;display:none;color:var(--amber)">Cancel</button>
+              <button class="nt-btn" onclick="try{clRunCode()}catch(e){alert('Run error: '+e.message)}" id="cl-run-btn" style="font-size:10px;color:var(--teal)">▶ Run</button>
+              <button class="nt-btn" onclick="try{clCancelRun()}catch(e){}" id="cl-cancel-btn" style="font-size:10px;display:none;color:var(--amber)">Cancel</button>
               <button class="nt-btn" onclick="clClearOutput()" style="font-size:10px">Clear</button>
               <button class="nt-btn" onclick="clCopyCode()" style="font-size:10px">Copy</button>
               <button class="nt-btn" onclick="clFormatCode()" style="font-size:10px">Format</button>
@@ -763,7 +779,7 @@
 
       <!-- ABOUT -->
       <div class="tab-pane section" id="tab-about">
-        <div class="about-header">About NexCampus <span id="about-version">v2.4.9</span></div>
+        <div class="about-header">About NexCampus <span id="about-version">v2.4.3</span></div>
 
         <div class="about-block">
           <div class="about-block-title">Our Mission</div>
@@ -792,6 +808,7 @@
             <li><strong>Periodic Table</strong> — Interactive 118-element grid with search, filters, fun facts, discovery dates, quiz mode</li>
             <li><strong>Dictionary</strong> — 262,851-word Wiktionary-derived offline dictionary with smart suggestions</li>
               <li><strong>Interactive Solar System</strong> — Animated orbits, zoom/pan, 900 stars with nebula clouds, Milky Way, asteroid belt, dwarf planets, Saturn rings, tabbed planet info with 34 fun facts</li>
+              <li><strong>Mind Map</strong> — Interactive canvas mind map, drag nodes, add/edit/delete, export to PNG</li>
           </ul>
 
           <div class="about-block-text" style="margin-bottom:6px;font-weight:bold;color:var(--cyan)">Text Tools</div>
@@ -869,7 +886,7 @@
 </div>
 
   <div id="statusbar">
-    <span id="statusbar-version">NexCampus v2.4.9 · Made by Shahid Singh · NexCore&trade; Systems and Technologies · 2026</span>
+    <span id="statusbar-version">NexCampus v2.4.3 · Made by Shahid Singh · NexCore&trade; Systems and Technologies · 2026</span>
     <span id="mem-status" style="margin-left:auto;font-size:9px;color:var(--fg-dim)"></span>
   </div>
 
@@ -895,6 +912,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Service worker is registered from <head>
 });
+
+// Quick diag: check if key functions are defined
+setTimeout(function() {
+  var m = [];
+  if (typeof clRunCode !== 'function') m.push('clRunCode');
+  if (typeof clSwitchTab !== 'function') m.push('clSwitchTab');
+  if (typeof mindmapAddNode !== 'function') m.push('mindmapAddNode');
+  if (typeof initMindMap !== 'function') m.push('initMindMap');
+  if (typeof initCodeLab !== 'function') m.push('initCodeLab');
+  if (typeof initSolarSystem !== 'function') m.push('initSolarSystem');
+  var statusEl = document.getElementById('statusbar-version');
+  if (m.length && statusEl) {
+    statusEl.textContent = '⚠ MISSING: ' + m.join(', ');
+  }
+}, 2000);
 </script>
 </body>
 </html>

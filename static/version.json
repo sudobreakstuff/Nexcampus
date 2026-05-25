@@ -1,10 +1,11 @@
 {
-  "version": "2.4.9",
-  "name": "NexCampus v2.4.9",
+  "version": "2.5.0",
+  "name": "NexCampus v2.5.0",
   "update_url": "",
   "changelog": [
-    "Removed non-functional mind map tool",
+    "Reverted to stable tab code",
     "Update check uses CDN (no rate limits)",
-    "All code lab and study lab tools working"
+    "Uninstall script fixed",
+    "OCR preview quote fixed"
   ]
 }
