@@ -58,6 +58,12 @@ function switchRegistryTool(tool) {
     });
     tool._container.classList.add('active');
     tool._container.style.display = 'block';
+    // Also hide the active built-in text tool
+    var builtinPane = document.querySelector('#tab-texttools .nb-tool-content.active');
+    if (builtinPane && builtinPane !== tool._container) {
+      builtinPane.classList.remove('active');
+      builtinPane.style.display = 'none';
+    }
     if (!tool._initialized) {
       tool._initialized = true;
       try {

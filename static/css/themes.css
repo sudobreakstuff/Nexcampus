@@ -109,3 +109,21 @@ html[data-theme="tokyo"] {
   --glow-cyan: rgba(0, 240, 255, 0.12);
   --accent: var(--cyan);
 }
+
+/* ====== Sunset Glow — warm gradient sky background ====== */
+html[data-theme="sunset"] {
+  --bg: #1a1028;
+  --bg2: #261840;
+  --fg: #f0e0d0;
+  --fg-dim: #9080a0;
+  --fg-bright: #ffe8d0;
+  --cyan: #ff8855;
+  --teal: #ff8855;
+  --amber: #ffbb44;
+  --pink: #ff6688;
+  --border: #3a2060;
+  --glow-cyan: rgba(255, 136, 85, 0.12);
+  --accent: var(--cyan);
+  background: linear-gradient(180deg, #1a1030 0%, #2d1550 40%, #3a2060 70%, #1a1028 100%) fixed;
+  background-size: 100% 100vh;
+}
