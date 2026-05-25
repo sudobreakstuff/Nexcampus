@@ -1234,36 +1234,48 @@ function rangeForward(a,b) { var r=[]; for(var i=a;i<=b;i++) r.push(i); return r
 function rangeReverse(a,b) { var r=[]; for(var i=b;i>=a;i--) r.push(i); return r; }
 
 function qrEC(data, ecCount) {
-  // Build Galois field tables
-  var exp = []; var log = [];
-  exp[0] = 1; log[1] = 0;
-  for (var i=1;i<256;i++) {
+  // Galois field tables
+  var exp = new Array(512);
+  var log = new Array(256);
+  exp[0] = 1;
+  for (var i = 1; i < 255; i++) {
     exp[i] = exp[i-1] << 1;
     if (exp[i] >= 256) exp[i] ^= 0x11d;
+  }
+  for (var i = 0; i < 255; i++) {
     log[exp[i]] = i;
+    exp[i+255] = exp[i];
   }
-  // Generator polynomial
-  var gen = [1];
-  for (var i=0;i<ecCount;i++) {
-    gen.push(0);
-    for (var j=gen.length-1;j>=1;j--) {
-      if (gen[j-1] !== 0) gen[j] ^= qrGFMult(exp,log, gen[j-1], exp[i]);
-    }
-    gen[0] = 0;
-  }
-  // Remove trailing zeros from gen
-  while (gen[gen.length-1] === 0) gen.pop();
   
-  // Poly division
+  // Build generator polynomial by multiplying (x + α^i) for i = 0..ecCount-1
+  var gen = [1];
+  for (var i = 0; i < ecCount; i++) {
+    gen.push(0);
+    // Multiply by (x + α^i): for each coefficient, add α^i * coefficient shifted by 1
+    for (var j = gen.length - 1; j > 0; j--) {
+      var g = log[gen[j-1]];
+      if (gen[j-1] && g !== undefined) {
+        gen[j] ^= exp[(g + i) % 255];
+      }
+    }
+  }
+  
+  // Polynomial division: msg * x^ecCount / gen
   var msg = data.slice();
-  for (var i=0;i<ecCount;i++) msg.push(0);
-  for (var i=0;i<data.length;i++) {
+  for (var i = 0; i < ecCount; i++) msg.push(0);
+  
+  for (var i = 0; i < data.length; i++) {
     if (msg[i] === 0) continue;
     var factor = log[msg[i]];
-    for (var j=0;j<gen.length;j++) {
-      msg[i+j] ^= exp[(log[gen[j]] + factor) % 255];
+    if (factor === undefined) continue;
+    for (var j = 0; j < gen.length; j++) {
+      var g = log[gen[j]];
+      if (gen[j] && g !== undefined) {
+        msg[i+j] ^= exp[(g + factor) % 255];
+      }
     }
   }
+  
   return msg.slice(data.length);
 }
 
