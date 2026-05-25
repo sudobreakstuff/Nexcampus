@@ -2377,3 +2377,63 @@ function doneOcr(data, status, output, btn, fileInput, label) {
   output.style.display = '';
 }
 
+TOOL_INIT.formulas = function() { formulaSearch(); };
+
+
+var FORMULAS = [
+  {cat:"Math", name:"Quadratic Formula", expr:"x = (-b +/- sqrt(b^2 - 4ac)) / 2a", desc:"Solves ax^2 + bx + c = 0"},
+  {cat:"Math", name:"Pythagorean Theorem", expr:"a^2 + b^2 = c^2", desc:"Right triangle: hypotenuse c, legs a and b"},
+  {cat:"Math", name:"Area of a Circle", expr:"A = pi * r^2", desc:"Area from radius r. pi approx 3.14159"},
+  {cat:"Math", name:"Slope", expr:"m = (y2-y1) / (x2-x1)", desc:"Rate of change between two points"},
+  {cat:"Math", name:"Distance Formula", expr:"d = sqrt((x2-x1)^2 + (y2-y1)^2)", desc:"Distance between two points"},
+  {cat:"Math", name:"Derivative of x^n", expr:"d/dx[x^n] = n * x^(n-1)", desc:"Power rule for differentiation"},
+  {cat:"Math", name:"Sum of 1 to n", expr:"sum = n(n+1)/2", desc:"Arithmetic series: 1+2+3+...+n"},
+  {cat:"Math", name:"Logarithm Rule", expr:"log(a*b) = log(a) + log(b)", desc:"Log of product equals sum of logs"},
+  {cat:"Physics", name:"Force", expr:"F = m * a", desc:"Newtons 2nd Law: force = mass * acceleration"},
+  {cat:"Physics", name:"Kinetic Energy", expr:"KE = 0.5 * m * v^2", desc:"Energy of a moving object"},
+  {cat:"Physics", name:"Gravitational Force", expr:"F = G*m1*m2 / r^2", desc:"Gravity between masses (G=6.67e-11)"},
+  {cat:"Physics", name:"Ohms Law", expr:"V = I * R", desc:"Voltage = current * resistance"},
+  {cat:"Physics", name:"Wave Speed", expr:"v = f * lambda", desc:"Speed = frequency * wavelength"},
+  {cat:"Physics", name:"Work", expr:"W = F * d * cos(theta)", desc:"Work = force * distance * cos(angle)"},
+  {cat:"Physics", name:"Density", expr:"rho = m / V", desc:"Density = mass / volume"},
+  {cat:"Chemistry", name:"Ideal Gas Law", expr:"PV = nRT", desc:"Pressure*volume = moles*R*temp (R=8.314)"},
+  {cat:"Chemistry", name:"Molarity", expr:"M = n / V", desc:"Moles of solute per liter of solution"},
+  {cat:"Chemistry", name:"pH Formula", expr:"pH = -log10[H+]", desc:"Acidity from hydrogen ion concentration"},
+  {cat:"Chemistry", name:"Percent Yield", expr:"% = (actual/theoretical)*100", desc:"Reaction efficiency percentage"},
+  {cat:"Chemistry", name:"Half-Life", expr:"t_half = ln(2) / k", desc:"Time for half to decay (k=rate constant)"},
+  {cat:"Stats", name:"Mean (Average)", expr:"mean = sum(xi) / n", desc:"Arithmetic average of n values"},
+  {cat:"Stats", name:"Standard Deviation", expr:"sigma = sqrt(sum(xi-mean)^2/n)", desc:"Spread of data around mean"},
+  {cat:"Stats", name:"Independent Probability", expr:"P(A&B) = P(A) * P(B)", desc:"Chance both independent events occur"},
+  {cat:"CS", name:"Binary Search", expr:"O(log n)", desc:"Halves search space each step. Very fast."},
+  {cat:"CS", name:"Nested Loop", expr:"O(n^2)", desc:"Two nested loops over n items. Quadratic time."}
+];
+
+function formulaSearch() {
+  var q = (document.getElementById("formula-search") || {}).value || "";
+  var ql = q.toLowerCase();
+  var out = document.getElementById("formula-results");
+  if (!out) return;
+  var results = FORMULAS;
+  if (ql) {
+    results = FORMULAS.filter(function(f) {
+      return f.name.toLowerCase().indexOf(ql)!==-1 || f.cat.toLowerCase().indexOf(ql)!==-1 || f.desc.toLowerCase().indexOf(ql)!==-1;
+    });
+  }
+  var cats = {};
+  results.forEach(function(f) {
+    if (!cats[f.cat]) cats[f.cat] = [];
+    cats[f.cat].push(f);
+  });
+  var html = "";
+  Object.keys(cats).forEach(function(cat) {
+    html += "<div style='font-weight:bold;color:var(--cyan);font-size:11px;margin:10px 0 4px;border-bottom:1px solid var(--border);padding-bottom:2px'>" + escapeHtml(cat) + "</div>";
+    cats[cat].forEach(function(f) {
+      html += "<div style='padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.03)'>";
+      html += "<span style='color:var(--fg);font-weight:bold;font-size:10px'>" + escapeHtml(f.name) + "</span>";
+      html += "<div style='font-family:monospace;font-size:11px;color:var(--teal);margin:2px 0'>" + escapeHtml(f.expr) + "</div>";
+      html += "<div style='font-size:10px;color:var(--fg-dim)'>" + escapeHtml(f.desc) + "</div>";
+      html += "</div>";
+    });
+  });
+  out.innerHTML = html || "<div style='color:var(--fg-dim);padding:12px'>No formulas found. Try quadratic or newton or gas.</div>";
+}

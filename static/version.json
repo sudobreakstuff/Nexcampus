@@ -1,8 +1,8 @@
 {
-  "version": "2.8.3",
-  "name": "NexCampus v2.8.3",
+  "version": "2.8.4",
+  "name": "NexCampus v2.8.4",
   "update_url": "",
   "changelog": [
-    "Safely removed challenges, graph calculator, and formula reference"
+    "Added Formula Reference \u2014 25 formulas across Math, Physics, Chemistry, Stats, CS. Search by name or category."
   ]
 }
