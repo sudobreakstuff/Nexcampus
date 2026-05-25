@@ -31,10 +31,10 @@ function initToolRegistry() {
         div.className = 'nb-tool-content';
         div.id = 'tt-pane-' + tool.id;
         div.style.display = 'none';
-        // Find where to insert it — after the last text tool pane
-        var lastPane = document.querySelector('#tab-texttools .nb-tool-content:last-of-type');
-        if (lastPane && lastPane.parentNode) {
-          lastPane.parentNode.insertBefore(div, lastPane.nextSibling);
+        // Find the parent container and append
+        var parentDiv = document.querySelector('#tab-texttools > div');
+        if (parentDiv) {
+          parentDiv.appendChild(div);
         }
         tool._container = div;
       }
@@ -47,18 +47,16 @@ function initToolRegistry() {
 function switchRegistryTool(tool) {
   if (!tool || !tool._container) return;
   try {
-    // Hide all text tool panes
     document.querySelectorAll('#tab-texttools .nb-tool-content').forEach(function(p) {
       p.classList.remove('active');
+      p.style.display = 'none';
     });
-    // Highlight the correct button
     document.querySelectorAll('#tab-texttools .nb-tab-btn').forEach(function(b) {
       b.classList.remove('active');
       if (b.getAttribute('data-tt-tool') === tool.id) b.classList.add('active');
     });
-    // Show this tool's container
     tool._container.classList.add('active');
-    // Initialize once
+    tool._container.style.display = 'block';
     if (!tool._initialized) {
       tool._initialized = true;
       try {
@@ -67,6 +65,14 @@ function switchRegistryTool(tool) {
         tool._error = 'Failed to create: ' + e.message;
         showToolError(tool._container, tool._error);
       }
+      if (tool.init) {
+        try { tool.init(); } catch(e) { tool._error = 'Init error: ' + e.message; }
+      }
+    }
+  } catch(e) {
+    if (tool._container) showToolError(tool._container, 'Switch error: ' + e.message);
+  }
+}
       if (tool.init) {
         try { tool.init(); } catch(e) { tool._error = 'Init error: ' + e.message; }
       }
