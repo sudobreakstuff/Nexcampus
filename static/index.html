@@ -1137,29 +1137,140 @@ function qrGenerate() {
   if (!inp || !canvas || !inp.value.trim()) return;
   var data = inp.value.trim();
   var ctx = canvas.getContext('2d');
-  var size = 25; // 25x25 modules
-  var modules = []; for (var r=0;r<size;r++) { modules[r]=[]; for (var c=0;c<size;c++) modules[r][c]=false; }
   
-  // Hash the data to generate a deterministic pattern
-  var hash = 0;
-  for (var i=0;i<data.length;i++) hash = ((hash<<5)-hash) + data.charCodeAt(i);
+  // QR Version 1: 21x21, byte mode, L error correction
+  var size = 21;
+  var modules = [];
+  for (var r=0;r<size;r++) { modules[r]=[]; for(var c=0;c<size;c++) modules[r][c]=null; }
   
-  // Seed a PRNG
-  var seed = Math.abs(hash);
-  function rng() { seed = (seed*1103515245+12345)&0x7fffffff; return (seed>>16)&1; }
+  // Step 1: Encode data
+  var bytes = [];
+  for (var i=0;i<data.length;i++) bytes.push(data.charCodeAt(i)&0xff);
   
-  // Skip reserved areas when filling
-  function reserved(r,c) {
-    // Finder patterns (3 corners)
-    if (r<7&&c<7) return true;
-    if (r<7&&c>=size-7) return true;
-    if (r>=size-7&&c<7) return true;
-    // Timing lines
-    if (r===6||c===6) return false;
-    // Separators
-    if (r===7||c===7) return false;
-    return false;
+  // Build final bit string for 19 data bytes (152 bits)
+  var bits = '0100'; // byte mode
+  bits += pad(bytes.length,8); // count
+  for (var i=0;i<bytes.length;i++) bits += pad(bytes[i],8);
+  // Terminator (at most 4 zeros)
+  var cap = 19*8;
+  if (bits.length <= cap) bits += '0000'.slice(0, Math.min(4, cap - bits.length));
+  // Pad to byte boundary
+  while (bits.length % 8 !== 0) bits += '0';
+  // Pad to full capacity
+  var padBytes = ['11101100','00010001'];
+  var pi = 0;
+  while (bits.length < cap) { bits += padBytes[pi%2]; pi++; }
+  bits = bits.slice(0, cap);
+  
+  // Convert to codewords
+  var dataCW = [];
+  for (var i=0;i<bits.length;i+=8) dataCW.push(parseInt(bits.slice(i,i+8),2));
+  
+  // Step 2: Reeds-Solomon error correction
+  var eccw = qrEC(dataCW, 7);
+  
+  // Step 3: Interleave (just concatenate for version 1)
+  var all = dataCW.concat(eccw);
+  var allBits = '';
+  for (var i=0;i<all.length;i++) allBits += pad(all[i],8);
+  
+  // Step 4: Place in zigzag
+  var idx = 0;
+  var col = size-1;
+  var goingUp = true;
+  while (col > 0) {
+    if (col === 6) col = 5;
+    var range = goingUp ? rangeReverse(0,size-1) : rangeForward(0,size-1);
+    for (var ri=0;ri<range.length;ri++) {
+      var r = range[ri];
+      for (var dc=0;dc<2;dc++) {
+        var c = col-dc;
+        if (modules[r][c] !== null) continue;
+        modules[r][c] = idx < allBits.length ? allBits[idx] === '1' : false;
+        idx++;
+      }
+    }
+    col -= 2;
+    goingUp = !goingUp;
   }
+  
+  // Step 5: Finder patterns
+  function finder(sr,sc) {
+    for(var r=0;r<7;r++) for(var c=0;c<7;c++) {
+      var outer = r===0||r===6||c===0||c===6;
+      var inner = r===2||r===3||r===4||c===2||c===3||c===4;
+      modules[sr+r][sc+c] = outer || inner;
+    }
+  }
+  finder(0,0); finder(0,size-7); finder(size-7,0);
+  
+  // Step 6: Separators
+  for(var i=0;i<8;i++) { modules[i][7]=false; modules[7][i]=false; modules[size-8+i][7]=false; modules[7][size-8+i]=false; }
+  
+  // Step 7: Timing
+  for(var i=8;i<size-8;i++) { modules[6][i]=i%2===0; modules[i][6]=i%2===0; }
+  
+  // Step 8: Dark module + reserved
+  modules[size-8][8] = true;
+  
+  // Step 9: Mask pattern (pattern 2: (row+col)%3===0)
+  for(var r=0;r<size;r++) for(var c=0;c<size;c++) {
+    if (modules[r][c] !== null) continue;
+    modules[r][c] = (r+c)%3 !== 0;
+  }
+  
+  // Step 10: Draw
+  var sc = Math.floor(300/(size+8));
+  var ox = Math.floor((300-size*sc)/2);
+  ctx.fillStyle='white'; ctx.fillRect(0,0,300,300);
+  ctx.fillStyle='black';
+  for(var r=0;r<size;r++) for(var c=0;c<size;c++) {
+    if(modules[r][c]) ctx.fillRect(ox+c*sc,ox+r*sc,sc,sc);
+  }
+}
+
+function pad(n,len) { var s=n.toString(2); while(s.length<len) s='0'+s; return s; }
+function rangeForward(a,b) { var r=[]; for(var i=a;i<=b;i++) r.push(i); return r; }
+function rangeReverse(a,b) { var r=[]; for(var i=b;i>=a;i--) r.push(i); return r; }
+
+function qrEC(data, ecCount) {
+  // Build Galois field tables
+  var exp = []; var log = [];
+  exp[0] = 1; log[1] = 0;
+  for (var i=1;i<256;i++) {
+    exp[i] = exp[i-1] << 1;
+    if (exp[i] >= 256) exp[i] ^= 0x11d;
+    log[exp[i]] = i;
+  }
+  // Generator polynomial
+  var gen = [1];
+  for (var i=0;i<ecCount;i++) {
+    gen.push(0);
+    for (var j=gen.length-1;j>=1;j--) {
+      if (gen[j-1] !== 0) gen[j] ^= qrGFMult(exp,log, gen[j-1], exp[i]);
+    }
+    gen[0] = 0;
+  }
+  // Remove trailing zeros from gen
+  while (gen[gen.length-1] === 0) gen.pop();
+  
+  // Poly division
+  var msg = data.slice();
+  for (var i=0;i<ecCount;i++) msg.push(0);
+  for (var i=0;i<data.length;i++) {
+    if (msg[i] === 0) continue;
+    var factor = log[msg[i]];
+    for (var j=0;j<gen.length;j++) {
+      msg[i+j] ^= exp[(log[gen[j]] + factor) % 255];
+    }
+  }
+  return msg.slice(data.length);
+}
+
+function qrGFMult(exp,log,a,b) {
+  if (a===0||b===0) return 0;
+  return exp[(log[a]+log[b])%255];
+}
   
   // Fill data modules
   for (var r=0;r<size;r++) {
