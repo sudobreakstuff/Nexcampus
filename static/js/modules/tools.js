@@ -2284,6 +2284,7 @@ function planetTexture(color, size) {
 function planetDraw(ctx, x, y, size, color) {
   var tex = planetTexture(color, size);
   var ps = size;
+  ctx.save();
   // Shadow under planet (subtle)
   ctx.shadowColor = 'rgba(0,0,0,0.4)';
   ctx.shadowBlur = ps;
