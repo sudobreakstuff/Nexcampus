@@ -52,9 +52,9 @@ function switchTab(tab) {
   qsa('.nav-btn').forEach(b => b.classList.remove('active'));
   const navBtn = qs(`.nav-btn[data-tab="${tab}"]`);
   if (navBtn) navBtn.classList.add('active');
-  qsa('.tab-pane').forEach(p => p.classList.remove('active'));
+  qsa('.tab-pane').forEach(p => { p.classList.remove('active'); p.style.display = 'none'; });
   const pane = $(`tab-${tab}`);
-  if (pane) pane.classList.add('active');
+  if (pane) { pane.classList.add('active'); pane.style.display = (tab === 'codelab' ? 'flex' : 'block'); }
   if (tab === 'notebook') switchNbTool(currentNbTool);
   if (tab === 'codelab' && typeof initCodeLab === 'function') initCodeLab();
   log(`Switched to ${tab}`);
