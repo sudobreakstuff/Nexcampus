@@ -94,22 +94,6 @@ html[data-theme="purple"] {
   --accent: var(--cyan);
 }
 
-/* ====== Arctic Frost — crisp icy blues ====== */
-html[data-theme="arctic"] {
-  --bg: #e8f0f8;
-  --bg2: #dce6f0;
-  --fg: #1a2a3a;
-  --fg-dim: #5a7a9a;
-  --fg-bright: #0a1a2a;
-  --cyan: #0088cc;
-  --teal: #006699;
-  --amber: #cc6600;
-  --pink: #cc3366;
-  --border: #c0d0e0;
-  --glow-cyan: rgba(0, 136, 204, 0.08);
-  --accent: var(--cyan);
-}
-
 /* ====== Neon Tokyo — cyberpunk neon, electric blue + magenta ====== */
 html[data-theme="tokyo"] {
   --bg: #06060d;

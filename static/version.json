@@ -1,14 +1,10 @@
 {
-  "version": "2.10.1",
-  "name": "NexCampus v2.10.1",
+  "version": "2.10.2",
+  "name": "NexCampus v2.10.2",
   "update_url": "",
   "changelog": [
-    "5 new guides (Recursion, Lambda, Error Handling, Virtualenv, Git)",
-    "30 new dictionary terms (ML, web dev, CS)",
-    "5 new projects (RPG, Dice, CSV Analyzer, Password, Text Analyzer)",
-    "7 new Text Tools (Converter, Markdown, Base64, Color, JSON, QR Code, Stopwatch)",
-    "Cheat Sheets tab (Python, Regex, Git, Linux, Math)",
-    "Arctic Frost theme",
-    "All changes verified brace-balanced"
+    "Reverted to stable v2.5.0 code \u2014 all features working",
+    "Code Lab works, all tabs work",
+    "No experimental features"
   ]
 }

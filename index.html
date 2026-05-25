@@ -29,7 +29,6 @@
       <button class="nav-btn" data-tab="codelab" style="color:var(--amber)">CODE LAB</button>
       <button class="nav-btn" data-tab="texttools">TEXT TOOLS</button>
       <button class="nav-btn" data-tab="about">ABOUT</button>
-      <button class="nav-btn" data-tab="cheatsheets" style="color:var(--cyan)">CHEAT SHEETS</button>
     </nav>
     <div class="sidebar-footer"></div>
   </div>
@@ -495,9 +494,10 @@
         <div class="cl-layout">
           <div class="cl-sidebar">
             <div class="cl-sidebar-tabs">
-              <button class="cl-sb-btn active" onclick="clSwitchTab('guides')">Guides</button>
-              <button class="cl-sb-btn" onclick="clSwitchTab('dictionary')">Dictionary</button>
-              <button class="cl-sb-btn" onclick="clSwitchTab('projects')">Projects</button>
+              <button class="cl-sb-btn active" onclick="try{clSwitchTab('guides')}catch(e){alert('Guides error: '+e.message)}">Guides</button>
+              <button class="cl-sb-btn" onclick="try{clSwitchTab('dictionary')}catch(e){alert('Dict error: '+e.message)}">Dictionary</button>
+              <button class="cl-sb-btn" onclick="try{clSwitchTab('projects')}catch(e){alert('Projects error: '+e.message)}">Projects</button>
+              <button class="cl-sb-btn" onclick="try{clSwitchTab('challenges')}catch(e){alert('Challenges error: '+e.message)}" style="color:var(--amber)">★ Challenges</button>
             </div>
             <div id="cl-guides" class="cl-sidebar-content">
               <div id="cl-guides-list"></div>
@@ -523,6 +523,18 @@
                 <div id="cl-project-content" class="cl-guide-content"></div>
               </div>
             </div>
+            <div id="cl-challenges" class="cl-sidebar-content" style="display:none">
+              <div id="cl-challenges-list"></div>
+              <div id="cl-challenge-view" style="display:none">
+                <div style="padding:8px 0">
+                  <button class="nt-btn" onclick="clBackToChallenges()" style="font-size:10px">← Back</button>
+                  <button class="nt-btn" onclick="clLoadToEditor()" style="font-size:10px;margin-left:4px">Load Code</button>
+                  <button class="nt-btn" onclick="clGradeChallenge()" style="font-size:10px;margin-left:4px;color:var(--teal)">▶ Grade</button>
+                </div>
+                <div id="cl-challenge-desc"></div>
+                <div id="cl-challenge-content" class="cl-guide-content"></div>
+              </div>
+            </div>
           </div>
           <div class="cl-main">
             <div class="cl-toolbar">
@@ -531,16 +543,19 @@
                 <option value="javascript">JavaScript</option>
                 <option value="bash">Bash</option>
               </select>
-              <button class="nt-btn" onclick="clRunCode()" id="cl-run-btn" style="font-size:10px;color:var(--teal)">▶ Run</button>
-              <button class="nt-btn" onclick="clCancelRun()" id="cl-cancel-btn" style="font-size:10px;display:none;color:var(--amber)">Cancel</button>
+              <button class="nt-btn" onclick="try{clRunCode()}catch(e){alert('Run error: '+e.message)}" id="cl-run-btn" style="font-size:10px;color:var(--teal)">▶ Run</button>
+              <button class="nt-btn" onclick="try{clCancelRun()}catch(e){}" id="cl-cancel-btn" style="font-size:10px;display:none;color:var(--amber)">Cancel</button>
               <button class="nt-btn" onclick="clClearOutput()" style="font-size:10px">Clear</button>
               <button class="nt-btn" onclick="clCopyCode()" style="font-size:10px">Copy</button>
               <button class="nt-btn" onclick="clFormatCode()" style="font-size:10px">Format</button>
               <span style="font-size:9px;color:var(--fg-dim);margin-left:auto" id="cl-lang-label">Python</span>
             </div>
-            <div class="cl-editor-wrap">
-              <div class="cl-gutter" id="cl-gutter">1</div>
-              <textarea id="cl-code-input" class="cl-editor" spellcheck="false" placeholder="Write your code here...">print("Hello, NexCampus!")</textarea>
+            <div class="cl-workspace">
+              <div class="cl-editor-wrap">
+                <div class="cl-gutter" id="cl-gutter">1</div>
+                <textarea id="cl-code-input" class="cl-editor" spellcheck="false" placeholder="Write your code here...">print("Hello, NexCampus!")</textarea>
+              </div>
+              <div id="cl-output" class="cl-output"></div>
             </div>
             <div class="cl-snippets">
               <button class="nt-btn" onclick="clInsertSnippet('function')" style="font-size:9px;padding:2px 6px">def</button>
@@ -551,7 +566,6 @@
               <button class="nt-btn" onclick="clInsertSnippet('listcomp')" style="font-size:9px;padding:2px 6px">list[]</button>
               <button class="nt-btn" onclick="clInsertSnippet('fstring')" style="font-size:9px;padding:2px 6px">f""</button>
             </div>
-            <div id="cl-output" class="cl-output"></div>
           </div>
         </div>
       </div>
@@ -573,13 +587,6 @@
             <button class="nb-tab-btn" data-tt-tool="spell" onclick="switchTtTool('spell')">Spell</button>
             <button class="nb-tab-btn" data-tt-tool="replace" onclick="switchTtTool('replace')">Replace</button>
             <button class="nb-tab-btn" data-tt-tool="ocr" onclick="switchTtTool('ocr')">OCR</button>
-            <button class="nb-tab-btn" data-tt-tool="unitconv" onclick="switchTtTool('unitconv')">Converter</button>
-            <button class="nb-tab-btn" data-tt-tool="markdown" onclick="switchTtTool('markdown')">Markdown</button>
-            <button class="nb-tab-btn" data-tt-tool="base64" onclick="switchTtTool('base64')">Base64</button>
-            <button class="nb-tab-btn" data-tt-tool="color" onclick="switchTtTool('color')">Color</button>
-            <button class="nb-tab-btn" data-tt-tool="jsonfmt" onclick="switchTtTool('jsonfmt')">JSON</button>
-            <button class="nb-tab-btn" data-tt-tool="qrcode" onclick="switchTtTool('qrcode')">QR Code</button>
-            <button class="nb-tab-btn" data-tt-tool="stopwatch" onclick="switchTtTool('stopwatch')">Stopwatch</button>
           </div>
 
           <div class="nb-tool-content active" id="tt-pane-case">
@@ -738,105 +745,6 @@
             </div>
             <div id="tt-ocr-output-area" style="margin-top:8px">
               <textarea id="tt-ocr-output" class="tools-textarea" rows="8" placeholder="Extracted text will appear here..." style="display:none"></textarea>
-
-            <div id="tt-pane-unitconv" class="nb-tool-content" style="display:none">
-              <div class="tool-section-title">Unit Converter <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Length, weight, volume, temperature, speed</span></div>
-              <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;align-items:center">
-                <input type="number" id="unit-input" value="1" style="width:80px;padding:4px 8px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px;font-size:11px" oninput="unitConvert()">
-                <select id="unit-from" onchange="unitConvert()" style="padding:4px 8px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px;font-size:11px">
-                  <option value="m">Meters</option><option value="km">Kilometers</option><option value="cm">Centimeters</option><option value="mm">Millimeters</option><option value="in">Inches</option><option value="ft">Feet</option><option value="yd">Yards</option><option value="mi">Miles</option>
-                </select>
-                <span style="color:var(--fg-dim)">to</span>
-                <select id="unit-to" onchange="unitConvert()" style="padding:4px 8px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px;font-size:11px">
-                  <option value="ft">Feet</option><option value="m">Meters</option><option value="km">Kilometers</option><option value="cm">Centimeters</option><option value="mm">Millimeters</option><option value="in">Inches</option><option value="yd">Yards</option><option value="mi">Miles</option>
-                </select>
-                <button class="nt-btn" onclick="unitSwap()" style="font-size:10px;padding:4px 8px">Swap</button>
-                <select id="unit-category" onchange="unitSetCategory(this.value)" style="padding:4px 8px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px;font-size:11px">
-                  <option value="length">Length</option><option value="weight">Weight</option><option value="volume">Volume</option><option value="temp">Temperature</option><option value="speed">Speed</option>
-                </select>
-              </div>
-              <div id="unit-result" style="font-size:18px;color:var(--teal);font-weight:bold;padding:8px 0"></div>
-            </div>
-
-            <div id="tt-pane-markdown" class="nb-tool-content" style="display:none">
-              <div class="tool-section-title">Markdown Previewer <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Write markdown on the left, see preview on the right</span></div>
-              <div style="display:flex;gap:8px">
-                <textarea id="md-input" oninput="mdPreview()" style="flex:1;height:400px;padding:12px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:4px;font-family:monospace;font-size:12px;resize:none" placeholder="# Heading
-**bold** *italic*
-- list item
-`code`"># Hello Markdown
-
-**Bold text** and *italic text*
-
-- List item 1
-- List item 2
-
-`inline code`</textarea>
-                <div id="md-output" style="flex:1;height:400px;overflow:auto;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;font-size:12px;line-height:1.6"></div>
-              </div>
-            </div>
-
-            <div id="tt-pane-base64" class="nb-tool-content" style="display:none">
-              <div class="tool-section-title">Base64 Encode / Decode</div>
-              <textarea id="b64-input" placeholder="Enter text to encode or Base64 to decode..." style="width:100%;height:120px;padding:10px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:4px;font-family:monospace;font-size:12px;resize:vertical;box-sizing:border-box"></textarea>
-              <div style="margin:8px 0;display:flex;gap:8px">
-                <button class="nt-btn" onclick="b64Encode()" style="font-size:10px;color:var(--teal)">Encode</button>
-                <button class="nt-btn" onclick="b64Decode()" style="font-size:10px;color:var(--cyan)">Decode</button>
-                <button class="nt-btn" onclick="b64Copy()" style="font-size:10px">Copy Result</button>
-              </div>
-              <textarea id="b64-output" placeholder="Result..." style="width:100%;height:120px;padding:10px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:4px;font-family:monospace;font-size:12px;resize:vertical;box-sizing:border-box"></textarea>
-            </div>
-
-            <div id="tt-pane-color" class="nb-tool-content" style="display:none">
-              <div class="tool-section-title">Color Picker &amp; Converter</div>
-              <div style="display:flex;gap:12px;flex-wrap:wrap">
-                <div>
-                  <input type="color" id="color-picker" value="#4fc3f7" oninput="colorUpdate()" style="width:80px;height:80px;border:none;cursor:pointer;border-radius:8px">
-                </div>
-                <div style="flex:1;min-width:200px">
-                  <div style="margin-bottom:6px"><label style="font-size:10px;color:var(--fg-dim)">HEX</label><input type="text" id="color-hex" value="#4fc3f7" oninput="colorFromHex()" style="width:100%;padding:4px 8px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px;font-size:11px;font-family:monospace;box-sizing:border-box"></div>
-                  <div style="margin-bottom:6px"><label style="font-size:10px;color:var(--fg-dim)">RGB</label><input type="text" id="color-rgb" readonly style="width:100%;padding:4px 8px;background:var(--bg2);border:1px solid var(--border);color:var(--fg);border-radius:3px;font-size:11px;font-family:monospace;box-sizing:border-box"></div>
-                  <div style="margin-bottom:6px"><label style="font-size:10px;color:var(--fg-dim)">HSL</label><input type="text" id="color-hsl" readonly style="width:100%;padding:4px 8px;background:var(--bg2);border:1px solid var(--border);color:var(--fg);border-radius:3px;font-size:11px;font-family:monospace;box-sizing:border-box"></div>
-                  <button class="nt-btn" onclick="colorCopy()" style="font-size:10px">Copy HEX</button>
-                </div>
-              </div>
-            </div>
-
-            <div id="tt-pane-jsonfmt" class="nb-tool-content" style="display:none">
-              <div class="tool-section-title">JSON Formatter</div>
-              <textarea id="json-input" placeholder="Paste messy JSON here..." style="width:100%;height:150px;padding:10px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:4px;font-family:monospace;font-size:12px;resize:vertical;box-sizing:border-box">{"name":"Alex","age":20,"hobbies":["coding","gaming"]}</textarea>
-              <div style="margin:8px 0;display:flex;gap:8px">
-                <button class="nt-btn" onclick="jsonFormat(2)" style="font-size:10px;color:var(--teal)">Pretty Print</button>
-                <button class="nt-btn" onclick="jsonFormat(0)" style="font-size:10px">Minify</button>
-                <button class="nt-btn" onclick="jsonCopy()" style="font-size:10px">Copy</button>
-              </div>
-              <pre id="json-output" style="min-height:150px;padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;font-size:12px;color:var(--fg);white-space:pre-wrap;overflow:auto"></pre>
-            </div>
-
-            <div id="tt-pane-qrcode" class="nb-tool-content" style="display:none">
-              <div class="tool-section-title">QR Code Generator <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Pure JavaScript, no library needed</span></div>
-              <div style="display:flex;gap:8px;margin-bottom:8px">
-                <input type="text" id="qr-input" placeholder="Enter text or URL..." onkeydown="if(event.key==='Enter')qrGenerate()" style="flex:1;padding:6px 10px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px;font-size:11px">
-                <button class="nt-btn" onclick="qrGenerate()" style="font-size:10px;color:var(--teal)">Generate</button>
-                <button class="nt-btn" onclick="qrExport()" style="font-size:10px">Export PNG</button>
-              </div>
-              <div style="text-align:center;padding:20px;background:white;border-radius:8px;display:inline-block">
-                <canvas id="qr-canvas" width="200" height="200"></canvas>
-              </div>
-            </div>
-
-            <div id="tt-pane-stopwatch" class="nb-tool-content" style="display:none">
-              <div class="tool-section-title">Stopwatch <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Millisecond precision</span></div>
-              <div style="text-align:center;padding:20px">
-                <div id="sw-display" style="font-size:48px;font-family:monospace;color:var(--cyan);margin-bottom:16px">00:00.000</div>
-                <div style="display:flex;gap:8px;justify-content:center">
-                  <button class="nt-btn" onclick="swStart()" id="sw-start" style="font-size:12px;color:var(--teal);padding:8px 24px">Start</button>
-                  <button class="nt-btn" onclick="swLap()" id="sw-lap" disabled style="font-size:12px;padding:8px 24px">Lap</button>
-                  <button class="nt-btn" onclick="swReset()" id="sw-reset" style="font-size:12px;padding:8px 24px">Reset</button>
-                </div>
-                <div id="sw-laps" style="margin-top:16px;max-height:200px;overflow:auto;font-size:11px;color:var(--fg)"></div>
-              </div>
-            </div>
             </div>
           </div>
         </div>
@@ -850,15 +758,6 @@
             <button class="modal-close" onclick="closeModal()">&times;</button>
           </div>
           <div id="modal-body" class="modal-body"></div>
-        </div>
-      </div>
-
-      <!-- CHEAT SHEETS -->
-      <div class="tab-pane section" id="tab-cheatsheets">
-        <div style="padding:16px;width:100%;box-sizing:border-box">
-          <div class="tool-section-title">Cheat Sheets <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Quick reference for coding and more</span></div>
-          <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap" id="cs-tabs"></div>
-          <div id="cs-content" style="font-size:11px;line-height:1.7"></div>
         </div>
       </div>
 
@@ -919,6 +818,7 @@
             <li><strong>Programming Dictionary</strong> — 85+ searchable coding terms and definitions</li>
             <li><strong>Practice Projects</strong> — 11 projects with starter code and hints (Calculator, Hangman, Tic-Tac-Toe, etc.)</li>
             <li><strong>Code Snippets</strong> — Quick-insert templates for functions, classes, loops, and more</li>
+            <li><strong>Auto-Graded Challenges</strong> — 8 Python challenges with test cases and instant scoring</li>
           </ul>
         </div>
 
@@ -941,7 +841,7 @@
         <div class="about-block">
           <div class="about-block-title">Roadmap</div>
           <ul style="padding-left:20px;font-size:11px;line-height:1.7;color:var(--fg)">
-            <li>More Code Lab guides</li>
+            <li>More Code Lab guides and auto-graded challenges</li>
             <li>Concept tree generator from documents</li>
             <li>Dedicated Android native app (coming)</li>
             <li>More study tools (mind maps, concept trees)</li>
@@ -959,7 +859,6 @@
             <button onclick="setTheme('paper')" class="theme-btn" data-theme-btn="paper" style="background:#f5f0e8;color:#2c2416;border-color:#2a6f97">Paper Light</button>
             <button onclick="setTheme('ironman')" class="theme-btn" data-theme-btn="ironman" style="background:#1a0a0a;color:#ffd700;border-color:#ff3333">Iron Man</button>
             <button onclick="setTheme('purple')" class="theme-btn" data-theme-btn="purple" style="background:#0d0814;color:#c084fc;border-color:#a78bfa">Midnight Purple</button>
-            <button onclick="setTheme('arctic')" class="theme-btn" data-theme-btn="arctic" style="background:#e8f0f8;color:#0088cc;border-color:#006699">Arctic Frost</button>
             <button onclick="setTheme('tokyo')" class="theme-btn" data-theme-btn="tokyo" style="background:#06060d;color:#00f0ff;border-color:#ff00ff">Neon Tokyo</button>
           </div>
         </div>
@@ -1000,7 +899,14 @@ document.addEventListener('DOMContentLoaded', function() {
 // Quick diag: check if key functions are defined
 setTimeout(function() {
   var m = [];
-
+  if (typeof clRunCode !== 'function') m.push('clRunCode');
+  if (typeof clSwitchTab !== 'function') m.push('clSwitchTab');
+  if (typeof initSolarSystem !== 'function') m.push('initSolarSystem');
+  var statusEl = document.getElementById('statusbar-version');
+  if (m.length && statusEl) {
+    statusEl.textContent = '⚠ MISSING: ' + m.join(', ');
+  }
+}, 2000);
 </script>
 </body>
 </html>

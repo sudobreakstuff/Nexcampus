@@ -57,7 +57,6 @@ function switchTab(tab) {
   if (pane) pane.classList.add('active');
   if (tab === 'notebook') switchNbTool(currentNbTool);
   if (tab === 'codelab' && typeof initCodeLab === 'function') initCodeLab();
-  if (tab === 'cheatsheets' && typeof csInit === 'function') csInit();
   log(`Switched to ${tab}`);
 }
 
