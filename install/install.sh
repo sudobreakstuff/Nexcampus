@@ -30,8 +30,8 @@ VERSION=$(echo "$LATEST" | python3 -c "import sys,json; print(json.load(sys.stdi
 
 if [ -z "$URL" ]; then
   echo "Warning: Could not find latest release. Using fallback..."
-  URL="https://github.com/$REPO/releases/download/v2.4.6/$BINARY"
-  VERSION="v2.4.6"
+  URL="https://github.com/$REPO/releases/download/v2.4.7/$BINARY"
+  VERSION="v2.4.7"
 fi
 
 echo "==> Downloading NexCampus $VERSION..."
