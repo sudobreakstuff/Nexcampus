@@ -1032,6 +1032,55 @@ function b64Run(mode) {
     else out.value = decodeURIComponent(escape(atob(inp.value)));
   } catch(e) { out.value = 'Error: ' + e.message; }
 }
+
+// ==== Tool 3: JSON Formatter ====
+registerTool({
+  id: 'jsonfmt',
+  name: 'JSON',
+  tab: 'texttools',
+  create: function(c) {
+    var title = document.createElement('div');
+    title.className = 'tool-section-title';
+    title.textContent = 'JSON Formatter';
+    c.appendChild(title);
+    var inp = document.createElement('textarea');
+    inp.id = 'json-input'; inp.placeholder = 'Paste JSON here...';
+    inp.style.cssText = 'width:100%;height:130px;padding:10px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:4px;font-family:monospace;font-size:12px;resize:vertical;box-sizing:border-box';
+    inp.value = '{"name":"Alex","age":20,"skills":["python","js"]}';
+    c.appendChild(inp);
+    var row = document.createElement('div');
+    row.style.cssText = 'margin:8px 0;display:flex;gap:8px';
+    var pretty = document.createElement('button');
+    pretty.className = 'nt-btn'; pretty.textContent = 'Pretty'; pretty.style.cssText = 'font-size:10px;color:var(--teal)';
+    pretty.onclick = function() { jsonRun(2); }; row.appendChild(pretty);
+    var min = document.createElement('button');
+    min.className = 'nt-btn'; min.textContent = 'Minify'; min.style.cssText = 'font-size:10px;color:var(--cyan)';
+    min.onclick = function() { jsonRun(0); }; row.appendChild(min);
+    var cp = document.createElement('button');
+    cp.className = 'nt-btn'; cp.textContent = 'Copy'; cp.style.cssText = 'font-size:10px';
+    cp.onclick = function() { var o = document.getElementById('json-output'); if(o&&o.textContent)navigator.clipboard.writeText(o.textContent); };
+    row.appendChild(cp);
+    c.appendChild(row);
+    var out = document.createElement('pre');
+    out.id = 'json-output';
+    out.style.cssText = 'min-height:130px;padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;font-size:12px;color:var(--fg);white-space:pre-wrap;overflow:auto';
+    c.appendChild(out);
+  }
+});
+
+function jsonRun(indent) {
+  var inp = document.getElementById('json-input');
+  var out = document.getElementById('json-output');
+  if (!inp || !out || !inp.value.trim()) return;
+  try {
+    var obj = JSON.parse(inp.value);
+    out.textContent = JSON.stringify(obj, null, indent);
+    out.style.color = 'var(--teal)';
+  } catch(e) {
+    out.textContent = 'Invalid JSON: ' + e.message;
+    out.style.color = 'var(--amber)';
+  }
+}
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
