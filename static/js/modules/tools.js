@@ -2384,9 +2384,9 @@ TOOL_INIT.formulas = function() { formulaSearch(); };
 var GRAPH = { canvas:null, ctx:null, funcs:[], panX:0, panY:0, zoom:1, dragging:false, dragX:0, dragY:0, startPanX:0, startPanY:0 };
 
 function initGraph() {
-  if (GRAPH.canvas) return;
+  if (GRAPH.canvas) { graphDraw(); return; }
   GRAPH.canvas = document.getElementById('graph-canvas');
-  if (!GRAPH.canvas) return;
+  if (!GRAPH.canvas) { console.log('graph-canvas not found'); return; }
   GRAPH.ctx = GRAPH.canvas.getContext('2d');
   var c = GRAPH.canvas;
   c.addEventListener('wheel', function(e) {
