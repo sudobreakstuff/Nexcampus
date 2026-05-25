@@ -47,10 +47,11 @@ function initToolRegistry() {
 function switchRegistryTool(tool) {
   if (!tool || !tool._container) return;
   try {
-    document.querySelectorAll('#tab-texttools .nb-tool-content').forEach(function(p) {
-      p.classList.remove('active');
-      p.style.display = 'none';
+    // Only hide registry tool containers, not built-in tools
+    TOOL_REGISTRY.forEach(function(t) {
+      if (t._container) { t._container.classList.remove('active'); t._container.style.display = 'none'; }
     });
+    // Highlight button
     document.querySelectorAll('#tab-texttools .nb-tab-btn').forEach(function(b) {
       b.classList.remove('active');
       if (b.getAttribute('data-tt-tool') === tool.id) b.classList.add('active');
@@ -86,7 +87,32 @@ function showToolError(container, msg) {
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', function() {
     setTimeout(initToolRegistry, 500);
+    setTimeout(function() {
+      // When any built-in text tool is clicked, hide registry tools
+      document.querySelectorAll('#tab-texttools .nb-tab-btn').forEach(function(btn) {
+        if (!btn._registered) {
+          btn._registered = true;
+          btn.addEventListener('click', function() {
+            TOOL_REGISTRY.forEach(function(t) {
+              if (t._container) { t._container.classList.remove('active'); t._container.style.display = 'none'; }
+            });
+          });
+        }
+      });
+    }, 1000);
   });
 } else {
   setTimeout(initToolRegistry, 500);
+  setTimeout(function() {
+    document.querySelectorAll('#tab-texttools .nb-tab-btn').forEach(function(btn) {
+      if (!btn._registered) {
+        btn._registered = true;
+        btn.addEventListener('click', function() {
+          TOOL_REGISTRY.forEach(function(t) {
+            if (t._container) { t._container.classList.remove('active'); t._container.style.display = 'none'; }
+          });
+        });
+      }
+    });
+  }, 1000);
 }
