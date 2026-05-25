@@ -1070,9 +1070,17 @@ function clGradeChallenge() {
   if (!editor) return;
   var code = editor.value;
   var tests = c.tests;
-  var testCode = code + '\n\n# --- Auto-graded tests ---\n';
+  var testCode = code + '\n\n# test runner\n';
   for (var i = 0; i < tests.length; i++) {
-    testCode += 'try:\n    __result = ' + tests[i][0] + '\n    __expected = ' + tests[i][1] + '\n    __passed = str(__result) == str(__expected)\n    print("TEST ' + (i+1) + ': " + ("✅ PASS" if __passed else "❌ FAIL") + " (got " + repr(__result) + ", expected " + repr(__expected) + ")")\nexcept Exception as __e:\n    print("TEST ' + (i+1) + ': ❌ ERROR - " + str(__e) + "')\n';
+    var expr = tests[i][0];
+    var expected = tests[i][1];
+    testCode += 'try:\n';
+    testCode += '    __r = ' + expr + '\n';
+    testCode += '    __e = ' + expected + '\n';
+    testCode += '    __ok = str(__r) == str(__e)\n';
+    testCode += '    print("TEST ' + (i+1) + ': " + ("PASS" if __ok else "FAIL") + " (got " + repr(__r) + ", want " + repr(__e) + ")")\n';
+    testCode += 'except Exception as __x:\n';
+    testCode += '    print("TEST ' + (i+1) + ': ERROR - " + str(__x))\n';
   }
   var output = $('cl-output');
   if (!output) return;

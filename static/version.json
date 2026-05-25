@@ -1,12 +1,8 @@
 {
-  "version": "2.4.2",
-  "name": "NexCampus v2.4.2",
+  "version": "2.4.3",
+  "name": "NexCampus v2.4.3",
   "update_url": "",
   "changelog": [
-    "Code Lab tab switching fixed \u2014 uses toggle for active state",
-    "Mind map rendering uses hardcoded colors (no more CSS var issues)",
-    "Removed notification calls from init functions to prevent execution errors",
-    "Canvas clear using width reset for reliable redraw",
-    "Side-by-side editor + output, 8 challenges, global search, self-update"
+    "Fixed unclosed single quote in clGradeChallenge that broke entire code lab JS file"
   ]
 }
