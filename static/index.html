@@ -880,6 +880,125 @@
   <script src="js/modules/codelab.js"></script>
   <script src="js/tesseract/tesseract.min.js"></script>
 <script src="js/app.js"></script>
+<script src="js/modules/registry.js"></script>
+<script>
+// ==== Tool Registry: Register plugins here ====
+registerTool({
+  id: 'unitconv',
+  name: 'Converter',
+  tab: 'texttools',
+  create: function(c) {
+    // Title
+    var title = document.createElement('div');
+    title.className = 'tool-section-title';
+    title.innerHTML = 'Unit Converter <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Length, weight, volume, temp, speed</span>';
+    c.appendChild(title);
+
+    // Controls row
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;align-items:center';
+
+    var inp = document.createElement('input');
+    inp.type = 'number'; inp.value = '1'; inp.id = 'ru-input';
+    inp.style.cssText = 'width:80px;padding:4px 8px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px;font-size:11px';
+    inp.addEventListener('input', function() { ruConvert(); });
+    row.appendChild(inp);
+
+    var from = document.createElement('select');
+    from.id = 'ru-from';
+    from.style.cssText = 'padding:4px 8px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px;font-size:11px';
+    var units = ['m','km','cm','mm','in','ft','yd','mi'];
+    units.forEach(function(u) { var o = document.createElement('option'); o.value = u; o.textContent = u; from.appendChild(o); });
+    from.addEventListener('change', function() { ruConvert(); });
+    row.appendChild(from);
+
+    var lbl = document.createElement('span');
+    lbl.textContent = 'to'; lbl.style.color = 'var(--fg-dim)';
+    row.appendChild(lbl);
+
+    var to = document.createElement('select');
+    to.id = 'ru-to'; to.style.cssText = from.style.cssText;
+    units.forEach(function(u) { var o = document.createElement('option'); o.value = u; o.textContent = u; to.appendChild(o); });
+    to.value = 'ft';
+    to.addEventListener('change', function() { ruConvert(); });
+    row.appendChild(to);
+
+    var swap = document.createElement('button');
+    swap.className = 'nt-btn'; swap.textContent = 'Swap'; swap.style.fontSize = '10px';
+    swap.addEventListener('click', function() { var t = from.value; from.value = to.value; to.value = t; ruConvert(); });
+    row.appendChild(swap);
+
+    var cat = document.createElement('select');
+    cat.id = 'ru-cat'; cat.style.cssText = 'padding:4px 8px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px;font-size:11px';
+    [{v:'length',n:'Length'},{v:'weight',n:'Weight'},{v:'volume',n:'Volume'},{v:'temp',n:'Temperature'},{v:'speed',n:'Speed'}].forEach(function(x) {
+      var o = document.createElement('option'); o.value = x.v; o.textContent = x.n; cat.appendChild(o);
+    });
+    cat.addEventListener('change', function() { ruSetCategory(this.value); });
+    row.appendChild(cat);
+    c.appendChild(row);
+
+    // Result
+    var result = document.createElement('div');
+    result.id = 'ru-result';
+    result.style.cssText = 'font-size:18px;color:var(--teal);font-weight:bold;padding:8px 0';
+    c.appendChild(result);
+
+    // Store data
+    this._data = {
+      length: {m:1,km:1000,cm:0.01,mm:0.001,in:0.0254,ft:0.3048,yd:0.9144,mi:1609.344},
+      weight: {kg:1,g:0.001,mg:0.000001,lb:0.453592,oz:0.0283495,ton:907.185},
+      volume: {l:1,ml:0.001,gal:3.78541,qt:0.946353,pt:0.473176,cup:0.236588,floz:0.0295735},
+      speed: {ms:1,kmh:0.277778,mph:0.44704,knot:0.514444}
+    };
+    ruConvert();
+  }
+});
+
+// Converter logic (global so onclick can find them)
+var RU_UNITS = null;
+function ruSetCategory(cat) {
+  var data = RU_UNITS || {};
+  if (cat === 'temp') {
+    data = {c:'Celsius',f:'Fahrenheit',k:'Kelvin'};
+    RU_UNITS = data;
+  }
+  var units = cat === 'temp' ? ['c','f','k'] : Object.keys(data);
+  var from = document.getElementById('ru-from');
+  var to = document.getElementById('ru-to');
+  if (!from || !to) return;
+  from.innerHTML = ''; to.innerHTML = '';
+  units.forEach(function(u) {
+    var o1 = document.createElement('option'); o1.value = u; o1.textContent = data[u] || u; from.appendChild(o1);
+    var o2 = document.createElement('option'); o2.value = u; o2.textContent = data[u] || u; to.appendChild(o2);
+  });
+  to.selectedIndex = 1;
+  ruConvert();
+}
+
+function ruConvert() {
+  var cat = document.getElementById('ru-cat');
+  var val = parseFloat(document.getElementById('ru-input').value) || 0;
+  var from = document.getElementById('ru-from');
+  var to = document.getElementById('ru-to');
+  var result = document.getElementById('ru-result');
+  if (!cat || !from || !to || !result) return;
+  var cv = cat.value;
+  var out;
+  if (cv === 'temp') {
+    var c;
+    if (from.value === 'c') c = val;
+    else if (from.value === 'f') c = (val - 32) * 5 / 9;
+    else c = val - 273.15;
+    if (to.value === 'c') out = c;
+    else if (to.value === 'f') out = c * 9 / 5 + 32;
+    else out = c + 273.15;
+  } else {
+    var data = RU_UNITS || {};
+    out = val * (data[from.value] || 1) / (data[to.value] || 1);
+  }
+  result.textContent = val + ' ' + from.value + ' = ' + out.toFixed(4) + ' ' + to.value;
+}
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var sel = document.getElementById('tt-cipher-type');

@@ -1,10 +1,10 @@
 {
-  "version": "2.10.2",
-  "name": "NexCampus v2.10.2",
+  "version": "2.11.0",
+  "name": "NexCampus v2.11.0",
   "update_url": "",
   "changelog": [
-    "Reverted to stable v2.5.0 code \u2014 all features working",
-    "Code Lab works, all tabs work",
-    "No experimental features"
+    "Tool Registry plugin system \u2014 safe tool additions without breaking existing code",
+    "Unit Converter added as first registry tool (Text Tools)",
+    "All existing code untouched and verified"
   ]
 }
