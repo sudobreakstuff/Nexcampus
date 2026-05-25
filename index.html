@@ -892,15 +892,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Quick diag: check if key functions are defined
 setTimeout(function() {
-  var m = [];
-  if (typeof clRunCode !== 'function') m.push('clRunCode');
-  if (typeof clSwitchTab !== 'function') m.push('clSwitchTab');
-  if (typeof initSolarSystem !== 'function') m.push('initSolarSystem');
-  var statusEl = document.getElementById('statusbar-version');
-  if (m.length && statusEl) {
-    statusEl.textContent = '⚠ MISSING: ' + m.join(', ');
-  }
-}, 2000);
+  }, 2000);
 </script>
 </body>
 </html>
