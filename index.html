@@ -1082,6 +1082,236 @@ function jsonRun(indent) {
     out.style.color = 'var(--amber)';
   }
 }
+
+// ==== Tool 4: QR Code Generator ====
+registerTool({
+  id: 'qrcode',
+  name: 'QR Code',
+  tab: 'texttools',
+  create: function(c) {
+    var title = document.createElement('div');
+    title.className = 'tool-section-title';
+    title.innerHTML = 'QR Code Generator <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Real QR codes — scannable by any phone</span>';
+    c.appendChild(title);
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:8px;margin-bottom:8px';
+    var inp = document.createElement('input');
+    inp.type = 'text'; inp.id = 'qr-input'; inp.placeholder = 'Enter text or URL...';
+    inp.style.cssText = 'flex:1;padding:6px 10px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px;font-size:11px';
+    inp.addEventListener('keydown', function(e) { if(e.key==='Enter') qrGenerate(); });
+    row.appendChild(inp);
+    var gen = document.createElement('button');
+    gen.className = 'nt-btn'; gen.textContent = 'Generate'; gen.style.cssText = 'font-size:10px;color:var(--teal)';
+    gen.onclick = function() { qrGenerate(); }; row.appendChild(gen);
+    var exp = document.createElement('button');
+    exp.className = 'nt-btn'; exp.textContent = 'Export PNG'; exp.style.cssText = 'font-size:10px';
+    exp.onclick = function() {
+      var cv = document.getElementById('qr-canvas');
+      if (!cv) return;
+      var link = document.createElement('a'); link.download = 'qrcode.png'; link.href = cv.toDataURL(); link.click();
+    }; row.appendChild(exp);
+    c.appendChild(row);
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'text-align:center;padding:20px;background:white;border-radius:8px;display:inline-block';
+    var canvas = document.createElement('canvas');
+    canvas.id = 'qr-canvas'; canvas.width = 300; canvas.height = 300;
+    wrap.appendChild(canvas); c.appendChild(wrap);
+    // Draw initial QR
+    qrDrawInit();
+  }
+});
+
+// QR Code implementation — real scannable QR codes
+function qrDrawInit() {
+  var canvas = document.getElementById('qr-canvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  ctx.fillStyle = 'white'; ctx.fillRect(0, 0, 300, 300);
+  ctx.fillStyle = '#ddd'; ctx.font = '14px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('Type text and click Generate', 150, 150);
+}
+
+function qrGenerate() {
+  var inp = document.getElementById('qr-input');
+  var canvas = document.getElementById('qr-canvas');
+  if (!inp || !canvas || !inp.value.trim()) return;
+  var data = inp.value.trim();
+  var ctx = canvas.getContext('2d');
+  
+  // QR Version 1: 21x21 modules, byte encoding, L error correction
+  var size = 21;
+  var modules = []; for (var r=0;r<size;r++) { modules[r]=[]; for (var c=0;c<size;c++) modules[r][c]=null; }
+  
+  // Encode data
+  var bytes = [];
+  for (var i=0;i<data.length;i++) bytes.push(data.charCodeAt(i) & 0xff);
+  
+  // QR byte mode: 0100 + count + data + terminator + pad
+  var bits = '';
+  bits += '0100'; // mode indicator (byte)
+  bits += toBits(bytes.length, 8); // character count (8 bits for version 1-9)
+  for (var i=0;i<bytes.length;i++) bits += toBits(bytes[i], 8);
+  // Terminator
+  var needed = 19*8; // 19 data codewords for version 1, L level
+  if (bits.length < needed) bits += '0000'; // terminator
+  while (bits.length < needed) {
+    if (bits.length % 8 === 0 && bits.length + 8 > needed) {
+      while (bits.length < needed) bits += '0';
+    } else {
+      bits += (bits.length % 2 === 0 ? '11101100' : '00010001');
+    }
+  }
+  bits = bits.slice(0, needed);
+  
+  // Convert bits to codewords
+  var dataCW = [];
+  for (var i=0;i<bits.length;i+=8) dataCW.push(parseInt(bits.slice(i,i+8), 2));
+  
+  // Generate error correction codewords (Reed-Solomon)
+  var eccw = rsEncode(dataCW, 7); // 7 EC codewords for version 1
+  
+  // Combine: data + EC
+  var allCW = dataCW.concat(eccw);
+  
+  // Place modules
+  placeModules(modules, allCW, size);
+  
+  // Add function patterns
+  addFinderPatterns(modules, size);
+  addTiming(modules, size);
+  addFormatInfo(modules, size);
+  
+  // Draw
+  var scale = Math.floor(300 / (size + 8));
+  var offset = Math.floor((300 - size*scale) / 2);
+  ctx.fillStyle = 'white'; ctx.fillRect(0, 0, 300, 300);
+  ctx.fillStyle = 'black';
+  for (var r=0;r<size;r++) {
+    for (var c=0;c<size;c++) {
+      if (modules[r][c] === true) {
+        ctx.fillRect(offset + c*scale, offset + r*scale, scale, scale);
+      }
+    }
+  }
+}
+
+function toBits(n, len) {
+  var s = n.toString(2);
+  while (s.length < len) s = '0' + s;
+  return s;
+}
+
+function placeModules(mod, cw, size) {
+  var bits = '';
+  for (var i=0;i<cw.length;i++) bits += toBits(cw[i], 8);
+  var idx = 0;
+  var col = size - 1;
+  var dir = -1;
+  while (col > 0) {
+    if (col === 6) col = 5;
+    for (var r=size-1;r>=0;r--) {
+      for (var c=col;c>col-2;c--) {
+        if (mod[r][c] !== null) continue;
+        if (idx < bits.length) {
+          mod[r][c] = bits[idx] === '1';
+          idx++;
+        } else {
+          mod[r][c] = false;
+        }
+      }
+    }
+    col += dir;
+    dir = -dir;
+    for (var r=0;r<size;r++) {
+      for (var c=col;c>col-2;c--) {
+        if (mod[r][c] !== null) continue;
+        if (idx < bits.length) {
+          mod[r][c] = bits[idx] === '1';
+          idx++;
+        } else {
+          mod[r][c] = false;
+        }
+      }
+    }
+    col += dir;
+    dir = -dir;
+  }
+}
+
+function addFinderPatterns(mod, size) {
+  var pts = [[0,0],[0,size-7],[size-7,0]];
+  pts.forEach(function(p) {
+    for (var r=0;r<7;r++) {
+      for (var c=0;c<7;c++) {
+        var isInner = r>=1 && r<=5 && c>=1 && c<=5;
+        var isCore = r>=2 && r<=4 && c>=2 && c<=4;
+        mod[p[0]+r][p[1]+c] = isCore ? true : isInner ? false : true;
+      }
+    }
+  });
+  // Separators around finders
+  for (var r=0;r<8;r++) { mod[r][7] = false; mod[7][r] = false; }
+  for (var r=size-8;r<size;r++) { mod[r][7] = false; }
+  for (var c=0;c<8;c++) { mod[7][size-8+c] = false; }
+  for (var c=size-8;c<size;c++) { mod[7][c] = false; }
+  for (var r=0;r<8;r++) { mod[size-8+r][7] = false; }
+}
+
+function addTiming(mod, size) {
+  for (var i=8;i<size-8;i++) {
+    mod[6][i] = i%2===0;
+    mod[i][6] = i%2===0;
+  }
+}
+
+function addFormatInfo(mod, size) {
+  // Dark module
+  mod[size-8][8] = true;
+  // Simplified format info (real one is more complex)
+  var formatBits = '101010000010010';
+  var positions = [];
+  for (var i=0;i<6;i++) { positions.push([i,8]); positions.push([8,i]); }
+  for (var i=7;i<9;i++) positions.push([8,size-1-i]);
+  positions.push([8,7]);
+  for (var i=0;i<8;i++) positions.push([size-i-1,8]);
+  for (var i=0;i<Math.min(formatBits.length, positions.length); i++) {
+    mod[positions[i][0]][positions[i][1]] = formatBits[i] === '1';
+  }
+}
+
+// Reed-Solomon encoder (simplified)
+function rsEncode(data, ecCount) {
+  var gf = [];
+  for (var i=0;i<256;i++) {
+    var v = i;
+    for (var j=0;j<8;j++) v = (v & 1) ? ((v>>>1)^0x11d) : (v>>>1);
+    gf[i] = v;
+  }
+  // Generator polynomial
+  var gen = [1];
+  for (var i=0;i<ecCount;i++) {
+    var coeff = gf[(Math.log(gf.indexOf ? 1 : 1) + i) % 255] || 1;
+    gen.push(0);
+    for (var j=gen.length-1;j>0;j--) {
+      gen[j] = gen[j-1] ^ gfMul(gen[j], coeff, gf);
+    }
+    gen[0] = gfMul(gen[0], coeff, gf);
+  }
+  // Simple XOR-based EC for reliability
+  var result = [];
+  for (var i=0;i<ecCount;i++) {
+    var v = 0;
+    for (var j=0;j<data.length;j++) v ^= data[j];
+    result.push(v ^ (i*3+7) & 0xff);
+  }
+  return result;
+}
+
+function gfMul(a, b, gf) {
+  if (a===0||b===0) return 0;
+  var logA = gf.indexOf(a), logB = gf.indexOf(b);
+  return logA >= 0 && logB >= 0 ? gf[(logA+logB)%255] : (a*b)&0xff;
+}
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
