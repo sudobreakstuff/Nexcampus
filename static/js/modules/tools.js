@@ -1593,38 +1593,38 @@ var SOLAR_PLANETS = [
     info:{diameter:'4,879 km', distSun:'57.9M km', year:'88 days', day:'58.6 days', moons:'0', type:'Terrestrial', gravity:'3.7 m/s²', temp:'-180 to 430°C', atmosphere:'Trace (Exosphere)', rings:'No', volume:'0.056 Earths', mass:'0.055 Earths', density:'5.43 g/cm³', inclination:'7.0°', axialTilt:'0.03°', missions:'Mariner 10 (1974), MESSENGER (2011)', fact:'Mercury is the smallest planet and closest to the Sun! It has almost no atmosphere, so temperatures swing from -180°C at night to 430°C during the day.'} },
   { name:'Venus',   color:'#e8cda0', orbit:78, size:8.5, speed:1.62, angle:1.5,
     type:'Terrestrial',
-    info:{diameter:'12,104 km', distSun:'108.2M km', year:'225 days', day:'243 days', moons:'0', type:'Terrestrial', gravity:'8.87 m/s²', temp:'462°C (avg)', atmosphere:'96% CO₂, 3.5% N₂', rings:'No', volume:'0.857 Earths', mass:'0.815 Earths', density:'5.24 g/cm³', inclination:'3.39°', axialTilt:'177.4° (retrograde)', missions:'Venera series (USSR), Magellan (1990), Venus Express (2006)', fact:'Venus spins backwards — a day is longer than its year! It\'s the hottest planet despite being farther from the Sun than Mercury.'} },
+    info:{diameter:'12,104 km', distSun:'108.2M km', year:'225 days', day:'243 days', moons:'0', type:'Terrestrial', gravity:'8.87 m/s²', temp:'462°C (avg)', atmosphere:'96% CO₂, 3.5% N₂', rings:'No', volume:'0.857 Earths', mass:'0.815 Earths', density:'5.24 g/cm³', inclination:'3.39°', axialTilt:'177.4° (retrograde)', discovered:'Known since antiquity', discoverer:'N/A (visible to naked eye)', composition:'Rocky with metallic core', surface:'Volcanic plains, mountains, coronae', escapeVel:'10.36 km/s', albedo:'0.76 (brightest planet)', magneticField:'No (induced magnetosphere)', notable:'Hottest planet in solar system due to runaway greenhouse effect. Surface pressure is 92× Earth — crushing. Clouds rain sulfuric acid.', missions:'Venera series (USSR), Magellan (1990), Venus Express (2006)', fact:'Venus spins backwards — a day is longer than its year! It\'s the hottest planet despite being farther from the Sun than Mercury.'} },
   { name:'Earth',   color:'#4fc3f7', orbit:105, size:9.5, speed:1.0,  angle:3.0,
     type:'Terrestrial',
-    info:{diameter:'12,756 km', distSun:'149.6M km', year:'365.25 days', day:'24 hours', moons:'1', type:'Terrestrial', gravity:'9.81 m/s²', temp:'-89 to 57°C', atmosphere:'78% N₂, 21% O₂', rings:'No', volume:'1 (reference)', mass:'1 (reference)', density:'5.51 g/cm³', inclination:'0° (reference)', axialTilt:'23.4°', missions:'Thousands of satellites, ISS, Artemis (2025-)', fact:'Earth is the only known planet with liquid water and life! About 71% of Earth\'s surface is covered in water.'} },
+    info:{diameter:'12,756 km', distSun:'149.6M km', year:'365.25 days', day:'24 hours', moons:'1', type:'Terrestrial', gravity:'9.81 m/s²', temp:'-89 to 57°C', atmosphere:'78% N₂, 21% O₂', rings:'No', volume:'1 (reference)', mass:'1 (reference)', density:'5.51 g/cm³', inclination:'0° (reference)', axialTilt:'23.4°', discovered:'N/A (home planet)', discoverer:'N/A', composition:'32% iron, 30% oxygen, 15% silicon, 14% magnesium', surface:'71% water, continents, mountains, deserts', escapeVel:'11.19 km/s', albedo:'0.367', magneticField:'Yes (dipole) — protects from solar wind', notable:'Only known planet with liquid water and life. The Moon stabilizes Earth\'s axial tilt, giving us stable seasons.', missions:'Thousands of satellites, ISS, Artemis (2025-)', fact:'Earth is the only known planet with liquid water and life! About 71% of Earth\'s surface is covered in water.'} },
   { name:'Mars',    color:'#e57373', orbit:132, size:7.5, speed:0.53, angle:4.5,
     type:'Terrestrial',
-    info:{diameter:'6,792 km', distSun:'227.9M km', year:'687 days', day:'24.6 hours', moons:'2', type:'Terrestrial', gravity:'3.72 m/s²', temp:'-140 to 20°C', atmosphere:'95% CO₂, 2.7% N₂', rings:'No', volume:'0.151 Earths', mass:'0.107 Earths', density:'3.93 g/cm³', inclination:'1.85°', axialTilt:'25.2°', missions:'Perseverance (2021), Ingenuity helicopter, Curiosity, Tianwen-1', fact:'Mars has the tallest mountain — Olympus Mons at 21.9 km is 2.5× the height of Everest! It also has the longest canyon, Valles Marineris.'} },
+    info:{diameter:'6,792 km', distSun:'227.9M km', year:'687 days', day:'24.6 hours', moons:'2', type:'Terrestrial', gravity:'3.72 m/s²', temp:'-140 to 20°C', atmosphere:'95% CO₂, 2.7% N₂', rings:'No', volume:'0.151 Earths', mass:'0.107 Earths', density:'3.93 g/cm³', inclination:'1.85°', axialTilt:'25.2°', discovered:'Known since antiquity', discoverer:'N/A (visible to naked eye)', composition:'Iron-rich crust, silicate mantle', surface:'Red desert, polar ice caps, canyons, volcanoes', escapeVel:'5.03 km/s', albedo:'0.15', magneticField:'No global field (remnant crustal fields)', notable:'Has the largest volcano (Olympus Mons, 21.9 km) and the deepest canyon (Valles Marineris, 4,000 km). Once had liquid water on its surface.', missions:'Perseverance (2021), Ingenuity helicopter, Curiosity, Tianwen-1', fact:'Mars has the tallest mountain — Olympus Mons at 21.9 km is 2.5× the height of Everest! It also has the longest canyon, Valles Marineris.'} },
   { name:'Jupiter', color:'#d4a574', orbit:175, size:16, speed:0.084, angle:1.0,
     type:'Gas Giant',
-    info:{diameter:'142,984 km', distSun:'778.5M km', year:'11.86 years', day:'9.9 hours', moons:'96 known', type:'Gas Giant', gravity:'24.79 m/s²', temp:'-110°C (cloud tops)', atmosphere:'89% H₂, 10% He', rings:'Faint ring system', volume:'1,321 Earths', mass:'318 Earths', density:'1.33 g/cm³', inclination:'1.3°', axialTilt:'3.1°', missions:'Juno (2016-), Galileo (1995-2003), Voyager 1 & 2', fact:'Jupiter\'s Great Red Spot is a storm bigger than Earth that has raged for hundreds of years. It has 95 known moons!'} },
+    info:{diameter:'142,984 km', distSun:'778.5M km', year:'11.86 years', day:'9.9 hours', moons:'96 known', type:'Gas Giant', gravity:'24.79 m/s²', temp:'-110°C (cloud tops)', atmosphere:'89% H₂, 10% He', rings:'Faint ring system', volume:'1,321 Earths', mass:'318 Earths', density:'1.33 g/cm³', inclination:'1.3°', axialTilt:'3.1°', discovered:'Known since antiquity', discoverer:'N/A (visible to naked eye)', composition:'Mostly hydrogen and helium, possible rocky core', surface:'Cloud bands, storms, no solid surface', escapeVel:'59.5 km/s', albedo:'0.52', magneticField:'Yes — strongest in solar system (20,000× Earth)', notable:'The Great Red Spot is a storm wider than Earth that has lasted 350+ years. Jupiter\'s gravity shields inner planets from comets.', missions:'Juno (2016-), Galileo (1995-2003), Voyager 1 & 2', fact:'Jupiter\'s Great Red Spot is a storm bigger than Earth that has raged for hundreds of years. It has 95 known moons!'} },
   { name:'Saturn',  color:'#f0d58c', orbit:210, size:13, speed:0.034, angle:2.5,
     type:'Gas Giant',
-    info:{diameter:'120,536 km', distSun:'1.43B km', year:'29.46 years', day:'10.7 hours', moons:'146 known', type:'Gas Giant', gravity:'10.44 m/s²', temp:'-140°C (cloud tops)', atmosphere:'96% H₂, 3% He', rings:'Yes — prominent', volume:'764 Earths', mass:'95 Earths', density:'0.69 g/cm³', inclination:'2.49°', axialTilt:'26.7°', missions:'Cassini-Huygens (2004-2017), Voyager 1 & 2', fact:'Saturn\'s rings span 280,000 km but are only ~10 m thick! Saturn is so light it would float in water.'} },
+    info:{diameter:'120,536 km', distSun:'1.43B km', year:'29.46 years', day:'10.7 hours', moons:'146 known', type:'Gas Giant', gravity:'10.44 m/s²', temp:'-140°C (cloud tops)', atmosphere:'96% H₂, 3% He', rings:'Yes — prominent', volume:'764 Earths', mass:'95 Earths', density:'0.69 g/cm³', inclination:'2.49°', axialTilt:'26.7°', discovered:'Known since antiquity', discoverer:'N/A (visible to naked eye)', composition:'Mostly hydrogen and helium', surface:'No solid surface, visible cloud layers', escapeVel:'35.5 km/s', albedo:'0.47 (0.34 for rings)', magneticField:'Yes — aligned with rotation axis (unique)', notable:'The least dense planet — would float in water. Rings span 280,000 km but are only ~10 meters thick! Moon Titan has lakes of liquid methane.', missions:'Cassini-Huygens (2004-2017), Voyager 1 & 2', fact:'Saturn\'s rings span 280,000 km but are only ~10 m thick! Saturn is so light it would float in water.'} },
   { name:'Uranus',  color:'#7ec8e3', orbit:245, size:10, speed:0.012, angle:0.5,
     type:'Ice Giant',
-    info:{diameter:'51,118 km', distSun:'2.87B km', year:'84 years', day:'17.2 hours', moons:'27', type:'Ice Giant', gravity:'8.87 m/s²', temp:'-195°C', atmosphere:'83% H₂, 15% He, 2% CH₄', rings:'Faint ring system', volume:'63 Earths', mass:'14.5 Earths', density:'1.27 g/cm³', inclination:'0.77°', axialTilt:'97.8°', missions:'Voyager 2 (1986 only)', fact:'Uranus rotates on its side with an axial tilt of 98° — it basically rolls around the Sun! It was the first planet discovered with a telescope.'} },
+    info:{diameter:'51,118 km', distSun:'2.87B km', year:'84 years', day:'17.2 hours', moons:'27', type:'Ice Giant', gravity:'8.87 m/s²', temp:'-195°C', atmosphere:'83% H₂, 15% He, 2% CH₄', rings:'Faint ring system', volume:'63 Earths', mass:'14.5 Earths', density:'1.27 g/cm³', inclination:'0.77°', axialTilt:'97.8°', discovered:'1781', discoverer:'William Herschel', composition:'Water, methane, ammonia ices over rocky core', surface:'No solid surface, featureless blue-green', escapeVel:'21.3 km/s', albedo:'0.3', magneticField:'Yes — tilted 59° from rotation axis', notable:'First planet discovered with a telescope. Rotates on its side (98° tilt) — essentially rolls around the Sun. Methane in its atmosphere gives it the blue color.', missions:'Voyager 2 (1986 only)', fact:'Uranus rotates on its side with an axial tilt of 98° — it basically rolls around the Sun! It was the first planet discovered with a telescope.'} },
   { name:'Neptune', color:'#4a6db5', orbit:275, size:10, speed:0.006, angle:3.5,
     type:'Ice Giant',
-    info:{diameter:'49,528 km', distSun:'4.50B km', year:'164.8 years', day:'16.1 hours', moons:'16', type:'Ice Giant', gravity:'11.15 m/s²', temp:'-200°C', atmosphere:'80% H₂, 19% He, 1% CH₄', rings:'Faint ring system', volume:'58 Earths', mass:'17 Earths', density:'1.64 g/cm³', inclination:'1.77°', axialTilt:'28.3°', missions:'Voyager 2 (1989 only)', fact:'Neptune has the strongest winds at 2,100 km/h — faster than any storm on Earth! It was discovered using math before being observed.'} }
+    info:{diameter:'49,528 km', distSun:'4.50B km', year:'164.8 years', day:'16.1 hours', moons:'16', type:'Ice Giant', gravity:'11.15 m/s²', temp:'-200°C', atmosphere:'80% H₂, 19% He, 1% CH₄', rings:'Faint ring system', volume:'58 Earths', mass:'17 Earths', density:'1.64 g/cm³', inclination:'1.77°', axialTilt:'28.3°', discovered:'1846', discoverer:'Johann Galle (predicted by Le Verrier & Adams)', composition:'Water, ammonia, methane ices', surface:'No solid surface, deep blue color from methane', escapeVel:'23.5 km/s', albedo:'0.41', magneticField:'Yes — tilted 47° from rotation axis', notable:'Discovered using mathematics before being observed! Strongest winds in the solar system at 2,100 km/h. Its moon Triton orbits backwards.', missions:'Voyager 2 (1989 only)', fact:'Neptune has the strongest winds at 2,100 km/h — faster than any storm on Earth! It was discovered using math before being observed.'} }
 ];
 
 var SOLAR_DWARFS = [
   { name:'Ceres', color:'#8a8a7a', orbit:138, size:3.5, speed:0.21, angle:2.0,
-    info:{diameter:'940 km', distSun:'414M km', year:'4.6 years', day:'9.1 hours', moons:'0', type:'Dwarf Planet', gravity:'0.28 m/s²', temp:'-105°C', fact:'Ceres is the largest object in the asteroid belt and the only dwarf planet in the inner solar system. It may have a subsurface ocean!'} },
+    info:{diameter:'940 km', distSun:'414M km', year:'4.6 years', day:'9.1 hours', moons:'0', type:'Dwarf Planet', gravity:'0.28 m/s²', temp:'-105°C', discovered:'1801', discoverer:'Giuseppe Piazzi', composition:'Rock and ice, possible subsurface ocean', surface:'Cratered, bright spots (salt deposits)', escapeVel:'0.51 km/s', albedo:'0.09', magneticField:'No', notable:'Largest asteroid belt object. Bright spots in Occator crater are salt deposits from subsurface brine.', fact:'Ceres is the largest object in the asteroid belt and the only dwarf planet in the inner solar system. It may have a subsurface ocean!'} },
   { name:'Pluto', color:'#d4c5a9', orbit:295, size:3.5, speed:0.004, angle:4.0,
-    info:{diameter:'2,377 km', distSun:'5.91B km', year:'248 years', day:'6.4 days', moons:'5', type:'Dwarf Planet', gravity:'0.62 m/s²', temp:'-230°C', fact:'Pluto was reclassified as a dwarf planet in 2006. It has a heart-shaped glacier (Sputnik Planitia) and a thin nitrogen atmosphere.'} },
+    info:{diameter:'2,377 km', distSun:'5.91B km', year:'248 years', day:'6.4 days', moons:'5', type:'Dwarf Planet', gravity:'0.62 m/s²', temp:'-230°C', discovered:'1930', discoverer:'Clyde Tombaugh', composition:'Rock and ice (nitrogen, methane, CO)', surface:'Mountains, glaciers, heart-shaped plain', escapeVel:'1.23 km/s', albedo:'0.49-0.66', magneticField:'Unknown', notable:'Has a thin nitrogen atmosphere that freezes and falls as snow when Pluto moves away from the Sun. Charon is so large that Pluto-Charon is sometimes called a binary system.', fact:'Pluto was reclassified as a dwarf planet in 2006. It has a heart-shaped glacier (Sputnik Planitia) and a thin nitrogen atmosphere.'} },
   { name:'Eris', color:'#e8d8c8', orbit:350, size:3, speed:0.002, angle:5.5,
-    info:{diameter:'2,326 km', distSun:'10.12B km', year:'558 years', day:'25.9 hours', moons:'1', type:'Dwarf Planet', gravity:'0.82 m/s²', temp:'-231°C', fact:'Eris is almost the same size as Pluto but 27% more massive. Its discovery in 2005 sparked the debate that reclassified Pluto as a dwarf planet.'} },
+    info:{diameter:'2,326 km', distSun:'10.12B km', year:'558 years', day:'25.9 hours', moons:'1', type:'Dwarf Planet', gravity:'0.82 m/s²', temp:'-231°C', discovered:'2005', discoverer:'Brown, Trujillo & Rabinowitz', composition:'Rock and ice (methane, nitrogen)', surface:'Icy, high albedo surface', escapeVel:'1.38 km/s', albedo:'0.96 (one of the brightest)', magneticField:'Unknown', notable:'Almost same size as Pluto but 27% more massive. Its discovery led to Pluto\'s reclassification. Has one moon, Dysnomia.', fact:'Eris is almost the same size as Pluto but 27% more massive. Its discovery in 2005 sparked the debate that reclassified Pluto as a dwarf planet.'} },
   { name:'Makemake', color:'#b0a090', orbit:330, size:2.8, speed:0.003, angle:3.2,
-    info:{diameter:'1,430 km', distSun:'6.85B km', year:'309 years', day:'22.5 hours', moons:'1', type:'Dwarf Planet', gravity:'0.5 m/s²', temp:'-239°C', fact:'Makemake is named after the creator god of the Rapa Nui people of Easter Island. It is the second brightest Kuiper Belt object after Pluto.'} },
+    info:{diameter:'1,430 km', distSun:'6.85B km', year:'309 years', day:'22.5 hours', moons:'1', type:'Dwarf Planet', gravity:'0.5 m/s²', temp:'-239°C', discovered:'2005', discoverer:'Brown, Trujillo & Rabinowitz', composition:'Rock and methane ice', surface:'Reddish, methane-covered', escapeVel:'0.81 km/s', albedo:'0.77', magneticField:'Unknown', notable:'Named after Easter Island creator god. Extremely cold with reddish surface. Discovered just after Easter 2005.', fact:'Makemake is named after the creator god of the Rapa Nui people of Easter Island. It is the second brightest Kuiper Belt object after Pluto.'} },
   { name:'Haumea', color:'#c0b8a0', orbit:320, size:2.5, speed:0.003, angle:6.0,
-    info:{diameter:'1,632 km', distSun:'6.48B km', year:'283 years', day:'3.9 hours', moons:'2', type:'Dwarf Planet', gravity:'0.4 m/s²', temp:'-241°C', fact:'Haumea is shaped like a rugby ball due to its rapid rotation — it spins once every 3.9 hours! It also has a ring system, unique among dwarf planets.'} }
+    info:{diameter:'1,632 km', distSun:'6.48B km', year:'283 years', day:'3.9 hours', moons:'2', type:'Dwarf Planet', gravity:'0.4 m/s²', temp:'-241°C', discovered:'2004', discoverer:'Brown et al. (Ortiz et al.)', composition:'Rock with water ice crust', surface:'Elongated, crystalline water ice', escapeVel:'0.84 km/s', albedo:'0.66-0.80', magneticField:'Unknown', notable:'Only known dwarf planet with rings. Spins incredibly fast (3.9 hours) giving it an elongated rugby-ball shape. Has two moons: Hi\'iaka and Namaka.', fact:'Haumea is shaped like a rugby ball due to its rapid rotation — it spins once every 3.9 hours! It also has a ring system, unique among dwarf planets.'} }
 ];
 
 var SOLAR_FACTS = [
@@ -2157,8 +2157,8 @@ function solarShowInfoFor(p) {
   var tab = SOLAR.infoTab;
   var html = '<div style="font-size:13px;font-weight:bold;color:' + p.color + ';margin-bottom:6px">' + p.name + '</div>';
   html += '<div style="margin-bottom:8px;display:flex;gap:2px">';
-  ['overview','orbit','atmosphere','missions'].forEach(function(t) {
-    var names = {overview:'Overview', orbit:'Orbit', atmosphere:'Atmo', missions:'Missions'};
+  ['overview','orbit','atmosphere','details','missions'].forEach(function(t) {
+    var names = {overview:'Overview', orbit:'Orbit', atmosphere:'Atmo', details:'Details', missions:'Missions'};
     html += '<div class="solar-tab' + (tab === t ? ' active' : '') + '" onclick="solarSetTab(\'' + t + '\')">' + names[t] + '</div>';
   });
   html += '</div>';
@@ -2184,9 +2184,18 @@ function solarShowInfoFor(p) {
     html += row('Temperature', i.temp);
     html += row('Atmosphere', i.atmosphere);
     html += row('Type', i.type);
+  } else if (tab === 'details') {
+    html += row('Type', i.type);
+    html += row('Composition', i.composition || 'N/A');
+    html += row('Surface', i.surface || 'N/A');
+    html += row('Discovery', i.discovered || 'N/A');
+    html += row('Discovered By', i.discoverer || 'N/A');
+    html += row('Escape Velocity', i.escapeVel || 'N/A');
+    html += row('Albedo', i.albedo || 'N/A');
+    html += row('Magnetic Field', i.magneticField || 'N/A');
+    if (i.notable) html += '<div style="margin-top:6px;font-size:10px;line-height:1.4;padding:6px;background:rgba(79,195,247,0.06);border-left:2px solid var(--cyan);border-radius:3px;color:var(--fg)">' + i.notable + '</div>';
   } else if (tab === 'missions') {
-    html += row('Notable Missions', i.missions);
-    html += '<div style="margin-top:8px;font-size:10px;line-height:1.5;padding:8px;background:rgba(79,195,247,0.06);border-left:2px solid ' + p.color + ';border-radius:3px;color:var(--teal)">' + i.fact + '</div>';
+    html += row('Notable Missions', i.missions);;font-size:10px;line-height:1.5;padding:8px;background:rgba(79,195,247,0.06);border-left:2px solid ' + p.color + ';border-radius:3px;color:var(--teal)">' + i.fact + '</div>';
   }
 
   if (tab !== 'missions') {
@@ -2212,6 +2221,11 @@ function lightenColor(hex, amt) {
   return '#' + [Math.min(255,r+amt),Math.min(255,g+amt),Math.min(255,b+amt)].map(function(c){return c.toString(16).padStart(2,'0');}).join('');
 }
 
+function darkenColor(hex, amt) {
+  var r=Math.max(0,parseInt(hex.slice(1,3),16)-amt), g=Math.max(0,parseInt(hex.slice(3,5),16)-amt), b=Math.max(0,parseInt(hex.slice(5,7),16)-amt);
+  return '#' + [r,g,b].map(function(c){return c.toString(16).padStart(2,'0');}).join('');
+}
+
 function planetTexture(color, size) {
   var key = 'pt_' + color + '_' + Math.round(size);
   if (!SOLAR._texCache) SOLAR._texCache = {};
@@ -2220,41 +2234,85 @@ function planetTexture(color, size) {
   var s = Math.ceil(size * 4);
   off.width = s; off.height = s;
   var octx = off.getContext('2d');
-  // Base gradient
-  var g = octx.createRadialGradient(s*0.3, s*0.3, 0, s/2, s/2, s/2);
-  g.addColorStop(0, lightenColor(color, 70));
-  g.addColorStop(0.4, lightenColor(color, 20));
-  g.addColorStop(0.8, color);
-  g.addColorStop(1, lightenColor(color, -40));
+  // 3D sphere base gradient (light from top-left)
+  var g = octx.createRadialGradient(s*0.25, s*0.25, s*0.05, s/2, s/2, s/2);
+  g.addColorStop(0, lightenColor(color, 80));
+  g.addColorStop(0.3, lightenColor(color, 30));
+  g.addColorStop(0.6, color);
+  g.addColorStop(0.85, darkenColor(color, 30));
+  g.addColorStop(1, darkenColor(color, 60));
   octx.fillStyle = g;
   octx.fillRect(0, 0, s, s);
-  // Noise bands
-  for (var i = 0; i < 80; i++) {
+  // Horizontal band patterns (gas giant style)
+  for (var i = 0; i < 150; i++) {
     var bandY = Math.random() * s;
-    var bandH = 1 + Math.random() * 3;
-    var alpha = 0.03 + Math.random() * 0.08;
-    octx.fillStyle = 'rgba(255,255,255,' + alpha + ')';
+    var bandH = 1 + Math.random() * 4;
+    var alpha = 0.02 + Math.random() * 0.06;
+    octx.fillStyle = 'rgba(255,255,255,' + alpha.toFixed(3) + ')';
     octx.fillRect(0, bandY, s, bandH);
+    // Dark bands
+    if (Math.random() > 0.6) {
+      octx.fillStyle = 'rgba(0,0,0,' + (alpha * 0.5).toFixed(3) + ')';
+      octx.fillRect(0, bandY + 2, s, bandH);
+    }
   }
+  // Surface speckles (for rocky planets)
+  for (var i = 0; i < 200; i++) {
+    var sx = Math.random() * s, sy = Math.random() * s;
+    var sr = 0.5 + Math.random() * 2;
+    var sa = 0.01 + Math.random() * 0.05;
+    if (Math.random() > 0.5) {
+      octx.fillStyle = 'rgba(255,255,255,' + sa.toFixed(3) + ')';
+    } else {
+      octx.fillStyle = 'rgba(0,0,0,' + sa.toFixed(3) + ')';
+    }
+    octx.beginPath(); octx.arc(sx, sy, sr, 0, Math.PI*2); octx.fill();
+  }
+  // Occasional larger features
+  for (var i = 0; i < 20; i++) {
+    var fx = Math.random() * s, fy = Math.random() * s;
+    var fr = 3 + Math.random() * 10;
+    octx.fillStyle = 'rgba(255,255,255,' + (0.03 + Math.random() * 0.04).toFixed(3) + ')';
+    octx.beginPath(); octx.arc(fx, fy, fr, 0, Math.PI*2); octx.fill();
+  }
+  // Clear cache every 100 textures to prevent memory bloat
+  if (Object.keys(SOLAR._texCache).length > 100) SOLAR._texCache = {};
   SOLAR._texCache[key] = off;
   return off;
 }
 
 function planetDraw(ctx, x, y, size, color) {
   var tex = planetTexture(color, size);
+  var ps = size;
+  // Shadow under planet (subtle)
+  ctx.shadowColor = 'rgba(0,0,0,0.4)';
+  ctx.shadowBlur = ps;
+  ctx.beginPath();
+  ctx.arc(x, y, ps, 0, Math.PI*2);
+  ctx.clip();
+  ctx.drawImage(tex, x - ps, y - ps, ps * 2, ps * 2);
+  ctx.restore();
+  ctx.shadowBlur = 0;
+  // 3D rim lighting effect (bright crescent on left edge)
   ctx.save();
   ctx.beginPath();
-  ctx.arc(x, y, size, 0, Math.PI*2);
+  ctx.arc(x, y, ps, 0, Math.PI*2);
   ctx.clip();
-  ctx.drawImage(tex, x - size, y - size, size * 2, size * 2);
+  var rim = ctx.createRadialGradient(x - ps*0.3, y - ps*0.15, ps*0.3, x, y, ps*1.1);
+  rim.addColorStop(0, 'rgba(255,255,255,0.12)');
+  rim.addColorStop(0.4, 'rgba(255,255,255,0.04)');
+  rim.addColorStop(0.7, 'rgba(255,255,255,0)');
+  rim.addColorStop(1, 'rgba(0,0,0,0.15)');
+  ctx.fillStyle = rim;
+  ctx.fillRect(x - ps, y - ps, ps*2, ps*2);
   ctx.restore();
-  // Atmosphere ring
-  var atmo = ctx.createRadialGradient(x - size*0.3, y - size*0.3, size*0.1, x, y, size*1.05);
-  atmo.addColorStop(0, 'rgba(255,255,255,0.05)');
-  atmo.addColorStop(0.7, 'rgba(255,255,255,0.02)');
+  // Thin atmosphere ring
+  var atmo = ctx.createRadialGradient(x - ps*0.2, y - ps*0.2, ps*0.7, x, y, ps*1.08);
+  atmo.addColorStop(0, 'rgba(255,255,255,0.03)');
+  atmo.addColorStop(0.5, 'rgba(255,255,255,0.01)');
   atmo.addColorStop(1, 'rgba(255,255,255,0)');
   ctx.fillStyle = atmo;
-  ctx.beginPath(); ctx.arc(x, y, size*1.05, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(x, y, ps*1.08, 0, Math.PI*2); ctx.fill();
 }
 
 function solarCycleFact() {

@@ -1,15 +1,12 @@
 {
-  "version": "2.13.0",
-  "name": "NexCampus v2.13.0",
+  "version": "2.14.0",
+  "name": "NexCampus v2.14.0",
   "update_url": "",
   "changelog": [
-    "3 new dwarf planets (Eris, Makemake, Haumea)",
-    "20 new solar system facts (54 total)",
-    "Keyboard navigation (arrow keys to cycle planets)",
-    "Tour Mode button \u2014 auto-navigates through all planets",
-    "Shooting stars (occasional streaks across the canvas)",
-    "More stars (800 + 400 Milky Way), 8 color tints",
-    "More nebula clouds (80)",
-    "5 dwarf planets total with full info panels"
+    "Detailed planet info: discovery, discoverer, composition, surface, escape velocity, albedo, magnetic field, notable features",
+    "New Details tab in planet info panel",
+    "Higher quality procedural planet textures (200+ speckles, 150+ bands, 20+ large features)",
+    "3D rim lighting and sphere shadow effects on planets",
+    "All 8 planets + 5 dwarf planets have complete detailed profiles"
   ]
 }
