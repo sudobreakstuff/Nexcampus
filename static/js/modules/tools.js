@@ -2221,11 +2221,6 @@ function lightenColor(hex, amt) {
   return '#' + [Math.min(255,r+amt),Math.min(255,g+amt),Math.min(255,b+amt)].map(function(c){return c.toString(16).padStart(2,'0');}).join('');
 }
 
-function darkenColor(hex, amt) {
-  var r=Math.max(0,parseInt(hex.slice(1,3),16)-amt), g=Math.max(0,parseInt(hex.slice(3,5),16)-amt), b=Math.max(0,parseInt(hex.slice(5,7),16)-amt);
-  return '#' + [r,g,b].map(function(c){return c.toString(16).padStart(2,'0');}).join('');
-}
-
 function planetTexture(color, size) {
   var key = 'pt_' + color + '_' + Math.round(size);
   if (!SOLAR._texCache) SOLAR._texCache = {};
@@ -2234,86 +2229,41 @@ function planetTexture(color, size) {
   var s = Math.ceil(size * 4);
   off.width = s; off.height = s;
   var octx = off.getContext('2d');
-  // 3D sphere base gradient (light from top-left)
-  var g = octx.createRadialGradient(s*0.25, s*0.25, s*0.05, s/2, s/2, s/2);
-  g.addColorStop(0, lightenColor(color, 80));
-  g.addColorStop(0.3, lightenColor(color, 30));
-  g.addColorStop(0.6, color);
-  g.addColorStop(0.85, darkenColor(color, 30));
-  g.addColorStop(1, darkenColor(color, 60));
+  // Base gradient
+  var g = octx.createRadialGradient(s*0.3, s*0.3, 0, s/2, s/2, s/2);
+  g.addColorStop(0, lightenColor(color, 70));
+  g.addColorStop(0.4, lightenColor(color, 20));
+  g.addColorStop(0.8, color);
+  g.addColorStop(1, lightenColor(color, -40));
   octx.fillStyle = g;
   octx.fillRect(0, 0, s, s);
-  // Horizontal band patterns (gas giant style)
-  for (var i = 0; i < 150; i++) {
+  // Noise bands
+  for (var i = 0; i < 80; i++) {
     var bandY = Math.random() * s;
-    var bandH = 1 + Math.random() * 4;
-    var alpha = 0.02 + Math.random() * 0.06;
-    octx.fillStyle = 'rgba(255,255,255,' + alpha.toFixed(3) + ')';
+    var bandH = 1 + Math.random() * 3;
+    var alpha = 0.03 + Math.random() * 0.08;
+    octx.fillStyle = 'rgba(255,255,255,' + alpha + ')';
     octx.fillRect(0, bandY, s, bandH);
-    // Dark bands
-    if (Math.random() > 0.6) {
-      octx.fillStyle = 'rgba(0,0,0,' + (alpha * 0.5).toFixed(3) + ')';
-      octx.fillRect(0, bandY + 2, s, bandH);
-    }
   }
-  // Surface speckles (for rocky planets)
-  for (var i = 0; i < 200; i++) {
-    var sx = Math.random() * s, sy = Math.random() * s;
-    var sr = 0.5 + Math.random() * 2;
-    var sa = 0.01 + Math.random() * 0.05;
-    if (Math.random() > 0.5) {
-      octx.fillStyle = 'rgba(255,255,255,' + sa.toFixed(3) + ')';
-    } else {
-      octx.fillStyle = 'rgba(0,0,0,' + sa.toFixed(3) + ')';
-    }
-    octx.beginPath(); octx.arc(sx, sy, sr, 0, Math.PI*2); octx.fill();
-  }
-  // Occasional larger features
-  for (var i = 0; i < 20; i++) {
-    var fx = Math.random() * s, fy = Math.random() * s;
-    var fr = 3 + Math.random() * 10;
-    octx.fillStyle = 'rgba(255,255,255,' + (0.03 + Math.random() * 0.04).toFixed(3) + ')';
-    octx.beginPath(); octx.arc(fx, fy, fr, 0, Math.PI*2); octx.fill();
-  }
-  // Clear cache every 100 textures to prevent memory bloat
-  if (Object.keys(SOLAR._texCache).length > 100) SOLAR._texCache = {};
   SOLAR._texCache[key] = off;
   return off;
 }
 
 function planetDraw(ctx, x, y, size, color) {
   var tex = planetTexture(color, size);
-  var ps = size;
-  ctx.save();
-  // Shadow under planet (subtle)
-  ctx.shadowColor = 'rgba(0,0,0,0.4)';
-  ctx.shadowBlur = ps;
-  ctx.beginPath();
-  ctx.arc(x, y, ps, 0, Math.PI*2);
-  ctx.clip();
-  ctx.drawImage(tex, x - ps, y - ps, ps * 2, ps * 2);
-  ctx.restore();
-  ctx.shadowBlur = 0;
-  // 3D rim lighting effect (bright crescent on left edge)
   ctx.save();
   ctx.beginPath();
-  ctx.arc(x, y, ps, 0, Math.PI*2);
+  ctx.arc(x, y, size, 0, Math.PI*2);
   ctx.clip();
-  var rim = ctx.createRadialGradient(x - ps*0.3, y - ps*0.15, ps*0.3, x, y, ps*1.1);
-  rim.addColorStop(0, 'rgba(255,255,255,0.12)');
-  rim.addColorStop(0.4, 'rgba(255,255,255,0.04)');
-  rim.addColorStop(0.7, 'rgba(255,255,255,0)');
-  rim.addColorStop(1, 'rgba(0,0,0,0.15)');
-  ctx.fillStyle = rim;
-  ctx.fillRect(x - ps, y - ps, ps*2, ps*2);
+  ctx.drawImage(tex, x - size, y - size, size * 2, size * 2);
   ctx.restore();
-  // Thin atmosphere ring
-  var atmo = ctx.createRadialGradient(x - ps*0.2, y - ps*0.2, ps*0.7, x, y, ps*1.08);
-  atmo.addColorStop(0, 'rgba(255,255,255,0.03)');
-  atmo.addColorStop(0.5, 'rgba(255,255,255,0.01)');
+  // Atmosphere ring
+  var atmo = ctx.createRadialGradient(x - size*0.3, y - size*0.3, size*0.1, x, y, size*1.05);
+  atmo.addColorStop(0, 'rgba(255,255,255,0.05)');
+  atmo.addColorStop(0.7, 'rgba(255,255,255,0.02)');
   atmo.addColorStop(1, 'rgba(255,255,255,0)');
   ctx.fillStyle = atmo;
-  ctx.beginPath(); ctx.arc(x, y, ps*1.08, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(x, y, size*1.05, 0, Math.PI*2); ctx.fill();
 }
 
 function solarCycleFact() {
