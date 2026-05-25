@@ -1,8 +1,8 @@
 {
-  "version": "2.7.1",
-  "name": "NexCampus v2.7.1",
+  "version": "2.7.2",
+  "name": "NexCampus v2.7.2",
   "update_url": "",
   "changelog": [
-    "Fixed Back to All Guides button in step-by-step view"
+    "Challenges now like TryHackMe \u2014 detailed objectives, backgrounds, key concepts, and richer templates"
   ]
 }

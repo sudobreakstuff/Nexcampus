@@ -689,16 +689,86 @@ var CODEPROJECTS = [
 ];
 
 var CODECHALLENGES = [
-  {id:'sum-two',title:'Sum Two Numbers',desc:'Write <code>add(a, b)</code> that returns the sum of two numbers.',template:'def add(a, b):\n    pass',tests:[['add(2, 3)', '5'],['add(-1, 1)', '0'],['add(0, 0)', '0'],['add(100, 200)', '300']],hints:['You just need to return the result of adding the two parameters.',"Use the + operator: a + b","Replace 'pass' with: return a + b"]},
-  {id:'is-even',title:'Is Even?',desc:'Write <code>is_even(n)</code> that returns True if n is even.',template:'def is_even(n):\n    pass',tests:[['is_even(4)', 'True'],['is_even(7)', 'False'],['is_even(0)', 'True']],hints:['An even number is divisible by 2 with no remainder.','Use the modulo operator: n % 2 gives you the remainder.','Return n % 2 == 0 — this will be True for even numbers.']},
-  {id:'factorial',title:'Factorial',desc:'Write <code>factorial(n)</code> that returns n! (0! = 1).',template:'def factorial(n):\n    pass',tests:[['factorial(1)', '1'],['factorial(5)', '120'],['factorial(0)', '1']],hints:['n! means n × (n-1) × (n-2) × ... × 1. For example, 5! = 5×4×3×2×1 = 120.','Use a variable set to 1, then multiply by numbers from 1 to n in a loop.','result = 1; for i in range(1, n+1): result *= i; return result']},
-  {id:'max-of-three',title:'Max of Three',desc:'Write <code>max_of_three(a,b,c)</code> that returns the largest.',template:'def max_of_three(a,b,c):\n    pass',tests:[['max_of_three(1,2,3)', '3'],['max_of_three(5,3,4)', '5'],['max_of_three(-1,-2,-3)', '-1']],hints:['Compare the first two numbers, then compare the winner with the third.','Use if/elif: if a > b and a > c: return a','Or just use the built-in: return max(a, b, c)']},
-  {id:'palindrome',title:'Palindrome Check',desc:'Write <code>is_palindrome(s)</code> — returns True if s reads the same backward.',template:'def is_palindrome(s):\n    pass',tests:[['is_palindrome("racecar")', 'True'],['is_palindrome("hello")', 'False'],['is_palindrome("a")', 'True']],hints:['A palindrome reads the same forward and backward. Compare the string with itself reversed.','To reverse a string in Python, use slicing: s[::-1]','return s == s[::-1]']},
-  {id:'fizzbuzz',title:'FizzBuzz',desc:'Write <code>fizzbuzz(n)</code>. Return "Fizz" if divisible by 3, "Buzz" if 5, "FizzBuzz" if both.',template:'def fizzbuzz(n):\n    pass',tests:[['fizzbuzz(3)', 'Fizz'],['fizzbuzz(5)', 'Buzz'],['fizzbuzz(15)', 'FizzBuzz'],['fizzbuzz(7)', '7']],hints:['Check the most specific case first (divisible by both 3 and 5 = divisible by 15).','Use modulo: if n % 15 == 0, elif n % 3 == 0, elif n % 5 == 0.','Convert the number to a string for the else case: return str(n)']},
-  {id:'count-vowels',title:'Count Vowels',desc:'Write <code>count_vowels(s)</code> that counts a,e,i,o,u (case-insensitive).',template:'def count_vowels(s):\n    pass',tests:[['count_vowels("hello")', '2'],['count_vowels("AEIOU")', '5'],['count_vowels("sky")', '0']],hints:['Convert the string to lowercase first so you only check one case.','Loop through each character and check if it is in a string of vowels.','return sum(1 for c in s.lower() if c in "aeiou")']},
-  {id:'fibonacci',title:'Fibonacci',desc:'Write <code>fib_list(n)</code> returning first n Fibonacci numbers.',template:'def fib_list(n):\n    pass',tests:[['fib_list(1)', '[0]'],['fib_list(5)', '[0, 1, 1, 2, 3]'],['fib_list(7)', '[0, 1, 1, 2, 3, 5, 8]']],hints:['Start with [0, 1]. Each next number is the sum of the last two.','Use a while loop that continues until the list has n items.','while len(result) < n: result.append(result[-1] + result[-2])']},
-  {id:'reverse-string',title:'Reverse String',desc:'Write <code>reverse_string(s)</code> that reverses a string.',template:'def reverse_string(s):\n    pass',tests:[['reverse_string("hello")', 'olleh'],['reverse_string("python")', 'nohtyp'],['reverse_string("a")', 'a']],hints:['Python strings can be sliced with a step parameter.','s[::-1] steps backwards through the string.','return s[::-1]']},
-  {id:'temperature',title:'Celsius to Fahrenheit',desc:'Write <code>c_to_f(c)</code> converting Celsius to Fahrenheit: F = C * 9/5 + 32.',template:'def c_to_f(c):\n    pass',tests:[['c_to_f(0)', '32.0'],['c_to_f(100)', '212.0'],['c_to_f(-40)', '-40.0']],hints:['The formula is: multiply by 9, divide by 5, then add 32.','Use float division: c * 9 / 5 + 32','return c * 9 / 5 + 32']}
+  {
+    id:'sum-two',
+    title:'Mission 1: The Adder',
+    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Create a function that adds two numbers together.<br><br><b>📖 Background:</b> Functions are the building blocks of programming. They take inputs (called parameters), do something with them, and return a result. Think of a function like a vending machine: you put money in (input), it processes, and gives you a snack (output).<br><br><b>🧠 What You\'ll Learn:</b> Function definition with <code>def</code>, parameters, return values, and basic arithmetic.</div>',
+    template:'def add(a, b):\n    # a and b are your two numbers\n    # Return their sum\n    pass\n\n# After you finish, the grader will test your function\n# with different inputs like add(2, 3) and add(-1, 1)',
+    tests:[['add(2, 3)', '5'],['add(-1, 1)', '0'],['add(0, 0)', '0'],['add(100, 200)', '300']],
+    hints:['You just need to return the result of adding the two parameters.',"Use the + operator: return a + b","Replace 'pass' with: return a + b"]
+  },
+  {
+    id:'is-even',
+    title:'Mission 2: Even Stevens',
+    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Write a function that checks if a number is even.<br><br><b>📖 Background:</b> An even number is divisible by 2 with no remainder. The modulo operator (%) gives you the remainder after division. For example, 7 % 2 = 1 (7 divided by 2 leaves remainder 1). If the remainder is 0, the number is even!<br><br><b>🧠 Key Concept:</b> <code>n % 2 == 0</code> is True for even numbers. This is a Boolean expression — it evaluates to True or False. Your function should return this Boolean value.</div>',
+    template:'def is_even(n):\n    # n is any integer\n    # Return True if n is even, False otherwise\n    # Hint: Use the modulo operator %\n    pass',
+    tests:[['is_even(4)', 'True'],['is_even(7)', 'False'],['is_even(0)', 'True'],['is_even(1)', 'False']],
+    hints:['An even number is divisible by 2 with no remainder.','Use the modulo operator: n % 2 gives you the remainder.','Return n % 2 == 0 — this will be True for even numbers.']
+  },
+  {
+    id:'factorial',
+    title:'Mission 3: Factorial Factory',
+    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Calculate n! (n factorial).<br><br><b>📖 Background:</b> Factorial is a fundamental math concept used in probability, combinatorics, and algorithms. n! = n × (n-1) × (n-2) × ... × 1. For example, 5! = 5×4×3×2×1 = 120. Special case: 0! = 1 (by definition).<br><br><b>🧠 Key Concept:</b> Use a loop that multiplies numbers together. Start with result = 1, then multiply by 1, 2, 3, ..., n.</div>',
+    template:'def factorial(n):\n    # n is a non-negative integer\n    # Return n! (n factorial)\n    # Remember: 0! = 1\n    pass',
+    tests:[['factorial(0)', '1'],['factorial(1)', '1'],['factorial(5)', '120'],['factorial(3)', '6']],
+    hints:['n! means multiply all numbers from 1 to n. 5! = 5×4×3×2×1 = 120.','Start with result = 1, then loop from 1 to n, multiplying each time.','result = 1\nfor i in range(1, n+1):\n    result *= i\nreturn result']
+  },
+  {
+    id:'max-of-three',
+    title:'Mission 4: The Decider',
+    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Find the largest of three numbers.<br><br><b>📖 Background:</b> Comparison logic is essential in programming. Every time an app sorts a list, picks the best score, or finds the shortest route — it\'s comparing values. You\'ll use <code>if/elif</code> statements (conditional branching) to make decisions.<br><br><b>🧠 Key Concept:</b> Python\'s built-in <code>max()</code> function can do this instantly. But building it yourself teaches you how comparison logic works under the hood.</div>',
+    template:'def max_of_three(a, b, c):\n    # a, b, c are three numbers\n    # Return whichever is largest\n    # Approach 1: Use if/elif comparisons\n    # Approach 2: Use Python\'s max() function\n    pass',
+    tests:[['max_of_three(1,2,3)', '3'],['max_of_three(5,3,4)', '5'],['max_of_three(-1,-2,-3)', '-1'],['max_of_three(7,7,1)', '7']],
+    hints:['Compare a with b: find the larger. Then compare that with c.','Use nested if statements or Python\'s max()','return max(a, b, c) — simple and clean!']
+  },
+  {
+    id:'palindrome',
+    title:'Mission 5: Mirror Words',
+    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Check if a word reads the same backward as forward.<br><br><b>📖 Background:</b> Palindromes are words or phrases that are identical when reversed. "racecar", "madam", and "a" are palindromes. "hello" is not. This is a classic interview question that tests your string manipulation skills.<br><br><b>🧠 Key Concept:</b> Python has a powerful slicing feature: <code>s[::-1]</code> reverses any string. The slice <code>[start:stop:step]</code> with step=-1 goes backwards!</div>',
+    template:'def is_palindrome(s):\n    # s is any string\n    # Return True if s reads the same forward and backward\n    # Hint: Try reversing the string first\n    pass',
+    tests:[['is_palindrome("racecar")', 'True'],['is_palindrome("hello")', 'False'],['is_palindrome("a")', 'True'],['is_palindrome("madam")', 'True']],
+    hints:['A palindrome reads the same backward and forward. "racecar" reversed is still "racecar".','To reverse a string: s[::-1] — the ::-1 means step backwards.','return s == s[::-1]']
+  },
+  {
+    id:'fizzbuzz',
+    title:'Mission 6: The FizzBuzz Interview',
+    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Implement the classic FizzBuzz test.<br><br><b>📖 Background:</b> FizzBuzz is THE most famous coding interview question. It filters out candidates who can\'t write basic logic. The rules: if a number is divisible by 3, say "Fizz". If divisible by 5, say "Buzz". If divisible by both, say "FizzBuzz". Otherwise, just say the number.<br><br><b>🧠 Key Concept:</b> Check the MOST specific condition first (divisible by both = divisible by 15). Then check less specific conditions. This is called "ordering your conditions."</div>',
+    template:'def fizzbuzz(n):\n    # n is a positive integer\n    # Return "Fizz" if divisible by 3\n    # Return "Buzz" if divisible by 5\n    # Return "FizzBuzz" if divisible by both\n    # Otherwise return n as a string\n    # IMPORTANT: Check divisible by 15 FIRST\n    pass',
+    tests:[['fizzbuzz(3)', 'Fizz'],['fizzbuzz(5)', 'Buzz'],['fizzbuzz(15)', 'FizzBuzz'],['fizzbuzz(7)', '7']],
+    hints:['Check the most specific case first: divisible by both 3 AND 5 means divisible by 15.','Use modulo: if n % 15 == 0 return "FizzBuzz", elif n % 3 == 0 return "Fizz", elif n % 5 == 0 return "Buzz".','Convert n to string for the else: return str(n)']
+  },
+  {
+    id:'count-vowels',
+    title:'Mission 7: Vowel Counter',
+    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Count how many vowels are in a string.<br><br><b>📖 Background:</b> Text analysis is everywhere — search engines, spell checkers, autocomplete. Counting characters is the first step. Vowels (a, e, i, o, u) are the most common letters in English. Your function should be case-insensitive (treat \'A\' and \'a\' the same).<br><br><b>🧠 Key Concept:</b> Convert to lowercase first (<code>s.lower()</code>), then loop through each character checking if it\'s in a set of vowels.</div>',
+    template:'def count_vowels(s):\n    # s is any string (may contain uppercase)\n    # Count and return the number of vowels (a, e, i, o, u)\n    # Make it case-insensitive!\n    pass',
+    tests:[['count_vowels("hello")', '2'],['count_vowels("AEIOU")', '5'],['count_vowels("sky")', '0'],['count_vowels("Python")', '1']],
+    hints:['Convert to lowercase first: s = s.lower()','Check each character: if c in "aeiou": count += 1','return sum(1 for c in s.lower() if c in "aeiou")']
+  },
+  {
+    id:'fibonacci',
+    title:'Mission 8: The Golden Sequence',
+    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Generate the first n Fibonacci numbers.<br><br><b>📖 Background:</b> The Fibonacci sequence appears everywhere in nature — flower petals, pinecones, spiral galaxies. Each number is the sum of the previous two: 0, 1, 1, 2, 3, 5, 8, 13, 21... It starts with 0 and 1. This sequence is used in algorithms, trading strategies, and even art.<br><br><b>🧠 Key Concept:</b> Build the list step by step. Always look at the last two numbers to generate the next one.</div>',
+    template:'def fib_list(n):\n    # n is how many Fibonacci numbers to generate\n    # Return a list of the first n Fibonacci numbers\n    # fib(1) = [0], fib(2) = [0, 1], fib(5) = [0, 1, 1, 2, 3]\n    pass',
+    tests:[['fib_list(1)', '[0]'],['fib_list(2)', '[0, 1]'],['fib_list(5)', '[0, 1, 1, 2, 3]'],['fib_list(7)', '[0, 1, 1, 2, 3, 5, 8]']],
+    hints:['Start the list with [0, 1]. Each new number is the sum of the last two.','Use a loop: while len(result) < n: result.append(result[-1] + result[-2])','Edge case: if n == 1, return [0]; if n == 0, return []']
+  },
+  {
+    id:'reverse-string',
+    title:'Mission 9: String Reverser',
+    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Reverse any string completely.<br><br><b>📖 Background:</b> String reversal is a fundamental operation. It\'s used in DNA sequencing, cryptography, and checksums. Understanding string slicing is a Python superpower — once you know <code>[start:stop:step]</code>, you can extract any part of any sequence.<br><br><b>🧠 Key Concept:</b> A negative step in a slice walks backwards. <code>s[::-1]</code> means "from start to end, step -1" — which reverses the string.</div>',
+    template:'def reverse_string(s):\n    # s is any string\n    # Return s reversed (e.g., "hello" -> "olleh")\n    # Python makes this very easy!\n    pass',
+    tests:[['reverse_string("hello")', 'olleh'],['reverse_string("Python")', 'nohtyP'],['reverse_string("a")', 'a'],['reverse_string("racecar")', 'racecar']],
+    hints:['Python slices can take a step parameter.','s[::-1] means "step by -1" which goes backward.','return s[::-1]']
+  },
+  {
+    id:'temperature',
+    title:'Mission 10: Global Weather',
+    desc:'<div style="font-size:10px;line-height:1.6;color:var(--fg);margin-bottom:8px"><b>🎯 Objective:</b> Convert Celsius to Fahrenheit.<br><br><b>📖 Background:</b> Most of the world uses Celsius, but the US uses Fahrenheit. Temperature conversion is one of the most practical programming tasks. The formula is: F = (C × 9/5) + 32. That\'s it! This teaches you about mathematical operations in Python and function return values.<br><br><b>🧠 Key Concept:</b> Python follows order of operations (multiplication before addition), so C × 9/5 + 32 is calculated correctly without extra parentheses. But adding parentheses makes it clearer: (C * 9/5) + 32.</div>',
+    template:'def c_to_f(c):\n    # c is temperature in Celsius\n    # Convert to Fahrenheit: F = (C × 9/5) + 32\n    # Return the result\n    pass',
+    tests:[['c_to_f(0)', '32.0'],['c_to_f(100)', '212.0'],['c_to_f(-40)', '-40.0'],['c_to_f(37)', '98.6']],
+    hints:['The formula is: multiply by 9, divide by 5, add 32.','return c * 9 / 5 + 32','Test it: water freezes at 0°C = 32°F, boils at 100°C = 212°F']
+  }
 ];
 
 function clInitChallenges() {
