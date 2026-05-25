@@ -497,14 +497,12 @@ function initCodeLab() {
   clRenderGuides();
   clSearchDict();
   clRenderProjects();
-  clInitChallenges();
-  window._clChallengesInit = true;
 }
 
 function clSwitchTab(tab) {
   currentClTab = tab;
   // Hide all content panels
-  ['guides','dictionary','projects','challenges'].forEach(function(t) {
+  ['guides','dictionary','projects'].forEach(function(t) {
     var c = $('cl-' + t);
     if (c) c.style.display = 'none';
   });
@@ -516,11 +514,6 @@ function clSwitchTab(tab) {
     var ontxt = b.getAttribute('onclick') || '';
     b.classList.toggle('active', ontxt.indexOf("'" + tab + "'") !== -1);
   });
-  // Lazy-init challenges
-  if (tab === 'challenges' && !window._clChallengesInit) {
-    clInitChallenges();
-    window._clChallengesInit = true;
-  }
 }
 
 function clLoadGuide(id) {
@@ -680,25 +673,7 @@ function clBackToProjects() {
   if (listEl) listEl.style.display = 'block';
 }
 
-function clInitChallenges() {
-  var listEl = $('cl-challenges-list');
-  if (!listEl) return;
-  var html = '';
-  CODECHALLENGES.forEach(function(c) {
-    html += '<div style="padding:6px 8px;border-bottom:1px solid var(--border);cursor:pointer" onclick="clLoadChallenge(\'' + c.id + '\')"><div style="font-size:11px;color:var(--fg)">' + escapeHtml(c.title) + '</div></div>';
-  });
-  listEl.innerHTML = html || '<div style="color:var(--fg-dim);font-size:10px;padding:8px">No challenges loaded.</div>';
-}
 
-function clBackToChallenges() {
-  var viewEl = $('cl-challenge-view');
-  var descEl = $('cl-challenge-desc');
-  var listEl = $('cl-challenges-list');
-  if (viewEl) viewEl.style.display = 'none';
-  if (descEl) descEl.style.display = 'none';
-  if (listEl) listEl.style.display = 'block';
-  window._clChallenge = null;
-}
 
 function clLoadToEditor() {
   var editor = $('cl-code-input');
@@ -963,148 +938,5 @@ function clSetLanguage(lang) {
   }
 }
 
-var CODECHALLENGES = [
-  {
-    id:'sum-two',
-    title:'Sum Two Numbers',
-    desc:'Write a function <code>add(a, b)</code> that returns the sum of two numbers.',
-    template:'def add(a, b):\n    # Your code here\n    pass',
-    tests:[
-      ['add(2, 3)', '5'],
-      ['add(-1, 1)', '0'],
-      ['add(0, 0)', '0'],
-      ['add(100, 200)', '300']
-    ],
-    hint:'Return a + b'
-  },
-  {
-    id:'is-even',
-    title:'Is Even?',
-    desc:'Write a function <code>is_even(n)</code> that returns <code>True</code> if n is even.',
-    template:'def is_even(n):\n    # Your code here\n    pass',
-    tests:[['is_even(4)', 'True'], ['is_even(7)', 'False'], ['is_even(0)', 'True'], ['is_even(1)', 'False']],
-    hint:'Use the modulo operator %'
-  },
-  {
-    id:'factorial',
-    title:'Factorial',
-    desc:'Write a function <code>factorial(n)</code> that returns n! (n factorial). n! = n × (n-1) × ... × 1.',
-    template:'def factorial(n):\n    # Your code here\n    pass',
-    tests:[['factorial(1)', '1'], ['factorial(5)', '120'], ['factorial(0)', '1'], ['factorial(3)', '6']],
-    hint:'Use a loop or recursion. 0! = 1'
-  },
-  {
-    id:'count-vowels',
-    title:'Count Vowels',
-    desc:'Write a function <code>count_vowels(s)</code> that returns the number of vowels in a string.',
-    template:'def count_vowels(s):\n    # Your code here\n    pass',
-    tests:[['count_vowels("hello")', '2'], ['count_vowels("sky")', '0'], ['count_vowels("AEIOU")', '5'], ['count_vowels("python")', '1']],
-    hint:'Convert to lowercase, check each character'
-  },
-  {
-    id:'max-of-three',
-    title:'Max of Three',
-    desc:'Write a function <code>max_of_three(a, b, c)</code> that returns the largest of three numbers.',
-    template:'def max_of_three(a, b, c):\n    # Your code here\n    pass',
-    tests:[['max_of_three(1, 2, 3)', '3'], ['max_of_three(5, 3, 4)', '5'], ['max_of_three(-1, -2, -3)', '-1'], ['max_of_three(7, 7, 1)', '7']],
-    hint:'Use if/elif or max()'
-  },
-  {
-    id:'palindrome',
-    title:'Palindrome Check',
-    desc:'Write a function <code>is_palindrome(s)</code> that returns <code>True</code> if s reads the same forwards and backwards.',
-    template:'def is_palindrome(s):\n    # Your code here\n    pass',
-    tests:[['is_palindrome("racecar")', 'True'], ['is_palindrome("hello")', 'False'], ['is_palindrome("madam")', 'True'], ['is_palindrome("a")', 'True']],
-    hint:'Compare s with s[::-1] (reversed string)'
-  },
-  {
-    id:'fizzbuzz',
-    title:'FizzBuzz',
-    desc:'Write <code>fizzbuzz(n)</code>. Return "Fizz" if divisible by 3, "Buzz" if by 5, "FizzBuzz" if both, else n as string.',
-    template:'def fizzbuzz(n):\n    # Your code here\n    pass',
-    tests:[['fizzbuzz(3)', 'Fizz'], ['fizzbuzz(5)', 'Buzz'], ['fizzbuzz(15)', 'FizzBuzz'], ['fizzbuzz(7)', '7']],
-    hint:'Check divisible by 15 first, then 3, then 5'
-  },
-  {
-    id:'fibonacci',
-    title:'Fibonacci List',
-    desc:'Write <code>fib_list(n)</code> that returns the first n Fibonacci numbers as a list.',
-    template:'def fib_list(n):\n    # Your code here\n    pass',
-    tests:[['fib_list(1)', '[0]'], ['fib_list(5)', '[0, 1, 1, 2, 3]'], ['fib_list(2)', '[0, 1]'], ['fib_list(7)', '[0, 1, 1, 2, 3, 5, 8]']],
-    hint:'Start with [0, 1], keep adding sum of last two'
-  }
-];
 
-function clLoadChallenge(id) {
-  var c = null;
-  for (var i = 0; i < CODECHALLENGES.length; i++) {
-    if (CODECHALLENGES[i].id === id) { c = CODECHALLENGES[i]; break; }
-  }
-  if (!c) return;
-  var descEl = $('cl-challenge-desc');
-  if (descEl) descEl.innerHTML = '<div style="font-size:12px;color:var(--fg);font-weight:bold;margin-bottom:4px">' + escapeHtml(c.title) + '</div><div style="font-size:10px;color:var(--fg-dim);margin-bottom:8px">' + c.desc + '</div>';
-  var viewEl = $('cl-challenge-view');
-  if (viewEl) viewEl.innerHTML = '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px;font-size:10px;color:var(--fg);margin:0">' + escapeHtml(c.template) + '</pre>';
-  var editor = $('cl-code-input');
-  if (editor) editor.value = c.template;
-  window._clChallenge = c;
-  var guideEl = $('cl-guide-view');
-  var dictEl = $('cl-dict-view');
-  var projectEl = $('cl-project-view');
-  var listEl = $('cl-challenges-list');
-  var challengeView = $('cl-challenge-view');
-  var challengeDesc = $('cl-challenge-desc');
-  if (listEl) listEl.style.display = 'block';
-  if (guideEl) guideEl.style.display = 'none';
-  if (dictEl) dictEl.style.display = 'none';
-  if (projectEl) projectEl.style.display = 'none';
-  if (challengeView) challengeView.style.display = 'block';
-  if (challengeDesc) challengeDesc.style.display = 'block';
-  showNotification('Challenge: ' + c.title, 2000, 'info');
-}
 
-function clGradeChallenge() {
-  var c = window._clChallenge;
-  if (!c) { showNotification('Load a challenge first!', 2000, 'error'); return; }
-  var editor = $('cl-code-input');
-  if (!editor) return;
-  var code = editor.value;
-  var tests = c.tests;
-  var testCode = code + '\n\n# test runner\n';
-  for (var i = 0; i < tests.length; i++) {
-    var expr = tests[i][0];
-    var expected = tests[i][1];
-    testCode += 'try:\n';
-    testCode += '    __r = ' + expr + '\n';
-    testCode += '    __e = ' + expected + '\n';
-    testCode += '    __ok = str(__r) == str(__e)\n';
-    testCode += '    print("TEST ' + (i+1) + ': " + ("PASS" if __ok else "FAIL") + " (got " + repr(__r) + ", want " + repr(__e) + ")")\n';
-    testCode += 'except Exception as __x:\n';
-    testCode += '    print("TEST ' + (i+1) + ': ERROR - " + str(__x))\n';
-  }
-  var output = $('cl-output');
-  if (!output) return;
-  output.innerHTML = '<div style="color:var(--fg-dim);font-size:11px">Running tests...</div>';
-  fetch('/api/code/run', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({code: testCode, language: 'python'})
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(d) {
-    var html = '';
-    var passed = 0;
-    var lines = (d.stdout || '').split('\n');
-    lines.forEach(function(line) {
-      if (line.indexOf('✅') !== -1) { html += '<div style="color:var(--teal);font-size:11px;padding:2px 0">' + escapeHtml(line) + '</div>'; passed++; }
-      else if (line.indexOf('❌') !== -1) { html += '<div style="color:var(--amber);font-size:11px;padding:2px 0">' + escapeHtml(line) + '</div>'; }
-    });
-    if (d.stderr) html += '<div style="color:var(--amber);font-size:10px;margin-top:4px">' + escapeHtml(d.stderr) + '</div>';
-    html += '<div style="margin-top:6px;font-size:12px;font-weight:bold;color:' + (passed === tests.length ? 'var(--teal)' : 'var(--amber)') + '">Score: ' + passed + '/' + tests.length + '</div>';
-    if (passed === tests.length) html += '<div style="color:var(--teal);font-size:11px">🎉 All tests passed!</div>';
-    output.innerHTML = html;
-  })
-  .catch(function(e) {
-    output.innerHTML = '<div style="color:var(--red);font-size:11px">Error: ' + escapeHtml(e.message) + '</div>';
-  });
-}

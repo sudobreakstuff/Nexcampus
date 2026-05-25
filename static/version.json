@@ -1,6 +1,6 @@
 {
-  "version": "2.11.1",
-  "name": "NexCampus v2.11.0",
+  "version": "2.11.2",
+  "name": "NexCampus v2.11.2",
   "update_url": "",
   "changelog": [
     "Tool Registry plugin system \u2014 safe tool additions without breaking existing code",

@@ -497,7 +497,6 @@
               <button class="cl-sb-btn active" onclick="try{clSwitchTab('guides')}catch(e){alert('Guides error: '+e.message)}">Guides</button>
               <button class="cl-sb-btn" onclick="try{clSwitchTab('dictionary')}catch(e){alert('Dict error: '+e.message)}">Dictionary</button>
               <button class="cl-sb-btn" onclick="try{clSwitchTab('projects')}catch(e){alert('Projects error: '+e.message)}">Projects</button>
-              <button class="cl-sb-btn" onclick="try{clSwitchTab('challenges')}catch(e){alert('Challenges error: '+e.message)}" style="color:var(--amber)">★ Challenges</button>
             </div>
             <div id="cl-guides" class="cl-sidebar-content">
               <div id="cl-guides-list"></div>
@@ -521,18 +520,6 @@
                 </div>
                 <div id="cl-project-description"></div>
                 <div id="cl-project-content" class="cl-guide-content"></div>
-              </div>
-            </div>
-            <div id="cl-challenges" class="cl-sidebar-content" style="display:none">
-              <div id="cl-challenges-list"></div>
-              <div id="cl-challenge-view" style="display:none">
-                <div style="padding:8px 0">
-                  <button class="nt-btn" onclick="clBackToChallenges()" style="font-size:10px">← Back</button>
-                  <button class="nt-btn" onclick="clLoadToEditor()" style="font-size:10px;margin-left:4px">Load Code</button>
-                  <button class="nt-btn" onclick="clGradeChallenge()" style="font-size:10px;margin-left:4px;color:var(--teal)">▶ Grade</button>
-                </div>
-                <div id="cl-challenge-desc"></div>
-                <div id="cl-challenge-content" class="cl-guide-content"></div>
               </div>
             </div>
           </div>
@@ -818,7 +805,6 @@
             <li><strong>Programming Dictionary</strong> — 85+ searchable coding terms and definitions</li>
             <li><strong>Practice Projects</strong> — 11 projects with starter code and hints (Calculator, Hangman, Tic-Tac-Toe, etc.)</li>
             <li><strong>Code Snippets</strong> — Quick-insert templates for functions, classes, loops, and more</li>
-            <li><strong>Auto-Graded Challenges</strong> — 8 Python challenges with test cases and instant scoring</li>
           </ul>
         </div>
 
@@ -841,7 +827,6 @@
         <div class="about-block">
           <div class="about-block-title">Roadmap</div>
           <ul style="padding-left:20px;font-size:11px;line-height:1.7;color:var(--fg)">
-            <li>More Code Lab guides and auto-graded challenges</li>
             <li>Concept tree generator from documents</li>
             <li>Dedicated Android native app (coming)</li>
             <li>More study tools (mind maps, concept trees)</li>
@@ -906,7 +891,7 @@ registerTool({
 
     var from = document.createElement('select');
     from.id = 'ru-from';
-    from.style.cssText = 'padding:4px 8px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px;font-size:11px';
+    from.style.cssText = 'padding:4px 8px;background:#1a2030;border:1px solid var(--border);color:#d4dcec;border-radius:3px;font-size:11px';
     var units = ['m','km','cm','mm','in','ft','yd','mi'];
     units.forEach(function(u) { var o = document.createElement('option'); o.value = u; o.textContent = u; from.appendChild(o); });
     from.addEventListener('change', function() { ruConvert(); });
@@ -917,7 +902,7 @@ registerTool({
     row.appendChild(lbl);
 
     var to = document.createElement('select');
-    to.id = 'ru-to'; to.style.cssText = from.style.cssText;
+    to.id = 'ru-to'; to.style.cssText = 'padding:4px 8px;background:#1a2030;border:1px solid var(--border);color:#d4dcec;border-radius:3px;font-size:11px';
     units.forEach(function(u) { var o = document.createElement('option'); o.value = u; o.textContent = u; to.appendChild(o); });
     to.value = 'ft';
     to.addEventListener('change', function() { ruConvert(); });
@@ -929,7 +914,7 @@ registerTool({
     row.appendChild(swap);
 
     var cat = document.createElement('select');
-    cat.id = 'ru-cat'; cat.style.cssText = 'padding:4px 8px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px;font-size:11px';
+    cat.id = 'ru-cat'; cat.style.cssText = 'padding:4px 8px;background:#1a2030;border:1px solid var(--border);color:#d4dcec;border-radius:3px;font-size:11px';
     [{v:'length',n:'Length'},{v:'weight',n:'Weight'},{v:'volume',n:'Volume'},{v:'temp',n:'Temperature'},{v:'speed',n:'Speed'}].forEach(function(x) {
       var o = document.createElement('option'); o.value = x.v; o.textContent = x.n; cat.appendChild(o);
     });
