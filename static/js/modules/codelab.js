@@ -9,6 +9,12 @@ var CODEGUIDES = [
     id:'python-intro',
     title:'Python Basics',
     category:'Python',
+    steps: [
+      {title:'Welcome to Python!',text:'Hey there! Python is a programming language that reads almost like English. It\'s used for websites, AI, rocket science — but right now, we\'re starting simple: writing code that actually runs. Don\'t just read — type every example in the code editor on the right. Change things. Break things. That\'s how you learn.',code:'print("Hello, World!")',try:'Change the message to include your name: print("Hello, Alex!")',solution:'print("Hello, Alex!")'},
+      {title:'Leave Yourself Notes',text:'Use # to write comments. Comments are notes Python ignores — they\'re for humans (including future you). Good programmers comment their code so they remember what it does months later.',code:'# This is a comment — Python ignores this line\nprint("Hello!")  # Comments can go after code too',try:'Add a comment above your Hello World explaining what it does',solution:'# Print a greeting\nprint("Hello, Alex!")'},
+      {title:'Python is a Calculator',text:'Python does math faster than any calculator. Try addition (+), subtraction (-), multiplication (*), division (/), floor division (//), modulus (%), and exponents (**).',code:'print(2 + 3)    # 5\nprint(10 - 4)   # 6\nprint(3 * 7)    # 21\nprint(15 / 4)   # 3.75\nprint(15 // 4)  # 3 (floor)\nprint(15 % 4)   # 3 (remainder)\nprint(2 ** 3)   # 8 (power)',try:'Calculate how many seconds are in a day: 24 * 60 * 60. Print the result.',solution:'seconds = 24 * 60 * 60\nprint("Seconds in a day:", seconds)'},
+      {title:'Need Help?',text:'Stuck? Python has built-in help. Type help(print) to see what print() can do. You can also try dir(str) to list all methods for strings. Python\'s documentation is always one command away.',code:'help(print)\n# Try: dir(str)',try:'Use help(print) to see what the print function can do. Find one parameter you didn\'t know about!',solution:'help(print)  # Shows all the things print() can do'}
+    ],
     content:'<h3 style="color:var(--cyan);margin:0 0 10px;font-size:14px">Welcome to Python! Let\\\'s Write Some Code!</h3>'
       + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Hey there! Welcome to Python — a programming language that reads almost like English. Created by Guido van Rossum in 1991, Python is designed to be <em>fun</em> to write and easy to read. It\\\'s used for everything from websites to AI to rocket science. But right now, we\\\'re going to start simple: writing code that actually runs.</p>'
       + '<p style="margin:0 0 10px;color:var(--fg);font-size:11px;line-height:1.7">Here\\\'s the deal: don\\\'t just read this guide. Type the examples in the code runner below. Change them. Break them. That\\\'s how you actually learn. Ready? Let\\\'s go!</p>'
@@ -683,16 +689,16 @@ var CODEPROJECTS = [
 ];
 
 var CODECHALLENGES = [
-  {id:'sum-two',title:'Sum Two Numbers',desc:'Write <code>add(a, b)</code> that returns the sum of two numbers.',template:'def add(a, b):\n    pass',tests:[['add(2, 3)', '5'],['add(-1, 1)', '0'],['add(0, 0)', '0'],['add(100, 200)', '300']],hint:'Return a + b'},
-  {id:'is-even',title:'Is Even?',desc:'Write <code>is_even(n)</code> that returns True if n is even.',template:'def is_even(n):\n    pass',tests:[['is_even(4)', 'True'],['is_even(7)', 'False'],['is_even(0)', 'True']],hint:'Use n % 2 == 0'},
-  {id:'factorial',title:'Factorial',desc:'Write <code>factorial(n)</code> that returns n! (0! = 1).',template:'def factorial(n):\n    pass',tests:[['factorial(1)', '1'],['factorial(5)', '120'],['factorial(0)', '1']],hint:'Use a loop or recursion'},
-  {id:'max-of-three',title:'Max of Three',desc:'Write <code>max_of_three(a,b,c)</code> that returns the largest.',template:'def max_of_three(a,b,c):\n    pass',tests:[['max_of_three(1,2,3)', '3'],['max_of_three(5,3,4)', '5'],['max_of_three(-1,-2,-3)', '-1']],hint:'Compare with if/elif or use max()'},
-  {id:'palindrome',title:'Palindrome Check',desc:'Write <code>is_palindrome(s)</code> — returns True if s reads the same backward.',template:'def is_palindrome(s):\n    pass',tests:[['is_palindrome("racecar")', 'True'],['is_palindrome("hello")', 'False'],['is_palindrome("a")', 'True']],hint:'Compare s with s[::-1]'},
-  {id:'fizzbuzz',title:'FizzBuzz',desc:'Write <code>fizzbuzz(n)</code>. Return "Fizz" if divisible by 3, "Buzz" if 5, "FizzBuzz" if both.',template:'def fizzbuzz(n):\n    pass',tests:[['fizzbuzz(3)', 'Fizz'],['fizzbuzz(5)', 'Buzz'],['fizzbuzz(15)', 'FizzBuzz'],['fizzbuzz(7)', '7']],hint:'Check 15 first, then 3, then 5'},
-  {id:'count-vowels',title:'Count Vowels',desc:'Write <code>count_vowels(s)</code> that counts a,e,i,o,u (case-insensitive).',template:'def count_vowels(s):\n    pass',tests:[['count_vowels("hello")', '2'],['count_vowels("AEIOU")', '5'],['count_vowels("sky")', '0']],hint:'Convert to lowercase and check each char'},
-  {id:'fibonacci',title:'Fibonacci',desc:'Write <code>fib_list(n)</code> returning first n Fibonacci numbers.',template:'def fib_list(n):\n    pass',tests:[['fib_list(1)', '[0]'],['fib_list(5)', '[0, 1, 1, 2, 3]'],['fib_list(7)', '[0, 1, 1, 2, 3, 5, 8]']],hint:'Start with [0,1], keep adding sum of last two'},
-  {id:'reverse-string',title:'Reverse String',desc:'Write <code>reverse_string(s)</code> that reverses a string.',template:'def reverse_string(s):\n    pass',tests:[['reverse_string("hello")', 'olleh'],['reverse_string("python")', 'nohtyp'],['reverse_string("a")', 'a']],hint:'Use slicing: s[::-1]'},
-  {id:'temperature',title:'Celsius to Fahrenheit',desc:'Write <code>c_to_f(c)</code> converting Celsius to Fahrenheit: F = C * 9/5 + 32.',template:'def c_to_f(c):\n    pass',tests:[['c_to_f(0)', '32.0'],['c_to_f(100)', '212.0'],['c_to_f(-40)', '-40.0']],hint:'return c * 9 / 5 + 32'}
+  {id:'sum-two',title:'Sum Two Numbers',desc:'Write <code>add(a, b)</code> that returns the sum of two numbers.',template:'def add(a, b):\n    pass',tests:[['add(2, 3)', '5'],['add(-1, 1)', '0'],['add(0, 0)', '0'],['add(100, 200)', '300']],hints:['You just need to return the result of adding the two parameters.',"Use the + operator: a + b","Replace 'pass' with: return a + b"]},
+  {id:'is-even',title:'Is Even?',desc:'Write <code>is_even(n)</code> that returns True if n is even.',template:'def is_even(n):\n    pass',tests:[['is_even(4)', 'True'],['is_even(7)', 'False'],['is_even(0)', 'True']],hints:['An even number is divisible by 2 with no remainder.','Use the modulo operator: n % 2 gives you the remainder.','Return n % 2 == 0 — this will be True for even numbers.']},
+  {id:'factorial',title:'Factorial',desc:'Write <code>factorial(n)</code> that returns n! (0! = 1).',template:'def factorial(n):\n    pass',tests:[['factorial(1)', '1'],['factorial(5)', '120'],['factorial(0)', '1']],hints:['n! means n × (n-1) × (n-2) × ... × 1. For example, 5! = 5×4×3×2×1 = 120.','Use a variable set to 1, then multiply by numbers from 1 to n in a loop.','result = 1; for i in range(1, n+1): result *= i; return result']},
+  {id:'max-of-three',title:'Max of Three',desc:'Write <code>max_of_three(a,b,c)</code> that returns the largest.',template:'def max_of_three(a,b,c):\n    pass',tests:[['max_of_three(1,2,3)', '3'],['max_of_three(5,3,4)', '5'],['max_of_three(-1,-2,-3)', '-1']],hints:['Compare the first two numbers, then compare the winner with the third.','Use if/elif: if a > b and a > c: return a','Or just use the built-in: return max(a, b, c)']},
+  {id:'palindrome',title:'Palindrome Check',desc:'Write <code>is_palindrome(s)</code> — returns True if s reads the same backward.',template:'def is_palindrome(s):\n    pass',tests:[['is_palindrome("racecar")', 'True'],['is_palindrome("hello")', 'False'],['is_palindrome("a")', 'True']],hints:['A palindrome reads the same forward and backward. Compare the string with itself reversed.','To reverse a string in Python, use slicing: s[::-1]','return s == s[::-1]']},
+  {id:'fizzbuzz',title:'FizzBuzz',desc:'Write <code>fizzbuzz(n)</code>. Return "Fizz" if divisible by 3, "Buzz" if 5, "FizzBuzz" if both.',template:'def fizzbuzz(n):\n    pass',tests:[['fizzbuzz(3)', 'Fizz'],['fizzbuzz(5)', 'Buzz'],['fizzbuzz(15)', 'FizzBuzz'],['fizzbuzz(7)', '7']],hints:['Check the most specific case first (divisible by both 3 and 5 = divisible by 15).','Use modulo: if n % 15 == 0, elif n % 3 == 0, elif n % 5 == 0.','Convert the number to a string for the else case: return str(n)']},
+  {id:'count-vowels',title:'Count Vowels',desc:'Write <code>count_vowels(s)</code> that counts a,e,i,o,u (case-insensitive).',template:'def count_vowels(s):\n    pass',tests:[['count_vowels("hello")', '2'],['count_vowels("AEIOU")', '5'],['count_vowels("sky")', '0']],hints:['Convert the string to lowercase first so you only check one case.','Loop through each character and check if it is in a string of vowels.','return sum(1 for c in s.lower() if c in "aeiou")']},
+  {id:'fibonacci',title:'Fibonacci',desc:'Write <code>fib_list(n)</code> returning first n Fibonacci numbers.',template:'def fib_list(n):\n    pass',tests:[['fib_list(1)', '[0]'],['fib_list(5)', '[0, 1, 1, 2, 3]'],['fib_list(7)', '[0, 1, 1, 2, 3, 5, 8]']],hints:['Start with [0, 1]. Each next number is the sum of the last two.','Use a while loop that continues until the list has n items.','while len(result) < n: result.append(result[-1] + result[-2])']},
+  {id:'reverse-string',title:'Reverse String',desc:'Write <code>reverse_string(s)</code> that reverses a string.',template:'def reverse_string(s):\n    pass',tests:[['reverse_string("hello")', 'olleh'],['reverse_string("python")', 'nohtyp'],['reverse_string("a")', 'a']],hints:['Python strings can be sliced with a step parameter.','s[::-1] steps backwards through the string.','return s[::-1]']},
+  {id:'temperature',title:'Celsius to Fahrenheit',desc:'Write <code>c_to_f(c)</code> converting Celsius to Fahrenheit: F = C * 9/5 + 32.',template:'def c_to_f(c):\n    pass',tests:[['c_to_f(0)', '32.0'],['c_to_f(100)', '212.0'],['c_to_f(-40)', '-40.0']],hints:['The formula is: multiply by 9, divide by 5, then add 32.','Use float division: c * 9 / 5 + 32','return c * 9 / 5 + 32']}
 ];
 
 function clInitChallenges() {
@@ -712,10 +718,15 @@ function clLoadChallenge(id) {
   var descEl = document.getElementById('cl-challenge-desc');
   if (descEl) descEl.innerHTML = '<div style="font-size:12px;color:var(--fg);font-weight:bold;margin-bottom:4px">' + escapeHtml(c.title) + '</div><div style="font-size:10px;color:var(--fg-dim);margin-bottom:8px">' + c.desc + '</div>';
   var viewEl = document.getElementById('cl-challenge-view');
-  if (viewEl) viewEl.innerHTML = '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px;font-size:10px;color:var(--fg);margin:0">' + escapeHtml(c.template) + '</pre>';
+  var hintHtml = '';
+  if (c.hints && c.hints.length) {
+    hintHtml = '<div id="cl-hint-box" style="margin-top:8px"><button class="nt-btn" onclick="clShowHint()" id="cl-hint-btn" style="font-size:10px">💡 Need a hint?</button><div id="cl-hint-text" style="display:none;font-size:10px;color:var(--amber);margin-top:6px;padding:8px;background:rgba(255,183,77,0.08);border-left:2px solid var(--amber);border-radius:3px"></div></div>';
+  }
+  if (viewEl) viewEl.innerHTML = '<pre style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px;font-size:10px;color:var(--fg);margin:0">' + escapeHtml(c.template) + '</pre>' + hintHtml;
   var editor = document.getElementById('cl-code-input');
   if (editor) editor.value = c.template;
   window._clChallenge = c;
+  window._clHintLevel = 0;
   var guideEl = document.getElementById('cl-guide-view');
   var dictEl = document.getElementById('cl-dict-view');
   var projectEl = document.getElementById('cl-project-view');
@@ -726,6 +737,20 @@ function clLoadChallenge(id) {
   if (descEl) descEl.style.display = 'block';
   var listEl = document.getElementById('cl-challenges-list');
   if (listEl) listEl.style.display = 'block';
+}
+
+function clShowHint() {
+  var c = window._clChallenge;
+  if (!c || !c.hints) return;
+  var level = window._clHintLevel || 0;
+  var hintText = document.getElementById('cl-hint-text');
+  var hintBtn = document.getElementById('cl-hint-btn');
+  if (level < c.hints.length) {
+    if (hintText) { hintText.style.display = 'block'; hintText.textContent = 'Hint ' + (level+1) + ': ' + c.hints[level]; }
+    window._clHintLevel = (level + 1);
+    if (hintBtn && window._clHintLevel >= c.hints.length) hintBtn.textContent = '💡 No more hints!';
+    else if (hintBtn) hintBtn.textContent = '💡 Need another hint? (' + (c.hints.length - window._clHintLevel) + ' left)';
+  }
 }
 
 function clBackToChallenges() {
@@ -818,39 +843,101 @@ function clSwitchTab(tab) {
 function clLoadGuide(id) {
   var guide = null;
   for (var i = 0; i < CODEGUIDES.length; i++) {
-    if (CODEGUIDES[i].id === id) {
-      guide = CODEGUIDES[i];
-      break;
-    }
+    if (CODEGUIDES[i].id === id) { guide = CODEGUIDES[i]; break; }
   }
   if (!guide) return;
 
-  var contentEl = $('cl-guide-content');
-  if (contentEl) contentEl.innerHTML = '<h2 style="color:var(--cyan);margin:0 0 12px;font-size:15px">' + escapeHtml(guide.title) + '</h2>'
-    + '<div style="font-size:10px;color:var(--teal);margin-bottom:12px">' + escapeHtml(guide.category) + '</div>'
-    + guide.content;
+  window._clGuide = guide;
+  window._clGuideStep = 0;
 
   var viewEl = $('cl-guide-view');
   var listEl = $('cl-guides-list');
   if (viewEl) viewEl.style.display = 'block';
   if (listEl) listEl.style.display = 'none';
 
-  var editor = $('cl-code-input');
-  if (editor) {
-    var codeMatch = guide.content.match(/<pre><code[^>]*>([\s\S]*?)<\/code><\/pre>/i);
-    if (codeMatch) {
-      editor.value = escapeHtml(codeMatch[1]);
-    } else {
-      editor.value = '# ' + guide.title + '\n# Write your code here\n';
-    }
+  if (guide.steps && guide.steps.length) {
+    clRenderGuideStep();
+  } else {
+    var contentEl = $('cl-guide-content');
+    if (contentEl) contentEl.innerHTML = '<h2 style="color:var(--cyan);margin:0 0 12px;font-size:15px">' + escapeHtml(guide.title) + '</h2>'
+      + '<div style="font-size:10px;color:var(--teal);margin-bottom:12px">' + escapeHtml(guide.category) + '</div>'
+      + guide.content;
+    var editor = $('cl-code-input');
+    if (editor) editor.value = '# ' + guide.title + '\n# Write your code here\n';
+    // Back only button
+    var navArea = document.getElementById('cl-guide-nav');
+    if (navArea) navArea.innerHTML = '';
   }
 }
 
-function clBackToGuides() {
-  var viewEl = $('cl-guide-view');
-  var listEl = $('cl-guides-list');
-  if (viewEl) viewEl.style.display = 'none';
-  if (listEl) listEl.style.display = 'block';
+function clRenderGuideStep() {
+  var guide = window._clGuide;
+  var step = window._clGuideStep || 0;
+  var s = guide.steps[step];
+  if (!s) return;
+
+  var title = guide.title;
+  var editor = $('cl-code-input');
+  if (editor) editor.value = s.code || '# Write your code here\n';
+
+  var html = '';
+  html += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">';
+  html += '<h2 style="color:var(--cyan);margin:0;font-size:15px;flex:1">' + escapeHtml(title) + '</h2>';
+  html += '<span style="font-size:11px;color:var(--fg-dim);white-space:nowrap">Step ' + (step+1) + ' of ' + guide.steps.length + '</span>';
+  html += '</div>';
+  html += '<h4 style="color:var(--teal);margin:0 0 8px;font-size:12px">' + escapeHtml(s.title) + '</h4>';
+  html += '<p style="color:var(--fg);font-size:11px;line-height:1.7;margin:0 0 12px">' + s.text + '</p>';
+
+  if (s.try) {
+    html += '<div style="background:rgba(79,195,247,0.08);border:1px solid var(--cyan);border-radius:4px;padding:10px;margin:8px 0">';
+    html += '<p style="margin:0 0 6px;font-size:11px;color:var(--cyan);font-weight:bold">🎯 Try It!</p>';
+    html += '<p style="margin:0 0 8px;font-size:11px;color:var(--fg)">' + s.try + '</p>';
+    if (s.solution) {
+      html += '<button class="nt-btn" onclick="clShowSolution()" id="cl-soln-btn" style="font-size:10px">💡 Show Solution</button>';
+      html += '<pre id="cl-soln-code" style="display:none;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:8px;margin:8px 0 0;font-size:10px;color:var(--teal);overflow-x:auto">' + escapeHtml(s.solution) + '</pre>';
+    }
+    html += '</div>';
+  }
+
+  var contentEl = $('cl-guide-content');
+  if (contentEl) contentEl.innerHTML = html;
+
+  // Navigation
+  var nav = document.getElementById('cl-guide-nav');
+  if (nav) {
+    var navHtml = '';
+    navHtml += '<button class="nt-btn" onclick="clBackToGuides()" style="font-size:10px;margin-right:8px">← All Guides</button>';
+    if (step > 0) {
+      navHtml += '<button class="nt-btn" onclick="clGuidePrev()" style="font-size:10px">← Back</button>';
+    }
+    if (step < guide.steps.length - 1) {
+      navHtml += '<button class="nt-btn" onclick="clGuideNext()" style="font-size:10px;color:var(--teal);margin-left:4px">Next →</button>';
+    } else {
+      navHtml += '<span style="font-size:11px;color:var(--teal);margin-left:8px">✅ Complete! Try the challenges.</span>';
+    }
+    nav.innerHTML = navHtml;
+  }
+}
+
+function clGuideNext() {
+  var guide = window._clGuide;
+  if (!guide || !guide.steps) return;
+  window._clGuideStep = Math.min(guide.steps.length - 1, (window._clGuideStep || 0) + 1);
+  clRenderGuideStep();
+}
+
+function clGuidePrev() {
+  window._clGuideStep = Math.max(0, (window._clGuideStep || 0) - 1);
+  clRenderGuideStep();
+}
+
+function clShowSolution() {
+  var code = document.getElementById('cl-soln-code');
+  var btn = document.getElementById('cl-soln-btn');
+  if (code) code.style.display = 'block';
+  if (btn) btn.style.display = 'none';
+  var editor = $('cl-code-input');
+  if (editor && code) editor.value = code.textContent;
 }
 
 function clRenderGuides() {

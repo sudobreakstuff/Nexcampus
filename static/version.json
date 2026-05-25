@@ -1,14 +1,11 @@
 {
-  "version": "2.6.0",
-  "name": "NexCampus v2.6.0",
+  "version": "2.7.0",
+  "name": "NexCampus v2.7.0",
   "update_url": "",
   "changelog": [
-    "8 new detailed Python guides (Debugging, Data Structures, File I/O, APIs, OOP, Games, Regex, DateTime)",
-    "40 new programming dictionary terms",
-    "10 auto-graded coding challenges with instant scoring",
-    "Removed all diagnostic code",
-    "Clean sidebar buttons",
-    "Update check uses CDN",
-    "Uninstall/install scripts fixed"
+    "Step-by-step guided walkthroughs (Next/Back navigation, Try It prompts, Show Solution)",
+    "Progressive hints for challenges (3 levels: gentle \u2192 direct \u2192 pseudocode)",
+    "Python Basics guide now fully interactive with 4 steps",
+    "All 10 challenges now have progressive hints"
   ]
 }
