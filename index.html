@@ -739,7 +739,7 @@
             <div id="tt-ocr-output-area" style="margin-top:8px">
               <textarea id="tt-ocr-output" class="tools-textarea" rows="8" placeholder="Extracted text will appear here..." style="display:none"></textarea>
 
-            <div id="nb-tool-unitconv" class="nb-tool-content" style="display:none">
+            <div id="tt-pane-unitconv" class="nb-tool-content" style="display:none">
               <div class="tool-section-title">Unit Converter <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Length, weight, volume, temperature, speed</span></div>
               <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;align-items:center">
                 <input type="number" id="unit-input" value="1" style="width:80px;padding:4px 8px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px;font-size:11px" oninput="unitConvert()">
@@ -758,7 +758,7 @@
               <div id="unit-result" style="font-size:18px;color:var(--teal);font-weight:bold;padding:8px 0"></div>
             </div>
 
-            <div id="nb-tool-markdown" class="nb-tool-content" style="display:none">
+            <div id="tt-pane-markdown" class="nb-tool-content" style="display:none">
               <div class="tool-section-title">Markdown Previewer <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Write markdown on the left, see preview on the right</span></div>
               <div style="display:flex;gap:8px">
                 <textarea id="md-input" oninput="mdPreview()" style="flex:1;height:400px;padding:12px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:4px;font-family:monospace;font-size:12px;resize:none" placeholder="# Heading
@@ -776,7 +776,7 @@
               </div>
             </div>
 
-            <div id="nb-tool-base64" class="nb-tool-content" style="display:none">
+            <div id="tt-pane-base64" class="nb-tool-content" style="display:none">
               <div class="tool-section-title">Base64 Encode / Decode</div>
               <textarea id="b64-input" placeholder="Enter text to encode or Base64 to decode..." style="width:100%;height:120px;padding:10px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:4px;font-family:monospace;font-size:12px;resize:vertical;box-sizing:border-box"></textarea>
               <div style="margin:8px 0;display:flex;gap:8px">
@@ -787,7 +787,7 @@
               <textarea id="b64-output" placeholder="Result..." style="width:100%;height:120px;padding:10px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:4px;font-family:monospace;font-size:12px;resize:vertical;box-sizing:border-box"></textarea>
             </div>
 
-            <div id="nb-tool-color" class="nb-tool-content" style="display:none">
+            <div id="tt-pane-color" class="nb-tool-content" style="display:none">
               <div class="tool-section-title">Color Picker &amp; Converter</div>
               <div style="display:flex;gap:12px;flex-wrap:wrap">
                 <div>
@@ -802,7 +802,7 @@
               </div>
             </div>
 
-            <div id="nb-tool-jsonfmt" class="nb-tool-content" style="display:none">
+            <div id="tt-pane-jsonfmt" class="nb-tool-content" style="display:none">
               <div class="tool-section-title">JSON Formatter</div>
               <textarea id="json-input" placeholder="Paste messy JSON here..." style="width:100%;height:150px;padding:10px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:4px;font-family:monospace;font-size:12px;resize:vertical;box-sizing:border-box">{"name":"Alex","age":20,"hobbies":["coding","gaming"]}</textarea>
               <div style="margin:8px 0;display:flex;gap:8px">
@@ -813,7 +813,7 @@
               <pre id="json-output" style="min-height:150px;padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;font-size:12px;color:var(--fg);white-space:pre-wrap;overflow:auto"></pre>
             </div>
 
-            <div id="nb-tool-qrcode" class="nb-tool-content" style="display:none">
+            <div id="tt-pane-qrcode" class="nb-tool-content" style="display:none">
               <div class="tool-section-title">QR Code Generator <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Pure JavaScript, no library needed</span></div>
               <div style="display:flex;gap:8px;margin-bottom:8px">
                 <input type="text" id="qr-input" placeholder="Enter text or URL..." onkeydown="if(event.key==='Enter')qrGenerate()" style="flex:1;padding:6px 10px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px;font-size:11px">
@@ -825,7 +825,7 @@
               </div>
             </div>
 
-            <div id="nb-tool-stopwatch" class="nb-tool-content" style="display:none">
+            <div id="tt-pane-stopwatch" class="nb-tool-content" style="display:none">
               <div class="tool-section-title">Stopwatch <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Millisecond precision</span></div>
               <div style="text-align:center;padding:20px">
                 <div id="sw-display" style="font-size:48px;font-family:monospace;color:var(--cyan);margin-bottom:16px">00:00.000</div>

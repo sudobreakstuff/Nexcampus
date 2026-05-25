@@ -1,6 +1,6 @@
 {
-  "version": "2.10.0",
-  "name": "NexCampus v2.10.0",
+  "version": "2.10.1",
+  "name": "NexCampus v2.10.1",
   "update_url": "",
   "changelog": [
     "5 new guides (Recursion, Lambda, Error Handling, Virtualenv, Git)",
