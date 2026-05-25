@@ -1,9 +1,11 @@
 {
-  "version": "2.7.3",
-  "name": "NexCampus v2.7.3",
+  "version": "2.8.0",
+  "name": "NexCampus v2.8.0",
   "update_url": "",
   "changelog": [
-    "Fixed challenge descriptions rendering as raw HTML (escapeHtml bug)",
-    "TryHackMe-style missions with objectives, background, and key concepts"
+    "Graphing Calculator \u2014 plot functions like sin(x), x^2, log(x), scroll to zoom, drag to pan, export PNG",
+    "Formula Reference \u2014 30 searchable math/physics/chemistry/stats formulas (offline)",
+    "Challenge descriptions fixed (now render as rich HTML)",
+    "Step-by-step guided walkthroughs with Try It prompts"
   ]
 }

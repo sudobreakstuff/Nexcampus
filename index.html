@@ -86,6 +86,8 @@
           <button class="nb-tab-btn" data-nb-tool="periodic" onclick="switchNbTool('periodic')">Periodic</button>
           <button class="nb-tab-btn" data-nb-tool="dictionary" onclick="switchNbTool('dictionary')">Dictionary</button>
           <button class="nb-tab-btn" data-nb-tool="solar" onclick="switchNbTool('solar')" style="color:var(--amber)">★ Solar System</button>
+          <button class="nb-tab-btn" data-nb-tool="grapher" onclick="switchNbTool('grapher')" style="color:var(--teal)">Graph</button>
+          <button class="nb-tab-btn" data-nb-tool="formulas" onclick="switchNbTool('formulas')" style="color:var(--cyan)">Formulas</button>
         </div>
         <div class="nb-grid">
           <div class="nb-side">
@@ -483,6 +485,25 @@
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div id="nb-tool-grapher" class="nb-tool-content" style="display:none">
+              <div class="tool-section-title">Graphing Calculator <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Type functions like sin(x), x^2, log(x)</span></div>
+              <div style="display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap">
+                <input type="text" id="graph-func" placeholder="e.g. sin(x)" onkeydown="if(event.key==='Enter')graphPlot()" style="flex:1;min-width:200px;padding:4px 8px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:3px;font-size:11px;font-family:monospace">
+                <button class="nt-btn" onclick="graphPlot()" style="font-size:10px;color:var(--teal)">Plot</button>
+                <button class="nt-btn" onclick="graphClear()" style="font-size:10px">Clear</button>
+                <button class="nt-btn" onclick="graphExport()" style="font-size:10px">Export</button>
+                <span style="font-size:9px;color:var(--fg-dim);margin-left:8px"><i>Scroll to zoom · Drag to pan</i></span>
+              </div>
+              <canvas id="graph-canvas" width="700" height="400" style="width:100%;aspect-ratio:7/4;background:var(--bg);border:1px solid var(--border);border-radius:8px;cursor:crosshair"></canvas>
+              <div id="graph-info" style="font-size:10px;color:var(--fg-dim);margin-top:4px"></div>
+            </div>
+
+            <div id="nb-tool-formulas" class="nb-tool-content" style="display:none">
+              <div class="tool-section-title">Formula Reference <span style="font-size:9px;color:var(--fg-dim);font-weight:normal;margin-left:8px">Math, Physics, Chemistry — offline</span></div>
+              <input type="text" id="formula-search" placeholder="Search formulas... (e.g. quadratic, newton, ideal gas)" oninput="formulaSearch()" style="width:100%;padding:6px 10px;margin-bottom:8px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:4px;font-size:11px;box-sizing:border-box">
+              <div id="formula-results" style="font-size:10px;color:var(--fg);max-height:60vh;overflow:auto"></div>
             </div>
 
           </div>
