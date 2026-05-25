@@ -11,15 +11,18 @@ $url = $latest.assets | Where-Object { $_.name -eq $binary } | Select-Object -Ex
 $version = $latest.tag_name
 
 if (-not $url) {
-    Write-Host "Could not find latest release, using v2.3" -ForegroundColor Yellow
-    $url = "https://github.com/$repo/releases/download/v2.3/$binary"
-    $version = "v2.3"
+    Write-Host "Could not find latest release, using v2.12.3" -ForegroundColor Yellow
+    $url = "https://github.com/$repo/releases/download/v2.12.3/$binary"
+    $version = "v2.12.3"
 }
 
 # Download
 $out = Join-Path $env:TEMP $binary
 Write-Host "==> Downloading NexCampus $version..."
 Invoke-WebRequest -Uri $url -OutFile $out
+
+# Remove internet zone identifier (reduces SmartScreen warnings)
+Unblock-File $out -ErrorAction SilentlyContinue
 
 # Create install directory
 $installDir = "$env:LOCALAPPDATA\NexCampus"

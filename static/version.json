@@ -1,10 +1,18 @@
 {
   "version": "2.12.3",
-  "name": "NexCampus v2.11.3",
+  "name": "NexCampus v2.12.3",
   "update_url": "",
   "changelog": [
-    "Tool Registry plugin system \u2014 safe tool additions without breaking existing code",
-    "Unit Converter added as first registry tool (Text Tools)",
-    "All existing code untouched and verified"
+    "QR code generator using qrcode-generator library (real scannable codes, offline, 20KB)",
+    "4 registry tools: Unit Converter, Base64, JSON Formatter, QR Code Generator",
+    "Sunset Glow theme with warm gradient background",
+    "Tool Registry plugin system (safe tool additions without breaking existing code)",
+    "Challenges removed from Code Lab for stability",
+    "Windows install script updated: Unblock-File added, fallback to v2.12.3",
+    "README rewritten with all current features and tools",
+    "About page updated with plugin tools and correct counts",
+    "Self-update via CDN (no GitHub API rate limits)",
+    "Window icon + desktop entry on Linux",
+    "All JS files verified brace-balanced and string-balanced"
   ]
 }

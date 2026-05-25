@@ -2,11 +2,9 @@
 
 **Every student deserves free tools to learn, build, and create — no internet required.**
 
-NexCampus is a fully offline desktop toolkit for students: rich notes, study lab with 18 tools, mind maps, text processing, OCR, interactive solar system, and a complete code learning environment with a built-in code runner and auto-graded challenges. Weekly content updates deliver new guides, projects, and challenges without reinstalling.
+NexCampus is a fully offline desktop toolkit for students: rich notes, study lab with 16+ tools, text processing, OCR, interactive solar system, and a complete code learning environment with 18 Python guides, 125-term dictionary, 11 projects, and a built-in code runner.
 
-Built with Python, vanilla JS, and pywebview. No signup, no ads, no tracking.
-
-<img src="screenshots/home.png" alt="NexCampus Home" width="700">
+Built with Python + vanilla JS + pywebview. No signup, no ads, no tracking.
 
 ---
 
@@ -22,7 +20,7 @@ curl -sS https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install
 irm https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/install.ps1 | iex
 ```
 
-**Uninstall (Linux):**
+**Uninstall:**
 ```bash
 curl -sS https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/uninstall.sh | bash
 ```
@@ -31,30 +29,23 @@ curl -sS https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install
 
 ## Features
 
-### Study Lab (18 tools)
-Interactive Solar System, Mind Map, Notes (rich text editor with formatting toolbar, find/replace, templates, PDF export), Summarizer, Q&A, Quiz Generator, Flashcards, Citation Generator (MLA/APA/Chicago), Study Timer (Pomodoro), Reading Level Analyzer, Document Merger, GPA Calculator, Vocabulary Builder, Outline Generator, Document Diff, Bibliography Manager, Periodic Table (118 elements with search/filters/quiz), Dictionary (262k+ words)
-
-<img src="screenshots/solarsystem.png" alt="Solar System" width="400"> <img src="screenshots/studylab.png" alt="Study Lab" width="400">
+### Study Lab (16 tools)
+Interactive Solar System (900 stars, zoom/pan, dwarf planets, tabbed info), Notes (rich text editor, templates, find/replace, PDF export), Summarizer, Q&A, Quiz Generator, Flashcards, Citation Generator (MLA/APA/Chicago), Study Timer (Pomodoro), Reading Level Analyzer, Document Merger, GPA Calculator, Vocabulary Builder, Outline Generator, Document Diff, Bibliography Manager, Periodic Table (118 elements), Dictionary (262k+ words)
 
 ### Code Lab
-Side-by-side editor + output, 10 interactive Python guides, live code runner (Python/JavaScript/Bash with cancel), JavaScript runs in the browser (no Node.js needed), 85-term programming dictionary, 11 practice projects, 8 auto-graded challenges with instant pass/fail scoring, code snippet toolbar
+18 interactive Python guides, live code runner (Python/JavaScript/Bash with cancel), 125-term programming dictionary, 11 practice projects with hints, code snippet toolbar
 
-<img src="screenshots/codelab.png" alt="Code Lab" width="700">
-
-### Text Tools (13 tools)
-Case Converter, Ciphers (ROT13/Atbash/Caesar/Vigenere), Line Tools (sort/reverse/deduplicate/trim), Text Diff, AI-ism Scanner, Text Stats, Word Frequency, Entity Scanner, Hash Generator (MD5/SHA), Password Generator, Spell Check, Find & Replace, OCR (Tesseract 5.5, fully offline)
+### Text Tools (13 built-in + 4 plugins)
+Case Converter, Ciphers, Line Tools, Text Diff, AI-ism Scanner, Text Stats, Word Frequency, Entity Scanner, Hash Generator, Password Generator, Spell Check, Find & Replace, OCR (Tesseract 5.5 bundled), **Unit Converter**, **Base64**, **JSON Formatter**, **QR Code Generator**
 
 ### Themes (8)
-Retro Dark (default), Cyberpunk, Ocean Deep, Forest Night, Paper Light, Iron Man, Midnight Purple, Neon Tokyo
-
-### Weekly Content
-The app checks for new guides, challenges, projects, and themes weekly and auto-delivers them — no reinstall needed.
+Retro Dark (default), Cyberpunk, Ocean Deep, Forest Night, Paper Light, Iron Man, Midnight Purple, Neon Tokyo, Sunset Glow
 
 ### Self-Update
-Check for Updates from the About page — downloads and installs automatically. No sudo, no terminal.
+Check for Updates from the About page — downloads and installs automatically (uses CDN, no rate limits).
 
-### Global Search
-Type in the sidebar to find any tool. Press Enter to navigate directly.
+### Tool Registry
+Plugin system for safe tool additions — tools built with `createElement` instead of `innerHTML` strings. If one tool fails, others keep working.
 
 ---
 
@@ -62,11 +53,11 @@ Type in the sidebar to find any tool. Press Enter to navigate directly.
 
 - **Fully offline** — Tesseract 5 bundled; everything works without internet
 - **No frameworks** — Pure vanilla JS + Python, no Electron or npm
-- **Built-in code runner** — Python/JS/Bash with cancel, JS runs in-browser
-- **Auto-graded challenges** — learn by doing with instant feedback
-- **Weekly content updates** — fresh material pushed automatically
-- **8 themes** — Retro Dark, Cyberpunk, Ocean Deep, Forest Night, Paper Light, Iron Man, Midnight Purple, Neon Tokyo
+- **Built-in code runner** — Python, JavaScript, Bash with cancel support
+- **Tool Registry** — add new tools without breaking existing ones
+- **8 themes** — Retro Dark, Cyberpunk, Ocean Deep, Forest Night, Paper Light, Iron Man, Midnight Purple, Neon Tokyo, Sunset Glow
 - **Cross-platform** — Linux and Windows
+- **Self-updating** — one click from About page, CDN-powered
 
 ---
 
@@ -80,24 +71,18 @@ python3 server.py
 
 To build a standalone binary:
 ```bash
-# Linux
 pip install pyinstaller
 bash build.sh
-
-# Windows (requires Tesseract installed at %ProgramFiles%\Tesseract-OCR\)
-pip install pyinstaller
-build.bat
 ```
 
 ---
 
 ## Dependencies
 - Python 3.8+
-- libwebkit2gtk-4.1-0 (Linux, auto-installed by install script)
-- Tesseract 5.5 (bundled in the binary)
+- libwebkit2gtk-4.1-0 (Linux, auto-installed)
+- Tesseract 5.5 (bundled)
 
 ---
 
 ## License
-
 MIT © Shahid Singh, NexCore Systems and Technologies
