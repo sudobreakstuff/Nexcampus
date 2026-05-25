@@ -1039,9 +1039,9 @@ function ttSpell() {
     if (m.suggestions.length) {
       html += ' &rarr; ';
       m.suggestions.forEach(function(s) {
-        var escapedWord = m.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        var escapedS = s.replace(/'/g, "\\'");
-        html += '<span style="color:var(--green);cursor:pointer;margin-right:4px" onclick="var inp=document.getElementById(\'tt-spell-input\');inp.value=inp.value.replace(new RegExp(\'\\\\b' + escapedWord + '\\\\b\',\'gi\'),\'' + escapedS + '\');ttSpell()">' + escapeHtml(s) + '</span>';
+        var escapedWord = m.word.replace(/[.*+?^${}()|[\]\\]/g, '\\\\$&\'');
+        var escapedS = s.replace(/'/g, "\\\\'");
+        html += '<span class="spell-sugg" data-word="' + escapedWord + '" data-fix="' + escapedS + '" style="color:var(--green);cursor:pointer;margin-right:4px">' + escapeHtml(s) + '</span>';
       });
     } else {
       html += ' <span style="color:var(--fg-dim)">(no suggestions)</span>';
@@ -2266,7 +2266,11 @@ function previewOcrImage() {
   if (!file) { preview.innerHTML = ''; status.textContent = 'No file selected'; return; }
   var reader = new FileReader();
   reader.onload = function(e) {
-    preview.innerHTML = '<img src="' + e.target.result + '" style="max-height:200px;max-width:100%;border:1px solid var(--border);border-radius:4px">';
+    var img = document.createElement('img');
+    img.src = e.target.result;
+    img.style.cssText = 'max-height:200px;max-width:100%;border:1px solid var(--border);border-radius:4px';
+    preview.innerHTML = '';
+    preview.appendChild(img);
     status.textContent = file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB) ready';
   };
   reader.readAsDataURL(file);

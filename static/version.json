@@ -1,13 +1,12 @@
 {
-  "version": "2.4.4",
-  "name": "NexCampus v2.4.4",
+  "version": "2.4.5",
+  "name": "NexCampus v2.4.5",
   "update_url": "",
   "changelog": [
-    "Desktop entry now always updated, icon recopied on every launch",
-    "Window icon set via GTK set_default_icon_from_file",
-    "Stale system-level desktop entries cleaned up",
-    "update-desktop-database called after entry creation for app drawer",
-    "Binary auto-copied to ~/.nexcampus/ for seamless self-update",
-    "All Code Lab functions working (unclosed quote fix)"
+    "Update check now uses raw CDN (no GitHub API rate limiting)",
+    "Mind map fixed \u2014 unclosed quote in OCR preview + spell check onclick",
+    "Desktop entry refreshed on every launch, window icon set via GTK",
+    "All JS files verified brace-balanced and string-balanced",
+    "Code Lab fully working"
   ]
 }

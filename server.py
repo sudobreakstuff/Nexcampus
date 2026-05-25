@@ -405,28 +405,25 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
     def api_check_update(self):
         BINARY_NAME = 'NexCampus-windows.exe' if PLATFORM == 'windows' else 'NexCampus-linux'
         try:
+            # Fetch version from raw CDN (no rate limit) instead of API
             req = urllib.request.Request(
-                'https://api.github.com/repos/sudobreakstuff/Nexcampus/releases/latest',
-                headers={'User-Agent': 'NexCampus/2.0', 'Accept': 'application/vnd.github.v3+json'}
+                'https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/static/version.json',
+                headers={'User-Agent': 'NexCampus/2.0'}
             )
             with urllib.request.urlopen(req, timeout=10) as resp:
-                release = json.loads(resp.read())
+                remote = json.loads(resp.read())
             current = VERSION.get('version', '0.0.0')
-            remote_ver = release.get('tag_name', '').lstrip('v')
+            remote_ver = remote.get('version', '0.0.0')
             has_update = self._compare_versions(remote_ver, current)
-            download_url = ''
-            for asset in release.get('assets', []):
-                if asset['name'] == BINARY_NAME:
-                    download_url = asset['browser_download_url']
-                    break
-            body = release.get('body', '')
-            changelog = [l.strip('- ').strip() for l in body.split('\n') if l.strip().startswith('-')] if body else []
+            # Construct download URL from version (no API needed)
+            download_url = f'https://github.com/sudobreakstuff/Nexcampus/releases/download/v{remote_ver}/{BINARY_NAME}'
+            changelog = remote.get('changelog', [])
             self.send_json({
                 'current_version': current,
                 'remote_version': remote_ver,
                 'has_update': has_update,
                 'download_url': download_url,
-                'release_notes_url': release.get('html_url', ''),
+                'release_notes_url': f'https://github.com/sudobreakstuff/Nexcampus/releases/tag/v{remote_ver}',
                 'changelog': changelog,
                 'success': True
             })
@@ -461,22 +458,19 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
             try:
                 with _update_lock:
                     _update_status['state'] = 'downloading'
-                    _update_status['message'] = 'Fetching release info...'
+                    _update_status['message'] = 'Fetching version info...'
+                # Fetch from CDN instead of rate-limited API
                 req = urllib.request.Request(
-                    'https://api.github.com/repos/sudobreakstuff/Nexcampus/releases/latest',
-                    headers={'User-Agent': 'NexCampus/2.0', 'Accept': 'application/vnd.github.v3+json'}
+                    'https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/static/version.json',
+                    headers={'User-Agent': 'NexCampus/2.0'}
                 )
                 with urllib.request.urlopen(req, timeout=10) as resp:
-                    release = json.loads(resp.read())
-                download_url = ''
-                for asset in release.get('assets', []):
-                    if asset['name'] == BINARY_NAME:
-                        download_url = asset['browser_download_url']
-                        break
-                if not download_url:
+                    remote_ver = json.loads(resp.read()).get('version', '')
+                if not remote_ver:
                     with _update_lock:
-                        _update_status = {'state': 'error', 'progress': 0, 'message': 'No binary found in release'}
+                        _update_status = {'state': 'error', 'progress': 0, 'message': 'No version found'}
                     return
+                download_url = f'https://github.com/sudobreakstuff/Nexcampus/releases/download/v{remote_ver}/{BINARY_NAME}'
 
                 can_self = os.access(EXE_DIR, os.W_OK)
                 # Always install to user-writable directory for seamless updates
