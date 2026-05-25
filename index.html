@@ -21,7 +21,7 @@
 <div id="app" style="display:none;">
   <div id="sidebar">
     <div class="sidebar-header">NEXCAMPUS <span class="connection-dot"></span></div>
-    <div class="sidebar-subtitle" id="sidebar-version">v2.4.6</div>
+    <div class="sidebar-subtitle" id="sidebar-version">v2.4.7</div>
     <input type="text" id="sidebar-search" placeholder="Search tools..." style="width:100%;padding:6px 10px;margin:6px 0 2px;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:4px;font-size:11px;box-sizing:border-box">
     <nav id="nav">
       <button class="nav-btn active" data-tab="home">HOME</button>
@@ -44,11 +44,11 @@
       <!-- HOME -->
       <div class="tab-pane active section" id="tab-home">
         <div class="greeting">Hey there.</div>
-        <div class="greeting-sub" id="greeting-version">NexCampus v2.4.6</div>
+        <div class="greeting-sub" id="greeting-version">NexCampus v2.4.7</div>
 
         <div class="stat-row">
           <div class="stat-item">
-            <span class="stat-value" id="home-version">v2.4.6</span>
+            <span class="stat-value" id="home-version">v2.4.7</span>
             <span class="stat-label">Version</span>
           </div>
           <div class="stat-item">
@@ -494,10 +494,10 @@
         <div class="cl-layout">
           <div class="cl-sidebar">
             <div class="cl-sidebar-tabs">
-              <button class="cl-sb-btn active" onclick="try{clSwitchTab('guides')}catch(e){alert('Guides error: '+e.message)}">Guides</button>
-              <button class="cl-sb-btn" onclick="try{clSwitchTab('dictionary')}catch(e){alert('Dict error: '+e.message)}">Dictionary</button>
-              <button class="cl-sb-btn" onclick="try{clSwitchTab('projects')}catch(e){alert('Projects error: '+e.message)}">Projects</button>
-              <button class="cl-sb-btn" onclick="try{clSwitchTab('challenges')}catch(e){alert('Challenges error: '+e.message)}" style="color:var(--amber)">★ Challenges</button>
+              <button class="cl-sb-btn active" onclick="clSwitchTab('guides')">Guides</button>
+              <button class="cl-sb-btn" onclick="clSwitchTab('dictionary')">Dictionary</button>
+              <button class="cl-sb-btn" onclick="clSwitchTab('projects')">Projects</button>
+              <button class="cl-sb-btn" onclick="clSwitchTab('challenges')" style="color:var(--amber)">★ Challenges</button>
             </div>
             <div id="cl-guides" class="cl-sidebar-content">
               <div id="cl-guides-list"></div>
@@ -543,8 +543,8 @@
                 <option value="javascript">JavaScript</option>
                 <option value="bash">Bash</option>
               </select>
-              <button class="nt-btn" onclick="try{clRunCode()}catch(e){alert('Run error: '+e.message)}" id="cl-run-btn" style="font-size:10px;color:var(--teal)">▶ Run</button>
-              <button class="nt-btn" onclick="try{clCancelRun()}catch(e){}" id="cl-cancel-btn" style="font-size:10px;display:none;color:var(--amber)">Cancel</button>
+              <button class="nt-btn" onclick="clRunCode()" id="cl-run-btn" style="font-size:10px;color:var(--teal)">▶ Run</button>
+              <button class="nt-btn" onclick="clCancelRun()" id="cl-cancel-btn" style="font-size:10px;display:none;color:var(--amber)">Cancel</button>
               <button class="nt-btn" onclick="clClearOutput()" style="font-size:10px">Clear</button>
               <button class="nt-btn" onclick="clCopyCode()" style="font-size:10px">Copy</button>
               <button class="nt-btn" onclick="clFormatCode()" style="font-size:10px">Format</button>
@@ -763,7 +763,7 @@
 
       <!-- ABOUT -->
       <div class="tab-pane section" id="tab-about">
-        <div class="about-header">About NexCampus <span id="about-version">v2.4.6</span></div>
+        <div class="about-header">About NexCampus <span id="about-version">v2.4.7</span></div>
 
         <div class="about-block">
           <div class="about-block-title">Our Mission</div>
@@ -869,7 +869,7 @@
 </div>
 
   <div id="statusbar">
-    <span id="statusbar-version">NexCampus v2.4.6 · Made by Shahid Singh · NexCore&trade; Systems and Technologies · 2026</span>
+    <span id="statusbar-version">NexCampus v2.4.7 · Made by Shahid Singh · NexCore&trade; Systems and Technologies · 2026</span>
     <span id="mem-status" style="margin-left:auto;font-size:9px;color:var(--fg-dim)"></span>
   </div>
 
@@ -895,21 +895,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Service worker is registered from <head>
 });
-
-// Quick diag: check if key functions are defined
-setTimeout(function() {
-  var m = [];
-  if (typeof clRunCode !== 'function') m.push('clRunCode');
-  if (typeof clSwitchTab !== 'function') m.push('clSwitchTab');
-  if (typeof mindmapAddNode !== 'function') m.push('mindmapAddNode');
-  if (typeof initMindMap !== 'function') m.push('initMindMap');
-  if (typeof initCodeLab !== 'function') m.push('initCodeLab');
-  if (typeof initSolarSystem !== 'function') m.push('initSolarSystem');
-  var statusEl = document.getElementById('statusbar-version');
-  if (m.length && statusEl) {
-    statusEl.textContent = '⚠ MISSING: ' + m.join(', ');
-  }
-}, 2000);
 </script>
 </body>
 </html>
