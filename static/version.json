@@ -1,8 +1,13 @@
 {
-  "version": "2.4.3",
-  "name": "NexCampus v2.4.3",
+  "version": "2.4.4",
+  "name": "NexCampus v2.4.4",
   "update_url": "",
   "changelog": [
-    "Fixed unclosed single quote in clGradeChallenge that broke entire code lab JS file"
+    "Desktop entry now always updated, icon recopied on every launch",
+    "Window icon set via GTK set_default_icon_from_file",
+    "Stale system-level desktop entries cleaned up",
+    "update-desktop-database called after entry creation for app drawer",
+    "Binary auto-copied to ~/.nexcampus/ for seamless self-update",
+    "All Code Lab functions working (unclosed quote fix)"
   ]
 }

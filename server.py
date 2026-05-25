@@ -110,21 +110,46 @@ if getattr(sys, 'frozen', False):
             icon_path = icon_dir / 'icon.png'
             # Copy icon from bundle to permanent location
             icon_src = STATIC_DIR / 'icons' / 'icon-512.png'
-            if icon_src.exists() and not icon_path.exists():
+            if icon_src.exists():
                 import shutil
                 shutil.copy2(icon_src, icon_path)
-            if not desktop_file.exists():
-                desktop_file.write_text(
-                    '[Desktop Entry]\n'
-                    'Type=Application\n'
-                    'Name=NexCampus\n'
-                    f'Comment=NexCampus - Offline Student Toolkit\n'
-                    f'Exec={sys.executable}\n'
-                    f'Icon={icon_path}\n'
-                    'Categories=Education;Office;\n'
-                    'Terminal=false\n'
-                )
-                desktop_file.chmod(0o755)
+            # Always write/update the desktop entry
+            binary_path = sys.executable
+            # If installed to /opt, point to user dir for persistence
+            if binary_path.startswith('/opt/'):
+                user_bin = Path.home() / '.nexcampus' / 'NexCampus-linux'
+                if not user_bin.exists() and os.path.exists(binary_path):
+                    user_bin.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(binary_path, user_bin)
+                    user_bin.chmod(0o755)
+                binary_path = str(user_bin)
+            desktop_file.write_text(
+                '[Desktop Entry]\n'
+                'Type=Application\n'
+                'Name=NexCampus\n'
+                f'Comment=NexCampus - Offline Student Toolkit\n'
+                f'Exec={binary_path}\n'
+                f'Icon={icon_path}\n'
+                'Categories=Education;Office;\n'
+                'Terminal=false\n'
+                'StartupWMClass=NexCampus\n'
+            )
+            desktop_file.chmod(0o755)
+            # Force app drawer refresh
+            subprocess.run(['update-desktop-database', str(apps_dir)], capture_output=True)
+            # Remove stale system-level entry if we can
+            sys_entry = Path('/usr/share/applications/nexcampus.desktop')
+            if sys_entry.exists() and os.access(str(sys_entry.parent), os.W_OK):
+                try: sys_entry.unlink()
+                except: pass
+            # Also copy binary to user dir for self-update compatibility
+            if binary_path.startswith('/opt/'):
+                user_bin_dir = Path.home() / '.nexcampus'
+                user_bin_dir.mkdir(parents=True, exist_ok=True)
+                user_bin = user_bin_dir / 'NexCampus-linux'
+                if not user_bin.exists():
+                    shutil.copy2(binary_path, user_bin)
+                    user_bin.chmod(0o755)
     except Exception:
         pass
 
@@ -1561,6 +1586,22 @@ def open_window(url):
         has_display = 'DISPLAY' in os.environ
         if has_display:
             try:
+                # Set window icon from bundled icon
+                icon_path = str(Path.home() / '.local' / 'share' / 'nexcampus' / 'icon.png')
+                if not os.path.exists(icon_path):
+                    icon_src = STATIC_DIR / 'icons' / 'icon-512.png'
+                    if icon_src.exists():
+                        os.makedirs(os.path.dirname(icon_path), exist_ok=True)
+                        import shutil
+                        shutil.copy2(icon_src, icon_path)
+                if os.path.exists(icon_path):
+                    try:
+                        import gi
+                        gi.require_version('Gtk', '3.0')
+                        from gi.repository import Gtk
+                        Gtk.Window.set_default_icon_from_file(icon_path)
+                    except:
+                        pass
                 import webview
                 webview.create_window('NexCampus', url, width=1100, height=750)
                 webview.start()
