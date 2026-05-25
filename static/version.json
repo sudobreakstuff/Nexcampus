@@ -3,9 +3,10 @@
   "name": "NexCampus v2.5.0",
   "update_url": "",
   "changelog": [
-    "Reverted to stable tab code",
-    "Update check uses CDN (no rate limits)",
-    "Uninstall script fixed",
-    "OCR preview quote fixed"
+    "Reverted to stable tab-switching code",
+    "Mind map safely removed",
+    "OCR preview quote fixed",
+    "Update check uses CDN",
+    "Uninstall script fixed"
   ]
 }
