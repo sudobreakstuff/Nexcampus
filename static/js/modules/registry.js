@@ -73,14 +73,6 @@ function switchRegistryTool(tool) {
     if (tool._container) showToolError(tool._container, 'Switch error: ' + e.message);
   }
 }
-      if (tool.init) {
-        try { tool.init(); } catch(e) { tool._error = 'Init error: ' + e.message; }
-      }
-    }
-  } catch(e) {
-    if (tool._container) showToolError(tool._container, 'Switch error: ' + e.message);
-  }
-}
 
 function showToolError(container, msg) {
   while (container.firstChild) container.removeChild(container.firstChild);
