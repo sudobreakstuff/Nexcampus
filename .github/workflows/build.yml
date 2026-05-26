@@ -1,55 +1,11 @@
-name: Build
+name: Build Release Binaries
 
 on:
   push:
     tags:
       - 'v*'
 
-permissions:
-  contents: write
-
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            python3-dev \
-            libgtk-3-dev \
-            libwebkit2gtk-4.1-dev \
-            libappindicator3-dev \
-            patchelf
-
-      - name: Install Python deps
-        run: pip install pywebview PyInstaller Pillow
-
-      - name: Build
-        run: python3 -m PyInstaller --onefile --add-data "static:static" --add-data "index.html:." --add-data "tesseract-pkg/tesseract-bin:tesseract-bin" --name "NexCampus-linux" server.py
-
-      - name: Upload binary
-        uses: softprops/action-gh-release@v2
-        with:
-          files: dist/NexCampus-linux
-          generate_release_notes: true
-          make_latest: true
-
-      - name: Upload install scripts
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            install/install.sh
-            install/install.ps1
-            install/nexcampus.desktop
-
   build-windows:
     runs-on: windows-latest
     steps:
@@ -60,28 +16,64 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install Python deps
-        run: pip install pywebview PyInstaller Pillow
+      - name: Install PyInstaller
+        run: pip install pyinstaller
 
-      - name: Install Tesseract
-        run: choco install tesseract --version 5.3.3.20231005 -y
-
-      - name: Bundle Tesseract
-        shell: pwsh
+      - name: Download Tesseract binaries
         run: |
-          $tessDir = "$env:ProgramFiles\Tesseract-OCR"
-          mkdir tesseract-win -Force
-          Copy-Item "$tessDir\tesseract.exe" tesseract-win\
-          Copy-Item "$tessDir\*.dll" tesseract-win\
-          Copy-Item "$tessDir\tessdata\eng.traineddata" tesseract-win\
+          mkdir tesseract-win
+          # Download pre-built Tesseract 5.3.3 from GitHub
+          curl -L -o tesseract.zip "https://github.com/UB-Mannheim/tesseract/releases/download/v5.3.3.20231005/tesseract-ocr-w64-setup-5.3.3.20231005.exe"
+          7z x tesseract.zip -otesseract-temp -y
+          # Copy Tesseract exe and DLLs
+          Get-ChildItem -Path tesseract-temp -Recurse -Filter "tesseract.exe" | Select-Object -First 1 | ForEach-Object { Copy-Item $_.FullName tesseract-win\ }
+          Get-ChildItem -Path tesseract-temp -Recurse -Filter "*.dll" | ForEach-Object { Copy-Item $_.FullName tesseract-win\ }
+          # Download eng.traineddata
+          mkdir tesseract-win\tessdata
+          curl -L -o tesseract-win\tessdata\eng.traineddata "https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata"
 
-      - name: Build
-        run: python -m PyInstaller --onefile --noconsole --add-data "static;static" --add-data "index.html;." --add-data "tesseract-win;tesseract-win" --name "NexCampus-windows.exe" server.py
+      - name: Build Windows binary
+        run: |
+          pyinstaller --onefile --noconsole `
+            --icon "static\icons\icon.ico" `
+            --add-data "static;static" `
+            --add-data "index.html;." `
+            --add-data "tesseract-win;tesseract-win" `
+            --add-data "python-embed;python-embed" `
+            --name "NexCampus-windows" server.py
 
-      - name: Upload
-        uses: softprops/action-gh-release@v2
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v1
         with:
           files: dist/NexCampus-windows.exe
-          generate_release_notes: true
-          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+
+      - name: Build Linux binary
+        run: |
+          pyinstaller --onefile \
+            --icon "static/icons/icon-512.png" \
+            --add-data "static:static" \
+            --add-data "index.html:." \
+            --add-data "tesseract-pkg/tesseract-bin:tesseract-bin" \
+            --name "NexCampus-linux" server.py
+
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/NexCampus-linux
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,10 +1,10 @@
 {
-  "version": "2.15.0",
-  "name": "NexCampus v2.15.0",
+  "version": "2.15.1",
+  "name": "NexCampus v2.15.1",
   "update_url": "",
   "changelog": [
-    "Bundled Python 3.12 for Windows \u2014 code runner works out of the box, no Python install needed",
-    "python-embed/ included in Windows build with full stdlib",
-    "Server auto-detects bundled Python before searching system PATH"
+    "GitHub Actions auto-build for Windows and Linux binaries",
+    "Every release now auto-generates both platform binaries",
+    "No manual build needed \u2014 push a tag, get EXE + Linux binary"
   ]
 }
