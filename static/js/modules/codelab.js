@@ -774,7 +774,15 @@ function clRunJavaScript(code, output) {
   var _log = console.log;
   var _error = console.error;
   var _warn = console.warn;
+  var _print = window.print;
+  var _alert = window.alert;
   try {
+    // Override print() so it logs instead of opening print dialog
+    window.print = function() { logs.push('print() called — use console.log() instead'); };
+    // Override alert/confirm/prompt to avoid native dialogs
+    window.alert = function(msg) { logs.push('[alert] ' + String(msg)); };
+    window.confirm = function() { return true; };
+    window.prompt = function(msg) { logs.push('[prompt] ' + String(msg)); return ''; };
     console.log = function() { logs.push(Array.prototype.slice.call(arguments).map(function(a) { return typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a); }).join(' ')); };
     console.error = function() { errors.push(Array.prototype.slice.call(arguments).join(' ')); };
     console.warn = function() { logs.push('[warn] ' + Array.prototype.slice.call(arguments).join(' ')); };
@@ -786,6 +794,8 @@ function clRunJavaScript(code, output) {
     console.log = _log;
     console.error = _error;
     console.warn = _warn;
+    window.print = _print;
+    window.alert = _alert;
   }
   var html = '';
   if (logs.length) {
