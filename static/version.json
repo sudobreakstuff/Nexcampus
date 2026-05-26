@@ -1,12 +1,10 @@
 {
-  "version": "2.14.3",
-  "name": "NexCampus v2.14.0",
+  "version": "2.14.4",
+  "name": "NexCampus v2.14.4",
   "update_url": "",
   "changelog": [
-    "Detailed planet info: discovery, discoverer, composition, surface, escape velocity, albedo, magnetic field, notable features",
-    "New Details tab in planet info panel",
-    "Higher quality procedural planet textures (200+ speckles, 150+ bands, 20+ large features)",
-    "3D rim lighting and sphere shadow effects on planets",
-    "All 8 planets + 5 dwarf planets have complete detailed profiles"
+    "Windows code runner: no more PowerShell popup (CREATE_NO_WINDOW flag)",
+    "App icon created for Windows (.ico) and Linux (PNG)",
+    "Windows build script uses --icon flag"
   ]
 }

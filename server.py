@@ -656,9 +656,12 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
             return
         import subprocess, tempfile, textwrap, shutil
         result = {'stdout': '', 'stderr': '', 'exit_code': -1, 'success': True}
+        # Windows: prevent console window from appearing
+        sp_kwargs = {'capture_output': True, 'timeout': 8, 'text': True}
+        if sys.platform == 'win32':
+            sp_kwargs['creationflags'] = subprocess.CREATE_NO_WINDOW
         try:
             if language == 'python':
-                # In PyInstaller onefile, sys.executable is the app binary, not python
                 if getattr(sys, 'frozen', False):
                     python = shutil.which('python3') or shutil.which('python')
                     if not python:
@@ -672,11 +675,7 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
                     fpath = os.path.join(tmp, 'script.py')
                     with open(fpath, 'w') as f:
                         f.write(code)
-                    p = subprocess.run(
-                        [python, fpath],
-                        capture_output=True, timeout=8, text=True,
-                        cwd=tmp
-                    )
+                    p = subprocess.run([python, fpath], **sp_kwargs, cwd=tmp)
                     result['stdout'] = p.stdout[-10000:]
                     result['stderr'] = p.stderr[-10000:]
                     result['exit_code'] = p.returncode
@@ -687,10 +686,7 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
                     result['exit_code'] = -1
                 else:
                     try:
-                        p = subprocess.run(
-                            ['node', '-e', code],
-                            capture_output=True, timeout=8, text=True
-                        )
+                        p = subprocess.run(['node', '-e', code], **sp_kwargs)
                         result['stdout'] = p.stdout[-10000:]
                         result['stderr'] = p.stderr[-10000:]
                         result['exit_code'] = p.returncode
@@ -698,10 +694,7 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
                         result['stderr'] = str(e)
                         result['exit_code'] = -1
             elif language == 'bash':
-                p = subprocess.run(
-                    ['bash', '-c', code],
-                    capture_output=True, timeout=8, text=True
-                )
+                p = subprocess.run(['bash', '-c', code], **sp_kwargs)
                 result['stdout'] = p.stdout[-10000:]
                 result['stderr'] = p.stderr[-10000:]
                 result['exit_code'] = p.returncode
