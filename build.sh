@@ -19,6 +19,7 @@ rm -rf build dist *.spec
 
 # Build
 pyinstaller --onefile \
+  --icon "static/icons/icon-512.png" \
   --add-data "static:static" \
   --add-data "index.html:." \
   --add-data "tesseract-pkg/tesseract-bin:tesseract-bin" \

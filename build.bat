@@ -24,6 +24,7 @@ del /f /q *.spec 2>nul
 
 REM Build
 pyinstaller --onefile --noconsole ^
+  --icon "static\icons\icon.ico" ^
   --add-data "static;static" ^
   --add-data "index.html;." ^
   --add-data "tesseract-win;tesseract-win" ^
