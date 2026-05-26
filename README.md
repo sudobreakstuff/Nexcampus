@@ -48,6 +48,8 @@ Built with Python + vanilla JS + pywebview. MIT licensed. Free forever.
 
 ## Quick Install
 
+### One-line (recommended)
+
 **Linux:**
 ```bash
 curl -sS https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/install.sh | bash
@@ -58,7 +60,20 @@ curl -sS https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install
 irm https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/install.ps1 | iex
 ```
 
-**Uninstall (Linux):**
+### Manual download from Releases
+
+1. Go to **[Releases](https://github.com/sudobreakstuff/Nexcampus/releases/latest)**
+2. Download the binary for your platform:
+   - **Linux:** `NexCampus-linux`
+   - **Windows:** `NexCampus-windows.exe`
+3. Linux: `chmod +x NexCampus-linux && ./NexCampus-linux`
+4. Windows: Double-click `NexCampus-windows.exe`
+
+### Self-Update (no download needed)
+
+Already installed? Open NexCampus → **About** tab → **Check for Updates** → **Download Update**. The app downloads the latest version and restarts automatically. No terminal, no browser, no manual steps.
+
+### Uninstall (Linux):
 ```bash
 curl -sS https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/uninstall.sh | bash
 ```
