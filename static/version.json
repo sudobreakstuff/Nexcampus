@@ -1,10 +1,10 @@
 {
-  "version": "2.14.6",
-  "name": "NexCampus v2.14.6",
+  "version": "2.15.0",
+  "name": "NexCampus v2.15.0",
   "update_url": "",
   "changelog": [
-    "Windows code runner: no more PowerShell popup (CREATE_NO_WINDOW flag)",
-    "App icon created for Windows (.ico) and Linux (PNG)",
-    "Windows build script uses --icon flag"
+    "Bundled Python 3.12 for Windows \u2014 code runner works out of the box, no Python install needed",
+    "python-embed/ included in Windows build with full stdlib",
+    "Server auto-detects bundled Python before searching system PATH"
   ]
 }

@@ -664,22 +664,23 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
             if language == 'python':
                 python = None
                 if getattr(sys, 'frozen', False):
-                    # On Windows, try multiple Python locations
                     if sys.platform == 'win32':
-                        # Try the Python launcher first (most reliable on Windows)
-                        python = shutil.which('py') or shutil.which('python3') or shutil.which('python')
-                        if not python:
-                            # Check common install paths
-                            import glob as _glob
-                            for base in [os.environ.get('LOCALAPPDATA',''), 'C:\\', os.environ.get('ProgramFiles',''), os.environ.get('ProgramFiles(x86)','')]:
-                                for pattern in ['Programs\\Python\\Python3*\\python.exe', 'Python3*\\python.exe', 'Python*\\python.exe']:
-                                    matches = _glob.glob(os.path.join(base, pattern))
-                                    if matches:
-                                        python = matches[-1]
-                                        break
-                                if python: break
-                    else:
-                        python = shutil.which('python3') or shutil.which('python')
+                        # Use bundled embeddable Python (no install needed)
+                        bundled = os.path.join(sys._MEIPASS, 'python-embed', 'pythonw.exe')
+                        if os.path.exists(bundled):
+                            python = bundled
+                    if not python:
+                        if sys.platform == 'win32':
+                            python = shutil.which('py') or shutil.which('python3') or shutil.which('python')
+                            if not python:
+                                import glob as _glob
+                                for base in [os.environ.get('LOCALAPPDATA',''), 'C:\\', os.environ.get('ProgramFiles',''), os.environ.get('ProgramFiles(x86)','')]:
+                                    for pattern in ['Programs\\Python\\Python3*\\python.exe', 'Python3*\\python.exe', 'Python*\\python.exe']:
+                                        matches = _glob.glob(os.path.join(base, pattern))
+                                        if matches: python = matches[-1]; break
+                                    if python: break
+                        else:
+                            python = shutil.which('python3') or shutil.which('python')
                     if not python:
                         result['stderr'] = 'Python is not installed. Download from https://python.org'
                         result['exit_code'] = -1

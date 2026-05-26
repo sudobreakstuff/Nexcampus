@@ -28,6 +28,7 @@ pyinstaller --onefile --noconsole ^
   --add-data "static;static" ^
   --add-data "index.html;." ^
   --add-data "tesseract-win;tesseract-win" ^
+  --add-data "python-embed;python-embed" ^
   --name "%APP_NAME%" "%ENTRY%"
 
 echo [NexCampus Build] Done: dist\%APP_NAME%.exe
