@@ -1,10 +1,14 @@
 {
-  "version": "2.15.9",
-  "name": "NexCampus v2.15.1",
+  "version": "2.16.0",
+  "name": "NexCampus v2.16.0 \u2014 Windows Stable",
   "update_url": "",
   "changelog": [
-    "GitHub Actions auto-build for Windows and Linux binaries",
-    "Every release now auto-generates both platform binaries",
-    "No manual build needed \u2014 push a tag, get EXE + Linux binary"
+    "Windows binary now includes Python 3.12 embeddable (code runner works out of box)",
+    "Windows binary includes full Python deps (numpy, scipy, sklearn etc.)",
+    "App icon embedded in Windows and Linux binaries",
+    "JS print() no longer opens browser dialog",
+    "Detailed planet info with Details tab",
+    "3 new dwarf planets, Tour mode, keyboard nav, shooting stars",
+    "GitHub Actions auto-builds Windows + Linux binaries"
   ]
 }
