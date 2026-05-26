@@ -39,14 +39,21 @@ jobs:
         if: success()
         run: |
           $asset = "dist\NexCampus-windows.exe"
-          if (Test-Path $asset) {
-            $release = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.ref_name }}" -Headers @{Authorization="Bearer ${{ secrets.GITHUB_TOKEN }}"}
-            $uploadUrl = $release.upload_url -replace '\{.*\}', "?name=NexCampus-windows.exe"
-            Invoke-RestMethod -Uri $uploadUrl -Method Post -Headers @{Authorization="Bearer ${{ secrets.GITHUB_TOKEN }}"; "Content-Type"="application/octet-stream"} -InFile $asset
-            Write-Host "Uploaded Windows binary"
-          } else {
-            Write-Error "Binary not found at $asset"
+          if (-not (Test-Path $asset)) { Write-Error "Binary not found"; exit 1 }
+          $headers = @{Authorization="Bearer ${{ secrets.GITHUB_TOKEN }}"}
+          # Get release info
+          $release = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.ref_name }}" -Headers $headers
+          # Delete any existing Windows binary
+          foreach ($a in $release.assets) {
+            if ($a.name -eq "NexCampus-windows.exe") {
+              Invoke-RestMethod -Uri $a.url -Method Delete -Headers $headers
+              Write-Host "Deleted stale $($a.name) ($([math]::Round($a.size/1MB))MB)"
+            }
           }
+          # Upload new binary
+          $uploadUrl = $release.upload_url -replace '\{.*\}', "?name=NexCampus-windows.exe"
+          $result = Invoke-RestMethod -Uri $uploadUrl -Method Post -Headers @{Authorization="Bearer ${{ secrets.GITHUB_TOKEN }}"; "Content-Type"="application/octet-stream"} -InFile $asset
+          Write-Host "Uploaded: $($result.name) — $([math]::Round($result.size/1MB))MB"
 
   build-linux:
     runs-on: ubuntu-latest
