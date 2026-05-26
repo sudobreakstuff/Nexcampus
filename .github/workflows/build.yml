@@ -14,28 +14,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
       - name: Install PyInstaller
         run: pip install pyinstaller
 
-      - name: Download Tesseract binaries
+      - name: Setup Tesseract
         run: |
           mkdir tesseract-win
-          # Download pre-built Tesseract 5.3.3 from GitHub
           curl -L -o tesseract.zip "https://github.com/UB-Mannheim/tesseract/releases/download/v5.3.3.20231005/tesseract-ocr-w64-setup-5.3.3.20231005.exe"
-          7z x tesseract.zip -otesseract-temp -y
-          # Copy Tesseract exe and DLLs
+          7z x tesseract.zip -otesseract-temp -y -bso0 -bsp0
           Get-ChildItem -Path tesseract-temp -Recurse -Filter "tesseract.exe" | Select-Object -First 1 | ForEach-Object { Copy-Item $_.FullName tesseract-win\ }
           Get-ChildItem -Path tesseract-temp -Recurse -Filter "*.dll" | ForEach-Object { Copy-Item $_.FullName tesseract-win\ }
-          # Download eng.traineddata
           mkdir tesseract-win\tessdata
           curl -L -o tesseract-win\tessdata\eng.traineddata "https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata"
 
-      - name: Build Windows binary
+      - name: Build Windows EXE
         run: |
           pyinstaller --onefile --noconsole `
             --icon "static\icons\icon.ico" `
@@ -44,21 +40,27 @@ jobs:
             --add-data "tesseract-win;tesseract-win" `
             --add-data "python-embed;python-embed" `
             --name "NexCampus-windows" server.py
+          echo "BUILD_DONE=1" >> $env:GITHUB_ENV
 
       - name: Upload to Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: dist/NexCampus-windows.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: success()
+        run: |
+          $asset = "dist\NexCampus-windows.exe"
+          if (Test-Path $asset) {
+            $release = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.ref_name }}" -Headers @{Authorization="Bearer ${{ secrets.GITHUB_TOKEN }}"}
+            $uploadUrl = $release.upload_url -replace '\{.*\}', "?name=NexCampus-windows.exe"
+            Invoke-RestMethod -Uri $uploadUrl -Method Post -Headers @{Authorization="Bearer ${{ secrets.GITHUB_TOKEN }}"; "Content-Type"="application/octet-stream"} -InFile $asset
+            Write-Host "Uploaded Windows binary"
+          } else {
+            Write-Error "Binary not found at $asset"
+          }
 
   build-linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
@@ -73,10 +75,21 @@ jobs:
             --add-data "index.html:." \
             --add-data "tesseract-pkg/tesseract-bin:tesseract-bin" \
             --name "NexCampus-linux" server.py
+          echo "BUILD_DONE=1" >> $GITHUB_ENV
 
       - name: Upload to Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: dist/NexCampus-linux
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: success()
+        run: |
+          ASSET="dist/NexCampus-linux"
+          if [ -f "$ASSET" ]; then
+            RELEASE=$(curl -sS -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.ref_name }}")
+            UPLOAD_URL=$(echo "$RELEASE" | python3 -c "import sys,json; print(json.load(sys.stdin)['upload_url'].replace('{?name,label}','?name=NexCampus-linux'))")
+            curl -sS -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Content-Type: application/octet-stream" \
+              --data-binary @"$ASSET" "$UPLOAD_URL"
+            echo "Uploaded Linux binary"
+          else
+            echo "Binary not found at $ASSET"
+            exit 1
+          fi
