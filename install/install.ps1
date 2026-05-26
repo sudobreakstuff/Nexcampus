@@ -11,9 +11,9 @@ $url = $latest.assets | Where-Object { $_.name -eq $binary } | Select-Object -Ex
 $version = $latest.tag_name
 
 if (-not $url) {
-    Write-Host "Could not find latest release, using v2.12.3" -ForegroundColor Yellow
-    $url = "https://github.com/$repo/releases/download/v2.12.3/$binary"
-    $version = "v2.12.3"
+    Write-Host "Could not find latest release, using v2.14.5" -ForegroundColor Yellow
+    $url = "https://github.com/$repo/releases/download/v2.14.5/$binary"
+    $version = "v2.14.5"
 }
 
 # Download

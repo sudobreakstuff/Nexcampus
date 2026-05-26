@@ -11,15 +11,38 @@
   <img src="https://img.shields.io/badge/platform-Linux%20%7C%20Windows-lightgrey" alt="Platform">
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
   <img src="https://img.shields.io/badge/offline-yes-brightgreen" alt="Offline">
+  <img src="https://img.shields.io/badge/updates-weekly-purple" alt="Weekly Updates">
 </p>
 
 ---
 
-NexCampus is a fully offline desktop toolkit for students: Study Lab (16+ tools), Code Lab (18 guides, 125 terms, 11 projects), Text Tools (17), interactive Solar System, and OCR.
+> *"Education is the most powerful weapon which you can use to change the world."*
+> — <cite>Nelson Mandela</cite>
 
-No signup. No ads. No tracking. No internet.
+---
 
-Built with Python + vanilla JS + pywebview. **249MB onefile binary** — everything bundled.
+## Our Mission
+
+**Knowledge should not require a connection.**
+
+In a world where learning is increasingly gated behind paywalls, signups, and internet access, millions of students are left behind. Rural areas, developing regions, and under-resourced schools face the same reality: no internet, no access.
+
+NexCampus exists to change that. We believe every student — regardless of location, income, or connectivity — deserves the tools to learn, build, and create. No login. No subscription. No tracking. Just a single 249MB file that works completely offline.
+
+**We release updates every week with more content** — guides, projects, tools, and themes pushed directly to the app. No reinstall needed.
+
+Built with Python + vanilla JS + pywebview. MIT licensed. Free forever.
+
+---
+
+## Screenshots
+
+<p align="center">
+  <img src="screenshots/home.png" width="400">
+  <img src="screenshots/studylab.png" width="400">
+  <img src="screenshots/solarsystem.png" width="400">
+  <img src="screenshots/codelab.png" width="400">
+</p>
 
 ---
 
@@ -35,24 +58,10 @@ curl -sS https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install
 irm https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/install.ps1 | iex
 ```
 
-**Uninstall:**
+**Uninstall (Linux):**
 ```bash
 curl -sS https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/uninstall.sh | bash
 ```
-
----
-
-## Screenshots
-
-<p align="center">
-  <img src="screenshots/home.png" width="400">
-  <img src="screenshots/studylab.png" width="400">
-</p>
-
-<p align="center">
-  <img src="screenshots/solarsystem.png" width="400">
-  <img src="screenshots/codelab.png" width="400">
-</p>
 
 ---
 
@@ -81,17 +90,33 @@ Check for Updates from About page — downloads and installs automatically via C
 
 ---
 
+## Weekly Content Updates
+
+Every week we push new content directly to the app:
+
+- New Python guides and tutorials
+- Additional dictionary terms and definitions
+- Fresh practice projects with starter code
+- New color themes
+- Bug fixes and improvements
+
+The app checks on startup and auto-delivers. **No reinstall. No manual download. Just open the app.**
+
+---
+
 ## What Makes NexCampus Different
 
-| | |
-|---|---|
-| **Fully offline** | Tesseract 5 bundled, all tools work without internet |
-| **No frameworks** | Pure vanilla JS + Python, no Electron or npm |
-| **250MB binary** | Everything in one file — Python, JS, CSS, Tesseract, dictionary |
-| **Code runner** | Execute Python, JavaScript, Bash with cancel support |
-| **Tool Registry** | Plugin system for safe feature additions |
-| **9 themes** | Find your style |
-| **Self-updating** | One click, CDN-powered |
+| Feature | NexCampus | Other Tools |
+|---------|-----------|-------------|
+| **Internet required** | No — fully offline | Usually yes |
+| **Signup/Login** | Never | Almost always |
+| **Code runner** | Python, JS, Bash built-in | Rarely |
+| **OCR** | Tesseract 5.5 bundled | Online only |
+| **Solar System** | Interactive, offline | Online tools only |
+| **Updates** | Weekly, auto-delivered via CDN | Manual downloads |
+| **Size** | 249MB (everything included) | Varies |
+| **Privacy** | Zero data collection | Often tracked |
+| **Price** | Free forever | Freemium / paid |
 
 ---
 
@@ -121,3 +146,9 @@ build.bat            # Windows (requires Tesseract installed)
 
 ## License
 MIT © Shahid Singh, NexCore Systems and Technologies
+
+---
+
+<p align="center">
+  <sub>Made for students. Free forever. No internet required.</sub>
+</p>
