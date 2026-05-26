@@ -31,10 +31,22 @@ jobs:
           mkdir tesseract-win\tessdata
           curl -L -o tesseract-win\tessdata\eng.traineddata "https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata"
 
+      - name: Install Python dependencies
+        run: pip install numpy scipy scikit-learn Pillow lxml nltk pypdf2
+
       - name: Build Windows EXE
         shell: cmd
         run: |
-          pyinstaller --onefile --noconsole --icon static\icons\icon.ico --add-data "static;static" --add-data "index.html;." --add-data "tesseract-win;tesseract-win" --add-data "python-embed;python-embed" --name NexCampus-windows server.py || dir dist
+          echo === Checking directories ===
+          dir static\js\modules\codelab.js
+          dir static\index.html
+          dir python-embed\pythonw.exe
+          dir tesseract-win\tesseract.exe 2>nul || echo Tesseract not found, checking tesseract-win dir...
+          dir tesseract-win
+          echo === Building ===
+          pyinstaller --onefile --noconsole --icon static\icons\icon.ico --add-data "static;static" --add-data "index.html;." --add-data "tesseract-win;tesseract-win" --add-data "python-embed;python-embed" --name NexCampus-windows server.py
+          echo === Result ===
+          dir dist\NexCampus-windows.exe
           echo "BUILD_DONE=1" >> $env:GITHUB_ENV
 
       - name: Upload to Release
