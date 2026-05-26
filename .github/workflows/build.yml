@@ -32,14 +32,7 @@ jobs:
           curl -L -o tesseract-win\tessdata\eng.traineddata "https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata"
 
       - name: Build Windows EXE
-        run: |
-          pyinstaller --onefile --noconsole `
-            --icon static\icons\icon.ico `
-            --add-data "static`;static" `
-            --add-data "index.html`;." `
-            --add-data "tesseract-win`;tesseract-win" `
-            --add-data "python-embed`;python-embed" `
-            --name NexCampus-windows server.py
+        run: python build_ci.py
           echo "BUILD_DONE=1" >> $env:GITHUB_ENV
 
       - name: Upload to Release
