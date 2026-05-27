@@ -1693,13 +1693,16 @@ def main():
         print('[NexCampus] Made by Shahid Singh | NexCore Systems and Technologies')
 
         ok = open_window(url)
-        if not ok:
-            print('[NexCampus] Opened in browser. Server running in background.')
-            print('[NexCampus] Press Ctrl+C to stop.')
-            try:
-                while True: time.sleep(3600)
-            except KeyboardInterrupt:
-                print('\n[NexCampus] Shutting down...')
+        if ok:
+            # pywebview window closed — clean exit
+            os._exit(0)
+        else:
+            # Browser fallback — keep alive for 6 hours, then exit
+            print('[NexCampus] Opened in browser. Server will auto-exit after 6 hours.')
+            deadline = time.time() + 21600
+            while time.time() < deadline:
+                time.sleep(10)
+            os._exit(0)
     except Exception as e:
         tb = traceback.format_exc()
         print(f'[NexCampus] Fatal error: {e}\n{tb}')
