@@ -1657,6 +1657,10 @@ def main():
     _kill_stale()
     STARTUP_LOG = Path.home() / '.nexcampus-startup.log'
     try:
+        STARTUP_LOG.write_text(f'NexCampus starting at {time.ctime()}\n')
+    except:
+        pass
+    try:
         port = find_port(8080)
         if port is None:
             msg = 'No available port found.'
@@ -1705,9 +1709,13 @@ def main():
             os._exit(0)
     except Exception as e:
         tb = traceback.format_exc()
+        err = f'NexCampus crashed: {e}\n\nDetails in: {STARTUP_LOG}'
         print(f'[NexCampus] Fatal error: {e}\n{tb}')
         try:
-            STARTUP_LOG.write_text(f'FATAL: {e}\n{tb}')
+            STARTUP_LOG.write_text(tb)
+            if sys.platform == 'win32':
+                import subprocess
+                subprocess.run(['msg', '*', err], capture_output=True, timeout=5)
         except:
             pass
 
