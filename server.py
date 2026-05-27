@@ -249,15 +249,10 @@ def make_plain(text):
     return text.strip()
 
 class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=str(BASE_DIR), **kwargs)
 
     def do_GET(self):
-        try:
-            self._do_GET_impl()
-        except Exception:
-            try: self.send_json({'error': 'server error'}, 500)
-            except: pass
-
-    def _do_GET_impl(self):
         if self.path == '/api/version':
             self.send_json(VERSION)
             return
@@ -352,32 +347,7 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
             word = params.get('word', '').strip().lower()
             self.api_dictionary_lookup(word)
             return
-        # Serve static files from BASE_DIR
-        filepath = BASE_DIR / self.path.lstrip('/').split('?')[0]
-        if filepath.is_file():
-            ct = 'text/html'
-            ext = filepath.suffix
-            if ext == '.js': ct = 'application/javascript'
-            elif ext == '.css': ct = 'text/css'
-            elif ext == '.json': ct = 'application/json'
-            elif ext == '.png': ct = 'image/png'
-            elif ext == '.ico': ct = 'image/x-icon'
-            self.send_response(200)
-            self.send_header('Content-Type', ct)
-            self.send_header('Cache-Control', 'no-cache')
-            self.end_headers()
-            self.wfile.write(filepath.read_bytes())
-        elif self.path == '/' or self.path == '':
-            idx = BASE_DIR / 'index.html'
-            if idx.is_file():
-                self.send_response(200)
-                self.send_header('Content-Type', 'text/html')
-                self.end_headers()
-                self.wfile.write(idx.read_bytes())
-            else:
-                self.send_json({'error': 'not found'}, 404)
-        else:
-            self.send_json({'error': 'not found'}, 404)
+        super().do_GET()
 
     def do_POST(self):
         length = int(self.headers.get('Content-Length', 0))
@@ -686,33 +656,17 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
             return
         import subprocess, tempfile, textwrap, shutil
         result = {'stdout': '', 'stderr': '', 'exit_code': -1, 'success': True}
-        # Windows: prevent console window from appearing
-        sp_kwargs = {'capture_output': True, 'timeout': 8, 'text': True}
-        if sys.platform == 'win32':
-            sp_kwargs['creationflags'] = subprocess.CREATE_NO_WINDOW
         try:
             if language == 'python':
-                python = None
+                # In PyInstaller onefile, sys.executable is the app binary, not python
                 if getattr(sys, 'frozen', False):
                     if sys.platform == 'win32':
-                        # Use bundled embeddable Python (no install needed)
                         bundled = os.path.join(sys._MEIPASS, 'python-embed', 'pythonw.exe')
-                        if os.path.exists(bundled):
-                            python = bundled
+                        python = bundled if os.path.exists(bundled) else None
                     if not python:
-                        if sys.platform == 'win32':
-                            python = shutil.which('py') or shutil.which('python3') or shutil.which('python')
-                            if not python:
-                                import glob as _glob
-                                for base in [os.environ.get('LOCALAPPDATA',''), 'C:\\', os.environ.get('ProgramFiles',''), os.environ.get('ProgramFiles(x86)','')]:
-                                    for pattern in ['Programs\\Python\\Python3*\\python.exe', 'Python3*\\python.exe', 'Python*\\python.exe']:
-                                        matches = _glob.glob(os.path.join(base, pattern))
-                                        if matches: python = matches[-1]; break
-                                    if python: break
-                        else:
-                            python = shutil.which('python3') or shutil.which('python')
+                        python = shutil.which('py') or shutil.which('python3') or shutil.which('python')
                     if not python:
-                        result['stderr'] = 'Python is not installed. Download from https://python.org'
+                        result['stderr'] = 'Python is not installed on this system.'
                         result['exit_code'] = -1
                         self.send_json(result)
                         return
@@ -722,7 +676,11 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
                     fpath = os.path.join(tmp, 'script.py')
                     with open(fpath, 'w') as f:
                         f.write(code)
-                    p = subprocess.run([python, fpath], **sp_kwargs, cwd=tmp)
+                    p = subprocess.run(
+                        [python, fpath],
+                        capture_output=True, timeout=8, text=True,
+                        cwd=tmp
+                    )
                     result['stdout'] = p.stdout[-10000:]
                     result['stderr'] = p.stderr[-10000:]
                     result['exit_code'] = p.returncode
@@ -733,7 +691,10 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
                     result['exit_code'] = -1
                 else:
                     try:
-                        p = subprocess.run(['node', '-e', code], **sp_kwargs)
+                        p = subprocess.run(
+                            ['node', '-e', code],
+                            capture_output=True, timeout=8, text=True
+                        )
                         result['stdout'] = p.stdout[-10000:]
                         result['stderr'] = p.stderr[-10000:]
                         result['exit_code'] = p.returncode
@@ -741,7 +702,10 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
                         result['stderr'] = str(e)
                         result['exit_code'] = -1
             elif language == 'bash':
-                p = subprocess.run(['bash', '-c', code], **sp_kwargs)
+                p = subprocess.run(
+                    ['bash', '-c', code],
+                    capture_output=True, timeout=8, text=True
+                )
                 result['stdout'] = p.stdout[-10000:]
                 result['stderr'] = p.stderr[-10000:]
                 result['exit_code'] = p.returncode
@@ -1607,23 +1571,12 @@ def open_window(url):
             webview.start()
             return True
         except Exception:
-            # pywebview failed (likely missing Edge WebView2 Runtime)
-            # Wait to ensure server is ready before opening browser fallback
-            time.sleep(0.5)
             import subprocess, shutil
-            # Try Edge first (installed on all Windows 10+)
             edge = shutil.which('msedge') or shutil.which('msedge.exe')
             if edge:
-                subprocess.Popen([edge, url],
+                subprocess.Popen([edge, f'--app={url}'],
                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 return False
-            # Try Chrome
-            chrome = shutil.which('chrome') or shutil.which('chrome.exe') or shutil.which('google-chrome')
-            if chrome:
-                subprocess.Popen([chrome, url],
-                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                return False
-            # Last resort: default browser
             import webbrowser
             webbrowser.open(url)
             return False
@@ -1643,8 +1596,7 @@ def open_window(url):
                     try:
                         import gi
                         gi.require_version('Gtk', '3.0')
-                        from gi.repository import Gtk, GLib
-                        GLib.set_prgname('NexCampus')
+                        from gi.repository import Gtk
                         Gtk.Window.set_default_icon_from_file(icon_path)
                     except:
                         pass
@@ -1687,10 +1639,6 @@ def main():
     _kill_stale()
     STARTUP_LOG = Path.home() / '.nexcampus-startup.log'
     try:
-        STARTUP_LOG.write_text(f'NexCampus starting at {time.ctime()}\n')
-    except:
-        pass
-    try:
         port = find_port(8080)
         if port is None:
             msg = 'No available port found.'
@@ -1699,54 +1647,28 @@ def main():
             return
 
         httpd = http.server.HTTPServer(('127.0.0.1', port), NexCampusHandler)
-        # Wrap server in error-catching thread
-        def _serve():
-            try:
-                httpd.serve_forever()
-            except Exception as e2:
-                try:
-                    STARTUP_LOG.write_text(STARTUP_LOG.read_text() + f'\nServer thread crashed: {e2}\n')
-                except: pass
-        t = threading.Thread(target=_serve, daemon=True)
+        t = threading.Thread(target=httpd.serve_forever, daemon=True)
         t.start()
 
         url = f'http://127.0.0.1:{port}'
-
-        # Wait for server to be ready (retry, but don't abort if it fails)
-        for i in range(100):
-            try:
-                req = urllib.request.Request(url, headers={'User-Agent': 'NexCampus'})
-                resp = urllib.request.urlopen(req, timeout=0.2)
-                resp.close()
-                break
-            except:
-                time.sleep(0.1)
-
         STARTUP_LOG.write_text(f'Server running at {url}\nVERSION: {VERSION}\n')
         print(f'[NexCampus] NexCampus v{VERSION.get("version","?")}')
         print(f'[NexCampus] Server: {url}')
         print('[NexCampus] Made by Shahid Singh | NexCore Systems and Technologies')
 
         ok = open_window(url)
-        if ok:
-            # pywebview window closed — clean exit
-            os._exit(0)
-        else:
-            # Browser fallback — keep alive for 6 hours, then exit
-            print('[NexCampus] Opened in browser. Server will auto-exit after 6 hours.')
-            deadline = time.time() + 21600
-            while time.time() < deadline:
-                time.sleep(10)
-            os._exit(0)
+        if not ok:
+            print('[NexCampus] Opened in browser. Server running in background.')
+            print('[NexCampus] Press Ctrl+C to stop.')
+            try:
+                while True: time.sleep(3600)
+            except KeyboardInterrupt:
+                print('\n[NexCampus] Shutting down...')
     except Exception as e:
         tb = traceback.format_exc()
-        err = f'NexCampus crashed: {e}\n\nDetails in: {STARTUP_LOG}'
         print(f'[NexCampus] Fatal error: {e}\n{tb}')
         try:
-            STARTUP_LOG.write_text(tb)
-            if sys.platform == 'win32':
-                import subprocess
-                subprocess.run(['msg', '*', err], capture_output=True, timeout=5)
+            STARTUP_LOG.write_text(f'FATAL: {e}\n{tb}')
         except:
             pass
 

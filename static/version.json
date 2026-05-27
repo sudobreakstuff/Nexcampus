@@ -1,6 +1,6 @@
 {
-  "version": "2.17.1",
-  "name": "NexCampus v2.17.1",
+  "version": "2.17.2",
+  "name": "NexCampus v2.17.2",
   "update_url": "",
   "changelog": [
     "Windows binary now includes Python 3.12 embeddable (code runner works out of box)",
