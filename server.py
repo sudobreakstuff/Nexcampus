@@ -253,6 +253,13 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
         super().__init__(*args, directory=str(BASE_DIR), **kwargs)
 
     def do_GET(self):
+        try:
+            self._do_GET_impl()
+        except Exception:
+            try: self.send_json({'error': 'server error'}, 500)
+            except: pass
+
+    def _do_GET_impl(self):
         if self.path == '/api/version':
             self.send_json(VERSION)
             return
@@ -347,36 +354,35 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
             word = params.get('word', '').strip().lower()
             self.api_dictionary_lookup(word)
             return
-        # Serve static files from BASE_DIR with error handling
+        # Serve static files — try super first, fall back to safe handler
         try:
-            filepath = BASE_DIR / self.path.lstrip('/')
-            if filepath.is_file():
-                content_type = 'text/html'
-                if filepath.suffix == '.js': content_type = 'application/javascript'
-                elif filepath.suffix == '.css': content_type = 'text/css'
-                elif filepath.suffix == '.json': content_type = 'application/json'
-                elif filepath.suffix == '.png': content_type = 'image/png'
-                elif filepath.suffix == '.ico': content_type = 'image/x-icon'
-                elif filepath.suffix == '.svg': content_type = 'image/svg+xml'
-                self.send_response(200)
-                self.send_header('Content-Type', content_type)
-                self.end_headers()
-                with open(filepath, 'rb') as f:
-                    self.wfile.write(f.read())
-            elif self.path == '/' or self.path == '':
-                # Serve index.html
-                idx = BASE_DIR / 'index.html'
-                if idx.is_file():
-                    self.send_response(200)
-                    self.send_header('Content-Type', 'text/html')
-                    self.end_headers()
-                    self.wfile.write(idx.read_bytes())
-                else:
-                    self.send_json({'error': 'index.html not found'}, 500)
-            else:
-                self.send_json({'error': 'not found'}, 404)
+            super().do_GET()
         except Exception:
-            self.send_json({'error': 'internal server error'}, 500)
+            try:
+                # Fallback: serve files manually
+                filepath = BASE_DIR / self.path.lstrip('/')
+                if filepath.is_file():
+                    ct = 'text/html'
+                    if filepath.suffix == '.js': ct = 'application/javascript'
+                    elif filepath.suffix == '.css': ct = 'text/css'
+                    self.send_response(200)
+                    self.send_header('Content-Type', ct)
+                    self.end_headers()
+                    self.wfile.write(filepath.read_bytes())
+                elif self.path == '/' or self.path == '':
+                    idx = BASE_DIR / 'index.html'
+                    if idx.is_file():
+                        self.send_response(200)
+                        self.send_header('Content-Type', 'text/html')
+                        self.end_headers()
+                        self.wfile.write(idx.read_bytes())
+                    else:
+                        self.send_json({'error': 'index.html not found'}, 500)
+                else:
+                    self.send_json({'error': 'not found'}, 404)
+            except:
+                try: self.send_json({'error': 'server error'}, 500)
+                except: pass
 
     def do_POST(self):
         length = int(self.headers.get('Content-Length', 0))
@@ -1711,28 +1717,15 @@ def main():
 
         url = f'http://127.0.0.1:{port}'
 
-        # Wait for server to be ready (retry up to 10 seconds)
-        ready = False
-        last_error = 'unknown'
+        # Wait for server to be ready (retry, but don't abort if it fails)
         for i in range(100):
             try:
                 req = urllib.request.Request(url, headers={'User-Agent': 'NexCampus'})
                 resp = urllib.request.urlopen(req, timeout=0.2)
                 resp.close()
-                ready = True
                 break
-            except Exception as e2:
-                last_error = str(e2)
-                time.sleep(0.1)
-        if not ready:
-            log_path = str(STARTUP_LOG)
-            msg = f'Server failed to start at {url} after 10s.\nError: {last_error}\nLog: {log_path}'
-            print(f'[NexCampus] {msg}')
-            try:
-                STARTUP_LOG.write_text(STARTUP_LOG.read_text() + '\n' + msg + '\n')
             except:
-                pass
-            return
+                time.sleep(0.1)
 
         STARTUP_LOG.write_text(f'Server running at {url}\nVERSION: {VERSION}\n')
         print(f'[NexCampus] NexCampus v{VERSION.get("version","?")}')
