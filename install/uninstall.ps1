@@ -46,5 +46,7 @@ if (Test-Path $appData) {
 Get-Process "NexCampus-windows" -ErrorAction SilentlyContinue | Stop-Process -Force
 
 Write-Host ""
-Write-Host "NexCampus has been uninstalled." -ForegroundColor Green
-Write-Host "You can reinstall anytime with the one-liner from https://github.com/sudobreakstuff/Nexcampus"
+Write-Host "==> NexCampus has been uninstalled." -ForegroundColor Green
+Write-Host ""
+Write-Host "To reinstall:" -ForegroundColor Gray
+Write-Host "  irm https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/install.ps1 | iex" -ForegroundColor White
