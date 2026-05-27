@@ -347,7 +347,36 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
             word = params.get('word', '').strip().lower()
             self.api_dictionary_lookup(word)
             return
-        super().do_GET()
+        # Serve static files from BASE_DIR with error handling
+        try:
+            filepath = BASE_DIR / self.path.lstrip('/')
+            if filepath.is_file():
+                content_type = 'text/html'
+                if filepath.suffix == '.js': content_type = 'application/javascript'
+                elif filepath.suffix == '.css': content_type = 'text/css'
+                elif filepath.suffix == '.json': content_type = 'application/json'
+                elif filepath.suffix == '.png': content_type = 'image/png'
+                elif filepath.suffix == '.ico': content_type = 'image/x-icon'
+                elif filepath.suffix == '.svg': content_type = 'image/svg+xml'
+                self.send_response(200)
+                self.send_header('Content-Type', content_type)
+                self.end_headers()
+                with open(filepath, 'rb') as f:
+                    self.wfile.write(f.read())
+            elif self.path == '/' or self.path == '':
+                # Serve index.html
+                idx = BASE_DIR / 'index.html'
+                if idx.is_file():
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'text/html')
+                    self.end_headers()
+                    self.wfile.write(idx.read_bytes())
+                else:
+                    self.send_json({'error': 'index.html not found'}, 500)
+            else:
+                self.send_json({'error': 'not found'}, 404)
+        except Exception:
+            self.send_json({'error': 'internal server error'}, 500)
 
     def do_POST(self):
         length = int(self.headers.get('Content-Length', 0))
