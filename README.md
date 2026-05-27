@@ -73,9 +73,16 @@ irm https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/inst
 
 Already installed? Open NexCampus → **About** tab → **Check for Updates** → **Download Update**. The app downloads the latest version and restarts automatically. No terminal, no browser, no manual steps.
 
-### Uninstall (Linux):
+### Uninstall
+
+**Linux:**
 ```bash
 curl -sS https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/uninstall.sh | bash
+```
+
+**Windows (PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/uninstall.ps1 | iex
 ```
 
 ---
