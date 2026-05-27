@@ -1669,6 +1669,24 @@ def main():
         t.start()
 
         url = f'http://127.0.0.1:{port}'
+
+        # Wait for server to be ready (retry up to 5 seconds)
+        ready = False
+        for _ in range(50):
+            try:
+                req = urllib.request.Request(url, headers={'User-Agent': 'NexCampus'})
+                resp = urllib.request.urlopen(req, timeout=0.2)
+                resp.close()
+                ready = True
+                break
+            except:
+                time.sleep(0.1)
+        if not ready:
+            msg = 'Server failed to start after 5s — check ~/.nexcampus-startup.log'
+            print(f'[NexCampus] {msg}')
+            STARTUP_LOG.write_text(STARTUP_LOG.read_text() + '\n' + msg + '\n')
+            return
+
         STARTUP_LOG.write_text(f'Server running at {url}\nVERSION: {VERSION}\n')
         print(f'[NexCampus] NexCampus v{VERSION.get("version","?")}')
         print(f'[NexCampus] Server: {url}')
