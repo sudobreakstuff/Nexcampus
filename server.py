@@ -1669,26 +1669,40 @@ def main():
             return
 
         httpd = http.server.HTTPServer(('127.0.0.1', port), NexCampusHandler)
-        t = threading.Thread(target=httpd.serve_forever, daemon=True)
+        # Wrap server in error-catching thread
+        def _serve():
+            try:
+                httpd.serve_forever()
+            except Exception as e2:
+                try:
+                    STARTUP_LOG.write_text(STARTUP_LOG.read_text() + f'\nServer thread crashed: {e2}\n')
+                except: pass
+        t = threading.Thread(target=_serve, daemon=True)
         t.start()
 
         url = f'http://127.0.0.1:{port}'
 
-        # Wait for server to be ready (retry up to 5 seconds)
+        # Wait for server to be ready (retry up to 10 seconds)
         ready = False
-        for _ in range(50):
+        last_error = 'unknown'
+        for i in range(100):
             try:
                 req = urllib.request.Request(url, headers={'User-Agent': 'NexCampus'})
                 resp = urllib.request.urlopen(req, timeout=0.2)
                 resp.close()
                 ready = True
                 break
-            except:
+            except Exception as e2:
+                last_error = str(e2)
                 time.sleep(0.1)
         if not ready:
-            msg = 'Server failed to start after 5s — check ~/.nexcampus-startup.log'
+            log_path = str(STARTUP_LOG)
+            msg = f'Server failed to start at {url} after 10s.\nError: {last_error}\nLog: {log_path}'
             print(f'[NexCampus] {msg}')
-            STARTUP_LOG.write_text(STARTUP_LOG.read_text() + '\n' + msg + '\n')
+            try:
+                STARTUP_LOG.write_text(STARTUP_LOG.read_text() + '\n' + msg + '\n')
+            except:
+                pass
             return
 
         STARTUP_LOG.write_text(f'Server running at {url}\nVERSION: {VERSION}\n')
