@@ -1,6 +1,7 @@
 # NexCampus Installer for Windows
 $repo = "sudobreakstuff/Nexcampus"
 $binary = "NexCampus-windows.exe"
+$version = "v2.16.5"
 
 Write-Host "==> NexCampus Installer for Windows" -ForegroundColor Cyan
 
@@ -18,22 +19,25 @@ if (-not (Test-Path $wv2)) {
     Write-Host "    WebView2 already installed" -ForegroundColor Green
 }
 
-# Get latest release
-Write-Host "==> Fetching latest release..."
-$latest = Invoke-RestMethod -Uri "https://api.github.com/repos/$repo/releases/latest" -ErrorAction SilentlyContinue
-$url = $latest.assets | Where-Object { $_.name -eq $binary } | Select-Object -ExpandProperty browser_download_url
-$version = $latest.tag_name
-
-if (-not $url) {
-    Write-Host "Could not find latest release, using v2.14.5" -ForegroundColor Yellow
-    $url = "https://github.com/$repo/releases/download/v2.14.5/$binary"
-    $version = "v2.14.5"
+# Get latest version from CDN (no rate limit, always works)
+Write-Host "==> Fetching latest version..."
+try {
+    $versionData = Invoke-RestMethod -Uri "https://raw.githubusercontent.com/$repo/main/static/version.json" -ErrorAction Stop
+    $version = "v" + $versionData.version
+} catch {
+    Write-Host "    CDN check failed, using v$version" -ForegroundColor Yellow
 }
 
-# Download
-$out = Join-Path $env:TEMP $binary
+# Download binary
+$url = "https://github.com/$repo/releases/download/$version/$binary"
 Write-Host "==> Downloading NexCampus $version..."
-Invoke-WebRequest -Uri $url -OutFile $out
+$out = Join-Path $env:TEMP $binary
+try {
+    Invoke-WebRequest -Uri $url -OutFile $out -ErrorAction Stop
+} catch {
+    Write-Host "    Download failed. Check your internet and try again." -ForegroundColor Red
+    exit 1
+}
 
 # Remove internet zone identifier (reduces SmartScreen warnings)
 Unblock-File $out -ErrorAction SilentlyContinue
@@ -44,15 +48,18 @@ if (-not (Test-Path $installDir)) { New-Item -ItemType Directory -Path $installD
 
 # Copy binary
 Copy-Item $out "$installDir\$binary" -Force
-Write-Host "==> Installed to $installDir" -ForegroundColor Green
+$size = [math]::Round((Get-Item "$installDir\$binary").Length / 1MB)
+Write-Host "==> Installed to $installDir ($size MB)" -ForegroundColor Green
 
-# Create desktop shortcut (optional)
+# Create desktop shortcut
 $WScriptShell = New-Object -ComObject WScript.Shell
 $shortcut = $WScriptShell.CreateShortcut("$env:USERPROFILE\Desktop\NexCampus.lnk")
 $shortcut.TargetPath = "$installDir\$binary"
 $shortcut.Save()
 
 Write-Host ""
-Write-Host "==> NexCampus $version installed!" -ForegroundColor Green
-Write-Host "    Double-click the desktop shortcut or run:" -ForegroundColor Gray
-Write-Host "    $installDir\$binary" -ForegroundColor Gray
+Write-Host "==> NexCampus $version installed! Double-click the desktop shortcut." -ForegroundColor Green
+
+# Launch
+Write-Host "==> Launching..."
+Start-Process "$installDir\$binary"
