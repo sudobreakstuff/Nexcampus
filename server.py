@@ -1602,7 +1602,8 @@ def open_window(url):
                     try:
                         import gi
                         gi.require_version('Gtk', '3.0')
-                        from gi.repository import Gtk
+                        from gi.repository import Gtk, GLib
+                        GLib.set_prgname('NexCampus')
                         Gtk.Window.set_default_icon_from_file(icon_path)
                     except:
                         pass
