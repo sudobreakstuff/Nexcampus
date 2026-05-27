@@ -249,8 +249,6 @@ def make_plain(text):
     return text.strip()
 
 class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory=str(BASE_DIR), **kwargs)
 
     def do_GET(self):
         try:
@@ -354,35 +352,32 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
             word = params.get('word', '').strip().lower()
             self.api_dictionary_lookup(word)
             return
-        # Serve static files — try super first, fall back to safe handler
-        try:
-            super().do_GET()
-        except Exception:
-            try:
-                # Fallback: serve files manually
-                filepath = BASE_DIR / self.path.lstrip('/')
-                if filepath.is_file():
-                    ct = 'text/html'
-                    if filepath.suffix == '.js': ct = 'application/javascript'
-                    elif filepath.suffix == '.css': ct = 'text/css'
-                    self.send_response(200)
-                    self.send_header('Content-Type', ct)
-                    self.end_headers()
-                    self.wfile.write(filepath.read_bytes())
-                elif self.path == '/' or self.path == '':
-                    idx = BASE_DIR / 'index.html'
-                    if idx.is_file():
-                        self.send_response(200)
-                        self.send_header('Content-Type', 'text/html')
-                        self.end_headers()
-                        self.wfile.write(idx.read_bytes())
-                    else:
-                        self.send_json({'error': 'index.html not found'}, 500)
-                else:
-                    self.send_json({'error': 'not found'}, 404)
-            except:
-                try: self.send_json({'error': 'server error'}, 500)
-                except: pass
+        # Serve static files from BASE_DIR
+        filepath = BASE_DIR / self.path.lstrip('/').split('?')[0]
+        if filepath.is_file():
+            ct = 'text/html'
+            ext = filepath.suffix
+            if ext == '.js': ct = 'application/javascript'
+            elif ext == '.css': ct = 'text/css'
+            elif ext == '.json': ct = 'application/json'
+            elif ext == '.png': ct = 'image/png'
+            elif ext == '.ico': ct = 'image/x-icon'
+            self.send_response(200)
+            self.send_header('Content-Type', ct)
+            self.send_header('Cache-Control', 'no-cache')
+            self.end_headers()
+            self.wfile.write(filepath.read_bytes())
+        elif self.path == '/' or self.path == '':
+            idx = BASE_DIR / 'index.html'
+            if idx.is_file():
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/html')
+                self.end_headers()
+                self.wfile.write(idx.read_bytes())
+            else:
+                self.send_json({'error': 'not found'}, 404)
+        else:
+            self.send_json({'error': 'not found'}, 404)
 
     def do_POST(self):
         length = int(self.headers.get('Content-Length', 0))
