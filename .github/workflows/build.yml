@@ -21,19 +21,30 @@ jobs:
       - name: Install PyInstaller
         run: pip install pyinstaller
 
+      - name: Setup Tesseract
+        shell: pwsh
+        run: |
+          mkdir tesseract-win
+          # Download Tesseract installer using GitHub API with auth
+          $headers = @{Authorization="Bearer ${{ secrets.GITHUB_TOKEN }}"; Accept="application/octet-stream"}
+          Invoke-WebRequest -Uri "https://api.github.com/repos/UB-Mannheim/tesseract/releases/assets/174449750" -Headers $headers -OutFile tesseract-setup.exe
+          Write-Host "Downloaded: $((Get-Item tesseract-setup.exe).Length / 1MB) MB"
+          # Extract with 7z (pre-installed on Windows runners)
+          7z x tesseract-setup.exe -otesseract-temp -y
+          # Find and copy required files
+          Get-ChildItem -Path tesseract-temp -Recurse -Filter "tesseract.exe" | Select-Object -First 1 | ForEach-Object { Copy-Item $_.FullName tesseract-win\ }
+          Get-ChildItem -Path tesseract-temp -Recurse -Filter "*.dll" | ForEach-Object { Copy-Item $_.FullName tesseract-win\ }
+          # Download eng.traineddata directly
+          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/tesseract-ocr/tessdata/main/eng.traineddata" -OutFile tesseract-win\eng.traineddata
+          Write-Host "Tesseract files:"
+          Get-ChildItem tesseract-win | ForEach-Object { Write-Host "  $($_.Name) — $([math]::Round($_.Length/1KB))KB" }
+
       - name: Install Python dependencies
         run: pip install numpy scipy scikit-learn Pillow lxml nltk pypdf2
 
       - name: Build Windows EXE
         shell: cmd
         run: |
-          echo === Checking data dirs ===
-          dir static\index.html && echo static: OK
-          dir python-embed\pythonw.exe && echo python-embed: OK
-          REM Tesseract is optional — create empty dir if not present
-          if not exist tesseract-win mkdir tesseract-win
-          if not exist tesseract-win\tessdata mkdir tesseract-win\tessdata
-          type nul > tesseract-win\tesseract-placeholder.txt
           echo === Building ===
           pyinstaller --onefile --noconsole --icon static\icons\icon.ico --add-data "static;static" --add-data "index.html;." --add-data "tesseract-win;tesseract-win" --add-data "python-embed;python-embed" --name NexCampus-windows server.py
           echo === Result ===
