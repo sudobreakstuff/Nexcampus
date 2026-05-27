@@ -1577,12 +1577,23 @@ def open_window(url):
             webview.start()
             return True
         except Exception:
+            # pywebview failed (likely missing Edge WebView2 Runtime)
+            # Wait to ensure server is ready before opening browser fallback
+            time.sleep(0.5)
             import subprocess, shutil
+            # Try Edge first (installed on all Windows 10+)
             edge = shutil.which('msedge') or shutil.which('msedge.exe')
             if edge:
-                subprocess.Popen([edge, f'--app={url}'],
+                subprocess.Popen([edge, url],
                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 return False
+            # Try Chrome
+            chrome = shutil.which('chrome') or shutil.which('chrome.exe') or shutil.which('google-chrome')
+            if chrome:
+                subprocess.Popen([chrome, url],
+                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                return False
+            # Last resort: default browser
             import webbrowser
             webbrowser.open(url)
             return False
