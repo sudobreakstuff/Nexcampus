@@ -656,6 +656,7 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
         try:
             if language == 'python':
                 # In PyInstaller onefile, sys.executable is the app binary, not python
+                python = None
                 if getattr(sys, 'frozen', False):
                     if sys.platform == 'win32':
                         bundled = os.path.join(sys._MEIPASS, 'python-embed', 'pythonw.exe')
