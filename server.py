@@ -1646,6 +1646,9 @@ def main():
             STARTUP_LOG.write_text(msg + '\n')
             return
 
+        # Change to BASE_DIR so file serving works regardless of handler
+        os.chdir(str(BASE_DIR))
+
         httpd = http.server.HTTPServer(('127.0.0.1', port), NexCampusHandler)
         t = threading.Thread(target=httpd.serve_forever, daemon=True)
         t.start()
@@ -1656,6 +1659,7 @@ def main():
         print(f'[NexCampus] Server: {url}')
         print('[NexCampus] Made by Shahid Singh | NexCore Systems and Technologies')
 
+        time.sleep(0.5)
         ok = open_window(url)
         if not ok:
             print('[NexCampus] Opened in browser. Server running in background.')
