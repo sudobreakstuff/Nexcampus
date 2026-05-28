@@ -1574,7 +1574,7 @@ def open_window(url):
             import subprocess, shutil
             edge = shutil.which('msedge') or shutil.which('msedge.exe')
             if edge:
-                subprocess.Popen([edge, f'--app={url}'],
+                subprocess.Popen([edge, url],
                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 return False
             import webbrowser
