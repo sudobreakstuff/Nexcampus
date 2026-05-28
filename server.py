@@ -249,9 +249,6 @@ def make_plain(text):
     return text.strip()
 
 class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory=str(BASE_DIR), **kwargs)
-
     def do_GET(self):
         if self.path == '/api/version':
             self.send_json(VERSION)
