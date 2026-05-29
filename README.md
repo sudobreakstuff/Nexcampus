@@ -44,15 +44,50 @@ Built with Python + vanilla JS + pywebview. MIT licensed. Free forever.
   <img src="screenshots/codelab.png" width="400">
 </p>
 
+## How to Use
+
+**1. Study Lab** — 16+ tools: Summarizer, Q&A, Quiz, Flashcards, Notes, Citations, Timer, GPA, Periodic Table, Dictionary, Solar System
+
+**2. Code Lab** — 18 Python guides, code runner (Python/JS/Bash), 125 terms, 11 projects. Write code → click Run
+
+**3. Text Tools** — 17 tools: Converter, Base64, JSON, QR Code, OCR, Ciphers, Stats, and more
+
+**4. About** — update the app, pick from 9 themes, view version info
+
+Everything works **fully offline**. No signup. No ads.
+
 ---
 
 ## Quick Install
 
-### One-line (recommended)
+### Linux — copy and paste into terminal
+```bash
+curl -sS https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/install.sh | bash
+```
+
+### Windows — copy and paste into PowerShell
+```powershell
+irm https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/install.ps1 | iex
+```
+
+After install, the app opens automatically. A desktop shortcut is created for next time.
+
+### Update from the app
+Open **About** → **Check for Updates** → **Download Update**. The app auto-restarts with the latest version.
+
+### Manual download
+Go to **[Releases](https://github.com/sudobreakstuff/Nexcampus/releases/latest)** → download `NexCampus-linux` or `NexCampus-windows.exe` → double-click to run.
+
+### Uninstall
 
 **Linux:**
 ```bash
-curl -sS https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/install.sh | bash
+curl -sS https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/uninstall.sh | bash
+```
+
+**Windows (PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/sudobreakstuff/Nexcampus/main/install/uninstall.ps1 | iex
 ```
 
 **Windows (PowerShell):**
