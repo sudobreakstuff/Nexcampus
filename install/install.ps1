@@ -1,7 +1,7 @@
 # NexCampus Installer for Windows
 $repo = "sudobreakstuff/Nexcampus"
 $binary = "NexCampus-windows.exe"
-$version = "v2.16.6"
+$version = "v2.17.9"
 
 Write-Host "==> NexCampus Installer for Windows" -ForegroundColor Cyan
 
