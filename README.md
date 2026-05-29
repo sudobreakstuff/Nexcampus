@@ -42,6 +42,11 @@ Built with Python + vanilla JS + pywebview. MIT licensed. Free forever.
   <img src="screenshots/studylab.png" width="400">
   <img src="screenshots/solarsystem.png" width="400">
   <img src="screenshots/codelab.png" width="400">
+  <img src="screenshots/tool1.png" width="250">
+  <img src="screenshots/tool2.png" width="250">
+  <img src="screenshots/tool3.png" width="250">
+  <img src="screenshots/tool4.png" width="250">
+  <img src="screenshots/tool5.png" width="250">
 </p>
 
 ## How to Use
