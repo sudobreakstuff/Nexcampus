@@ -7,16 +7,27 @@ Write-Host "==> NexCampus Installer for Windows" -ForegroundColor Cyan
 
 # Install Edge WebView2 Runtime if missing (needed for native window)
 Write-Host "==> Checking WebView2 Runtime..."
-$wv2 = "HKLM:\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}"
-if (-not (Test-Path $wv2)) {
-    Write-Host "    WebView2 not found — installing..."
+$wv2Installed = $false
+try {
+    # Try to find WebView2 by checking the runtime
+    $wv2check = Get-ItemProperty "HKLM:\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" -ErrorAction Stop
+    $wv2Installed = $true
+} catch {}
+if (-not $wv2Installed) {
+    try {
+        $wv2check = Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" -ErrorAction Stop
+        $wv2Installed = $true
+    } catch {}
+}
+if (-not $wv2Installed) {
+    Write-Host "    WebView2 not found — installing (one-time 2 min)..."
     $wv2installer = Join-Path $env:TEMP "MicrosoftEdgeWebview2Setup.exe"
-    Invoke-WebRequest -Uri "https://go.microsoft.com/fwlink/p/?LinkId=2124703" -OutFile $wv2installer
-    Start-Process $wv2installer -ArgumentList "/install /silent" -Wait
+    Invoke-WebRequest -Uri "https://go.microsoft.com/fwlink/p/?LinkId=2124703" -OutFile $wv2installer -ErrorAction Stop
+    Start-Process $wv2installer -ArgumentList "/install /silent" -Wait -NoNewWindow
     Remove-Item $wv2installer -ErrorAction SilentlyContinue
     Write-Host "    WebView2 installed!" -ForegroundColor Green
 } else {
-    Write-Host "    WebView2 already installed" -ForegroundColor Green
+    Write-Host "    WebView2 found" -ForegroundColor Green
 }
 
 # Get latest version from CDN (no rate limit, always works)
