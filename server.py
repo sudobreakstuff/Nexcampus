@@ -344,7 +344,33 @@ class NexCampusHandler(http.server.SimpleHTTPRequestHandler):
             word = params.get('word', '').strip().lower()
             self.api_dictionary_lookup(word)
             return
-        super().do_GET()
+        # Serve static files safely
+        try:
+            filepath = BASE_DIR / self.path.lstrip('/').split('?')[0]
+            if filepath.is_file():
+                ct = 'text/html'
+                if filepath.suffix == '.js': ct = 'application/javascript'
+                elif filepath.suffix == '.css': ct = 'text/css'
+                elif filepath.suffix in ('.png','.ico','.svg'): ct = 'image/png'
+                elif filepath.suffix == '.json': ct = 'application/json'
+                self.send_response(200)
+                self.send_header('Content-Type', ct)
+                self.end_headers()
+                self.wfile.write(filepath.read_bytes())
+            elif self.path == '/' or self.path == '':
+                idx = BASE_DIR / 'index.html'
+                if idx.is_file():
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'text/html')
+                    self.end_headers()
+                    self.wfile.write(idx.read_bytes())
+                else:
+                    self.send_error(404)
+            else:
+                self.send_error(404)
+        except Exception:
+            try: self.send_error(500)
+            except: pass
 
     def do_POST(self):
         length = int(self.headers.get('Content-Length', 0))
