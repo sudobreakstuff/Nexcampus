@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-2.14.5-blue" alt="Version">
+  <img src="https://img.shields.io/badge/version-2.17.9-blue" alt="Version">
   <img src="https://img.shields.io/badge/platform-Linux%20%7C%20Windows-lightgrey" alt="Platform">
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
   <img src="https://img.shields.io/badge/offline-yes-brightgreen" alt="Offline">
